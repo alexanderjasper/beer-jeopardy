@@ -365,6 +365,7 @@ namespace Øljeopardy.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
+            ViewData["Title"] = "Glemt adgangskode";
             return View();
         }
 
@@ -386,8 +387,8 @@ namespace Øljeopardy.Controllers
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                await _emailSender.SendEmailAsync(model.Email, "Nulstil adgangskode",
+                   $"Nulstil din adgangskode ved at trykke her: <a href='{callbackUrl}'>link</a>");
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));
             }
 
@@ -399,6 +400,7 @@ namespace Øljeopardy.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
         {
+            ViewData["Title"] = "Adgangskode nulstillet";
             return View();
         }
 
