@@ -12,19 +12,28 @@ namespace Øljeopardy.Controllers
     {
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Title"] = "Øljeopardy";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Categories()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Title"] = "Kategorier";
+
+            return View();
+        }
+
+        public IActionResult Rules()
+        {
+            ViewData["Title"] = "Regler";
+
+            return View();
+        }
+
+        public IActionResult Game()
+        {
+            ViewData["Title"] = "Spil";
 
             return View();
         }
