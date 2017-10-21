@@ -48,6 +48,7 @@ namespace Øljeopardy.Controllers
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
+            ViewData["Title"] = "Log ind";
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -62,7 +63,19 @@ namespace Øljeopardy.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var userName = "";
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
+                {
+                    userName = user.UserName;
+
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError(string.Empty, "E-mailadresse ikke registreret.");
+                    }
+                }
+                var result = await _signInManager.PasswordSignInAsync(userName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -79,7 +92,7 @@ namespace Øljeopardy.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Ugyldigt login-forsøg.");
                     return View(model);
                 }
             }
@@ -209,6 +222,7 @@ namespace Øljeopardy.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            ViewData["Title"] = "Ny bruger";
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }

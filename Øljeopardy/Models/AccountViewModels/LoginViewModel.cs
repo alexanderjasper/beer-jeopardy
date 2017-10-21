@@ -10,13 +10,15 @@ namespace Øljeopardy.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Adgangskode")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Forbliv logget ind")]
         public bool RememberMe { get; set; }
     }
 }

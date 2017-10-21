@@ -1,1 +1,14 @@
 ﻿<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <hr />
+    @if (!Context.User.Identity.IsAuthenticated)
+    {
+        <div>
+            <a asp-controller="Account" asp-action="Login"><button class="menubutton">Log ind</button></a>
+        </div>
+        <div>
+            <a asp-controller="Account" asp-action="Register"><button class="menubutton">Ny bruger</button></a>
+        </div>
+    }
+</div>
