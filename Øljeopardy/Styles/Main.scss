@@ -46,10 +46,8 @@ h1, h2 {
     border-width: $borderWidth;
 }
 
-.menubar-list {
-    list-style-type: none;
+.menubar-container {
     margin: 0 auto;
-    padding: 0;
     overflow: hidden;
     background-color: $navbarBackground;
     font-size: 30px;
@@ -65,12 +63,18 @@ h1, h2 {
     display: inline;
 }
 
-.menubar-listitem-a {
+.menubar-listitem-icon {
     display: inline-block;
     text-align: center;
-    padding: 10px 10px;
+    padding: 10px 0;
     text-decoration: none;
     color: black;
+}
+
+.menubar-listitem-link {
+    padding: 9px 0 7px 0;
+    float: right;
+    margin-right: -10px;
 }
 
 .menubutton {
