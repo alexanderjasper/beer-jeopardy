@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Øljeopardy.Data;
 using Øljeopardy.Models;
 using Øljeopardy.Models.JeopardyViewModels;
@@ -27,11 +28,39 @@ namespace Øljeopardy.Controllers
             return View();
         }
 
-        public IActionResult Categories()
+        public IActionResult Categories(CategoriesViewModel model)
         {
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var userId = claim.Value;
+            var categories = new List<Category>();
+            using (_context)
+            {
+                var query = from c in _context.Categories
+                    where c.UserId == userId
+                    orderby c.Name
+                    select c;
+                foreach (var category in query)
+                {
+                    categories.Add(category);
+                }
+            }
+            model.CategoryList = categories;
+
+            var message = "";
+            switch (model.PageAction)
+            {
+                case Enums.CategoriesPageAction.AddedCategory:
+                    message = "Kategori tilføjet";
+                    break;
+                case Enums.CategoriesPageAction.EditedCategory:
+                    message = "Kategori redigeret";
+                    break;
+            }
+            ViewData["Message"] = message;
             ViewData["Title"] = "Kategorier";
 
-            return View();
+            return View(model);
         }
 
         public IActionResult Rules()
@@ -96,7 +125,12 @@ namespace Øljeopardy.Controllers
 
             ViewData["Title"] = "Kategorier";
 
-            return RedirectToAction("Categories", "Home");
+            var categoriesModel = new CategoriesViewModel()
+            {
+                PageAction = Enums.CategoriesPageAction.AddedCategory
+            };
+
+            return RedirectToAction("Categories", categoriesModel);
         }
 
         public IActionResult Error()

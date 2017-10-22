@@ -19,5 +19,12 @@ namespace Øljeopardy.Models
             Active,
             Inactive
         }
+
+        public enum CategoriesPageAction
+        {
+            Nothing,
+            AddedCategory,
+            EditedCategory
+        }
     }
 }
