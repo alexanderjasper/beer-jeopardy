@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Øljeopardy.Data;
+using Øljeopardy.DataAccess;
 using Øljeopardy.Models;
 using Øljeopardy.Services;
 
@@ -19,9 +21,15 @@ namespace Øljeopardy
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            MapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapperConfig.AutoMapperProfileConfiguration>();
+            });
         }
 
         public IConfiguration Configuration { get; }
+
+        private MapperConfiguration MapperConfiguration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,8 +43,11 @@ namespace Øljeopardy
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
 
             services.AddMvc();
+
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

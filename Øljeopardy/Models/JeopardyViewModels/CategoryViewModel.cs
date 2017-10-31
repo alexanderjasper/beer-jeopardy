@@ -11,6 +11,7 @@ namespace Øljeopardy.Models.JeopardyViewModels
         [Required]
         [Display(Name = "Navn")]
         public string Name { get; set; }
+        public Guid Id { get; set; }
 
         public AnswerQuestionViewModel AnswerQuestion100 { get; set; }
         public AnswerQuestionViewModel AnswerQuestion200 { get; set; }

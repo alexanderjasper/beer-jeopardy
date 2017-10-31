@@ -3,20 +3,24 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
-    @if (ViewData["Message"] == "Kategori tilføjet")
+    @if (ViewData["Message"] != "")
     {
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>@ViewData["Message"]</strong>
         </div>
     }
-    <p>
-        <select asp-for="ChosenCategoryGuid"
-                asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))">
-            <option>Vælg en kategori</option>
-        </select>
+    <div>
+        <form asp-controller="Category" asp-action="Edit">
+            <select asp-for="ChosenCategoryGuid"
+                    asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))">
+                <option>Vælg en kategori</option>
+            </select>
+            <input type="submit" class="menubutton" value="Rediger kategori"/>
+        </form>
+
         <div>
-            <a asp-controller="Home" asp-action="Category"><button class="menubutton">Ny kategori</button></a>
+            <a asp-controller="Category" asp-action="Create"><button class="menubutton">Ny kategori</button></a>
         </div>
-    </p>
+    </div>
 </div>

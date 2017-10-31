@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Øljeopardy.Data;
+using Øljeopardy.DataAccess;
 using Øljeopardy.Models;
 using Øljeopardy.Models.JeopardyViewModels;
 
@@ -15,10 +18,16 @@ namespace Øljeopardy.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private IMapper Mapper { get; set; }
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager, ICategoryRepository categoryRepository)
         {
             _context = context;
+            Mapper = mapper;
+            _userManager = userManager;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
@@ -28,24 +37,14 @@ namespace Øljeopardy.Controllers
             return View();
         }
 
-        public IActionResult Categories(CategoriesViewModel model)
+        public IActionResult Categories(Enums.CategoriesPageAction pageAction)
         {
-            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-            var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-            var userId = claim.Value;
-            var categories = new List<Category>();
-            using (_context)
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var model = new CategoriesViewModel()
             {
-                var query = from c in _context.Categories
-                    where c.UserId == userId
-                    orderby c.Name
-                    select c;
-                foreach (var category in query)
-                {
-                    categories.Add(category);
-                }
-            }
-            model.CategoryList = categories;
+                PageAction = pageAction,
+                CategoryList = _categoryRepository.GetCategoriesByUserId(userId)
+            };
 
             var message = "";
             switch (model.PageAction)
@@ -90,38 +89,8 @@ namespace Øljeopardy.Controllers
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             var userId = claim.Value;
-            var category = new Category()
-            {
-                Name = model.Name,
-                UserId = userId,
-                AnswerQuestion100 = new AnswerQuestion()
-                {
-                    Answer = model.AnswerQuestion100.Answer,
-                    Question = model.AnswerQuestion100.Question
-                },
-                AnswerQuestion200 = new AnswerQuestion()
-                {
-                    Answer = model.AnswerQuestion200.Answer,
-                    Question = model.AnswerQuestion200.Question
-                },
-                AnswerQuestion300 = new AnswerQuestion()
-                {
-                    Answer = model.AnswerQuestion300.Answer,
-                    Question = model.AnswerQuestion300.Question
-                },
-                AnswerQuestion400 = new AnswerQuestion()
-                {
-                    Answer = model.AnswerQuestion400.Answer,
-                    Question = model.AnswerQuestion400.Question
-                },
-                AnswerQuestion500 = new AnswerQuestion()
-                {
-                    Answer = model.AnswerQuestion500.Answer,
-                    Question = model.AnswerQuestion500.Question
-                }
-            };
-            _context.Add(category);
-            _context.SaveChanges();
+            var category = Mapper.Map<CategoryViewModel,Category>(model);
+            _categoryRepository.AddCategory(category, userId);
 
             ViewData["Title"] = "Kategorier";
 
