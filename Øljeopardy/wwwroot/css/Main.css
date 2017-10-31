@@ -92,3 +92,14 @@ h1, h2 {
   background: none;
   padding: 0px;
   border: none; }
+
+.dropdown {
+  font-style: italic;
+  font-size: inherit;
+  width: 80%; }
+
+.answer-question-container {
+  margin-bottom: 10px; }
+
+.answer-question-input {
+  resize: vertical; }

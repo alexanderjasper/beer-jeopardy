@@ -12,10 +12,10 @@
     <div>
         <form asp-controller="Category" asp-action="Edit">
             <select asp-for="ChosenCategoryGuid"
-                    asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))">
-                <option>Vælg en kategori</option>
+                    asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))" class="dropdown">
+                <option selected disabled>Vælg en kategori</option>
             </select>
-            <input type="submit" class="menubutton" value="Rediger kategori"/>
+            <input type="button" class="menubutton" value="Rediger kategori" onClick="ValidateForm(this.form)"/>
         </form>
 
         <div>

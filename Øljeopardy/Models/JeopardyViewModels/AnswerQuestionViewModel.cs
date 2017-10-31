@@ -8,10 +8,10 @@ namespace Øljeopardy.Models.JeopardyViewModels
 {
     public class AnswerQuestionViewModel
     {
-        [Display(Name = "Spørgsmål")]
+        [Display(Name = "Svar")]
         public string Answer { get; set; }
 
-        [Display(Name = "Svar")]
+        [Display(Name = "Spørgsmål")]
         public string Question { get; set; }
     }
 }
