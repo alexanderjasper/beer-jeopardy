@@ -3,7 +3,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
-    @if (ViewData["Message"] != "")
+    @if ((string)ViewData["Message"] != "")
     {
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
