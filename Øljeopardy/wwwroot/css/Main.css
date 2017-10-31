@@ -87,3 +87,8 @@ h1, h2 {
   box-shadow: 0 6px 4px #0D3E0F;
   border-radius: 10px;
   -webkit-appearance: none; }
+
+.fabutton {
+  background: none;
+  padding: 0px;
+  border: none; }

@@ -1,16 +1,16 @@
 ﻿<div class="row menubar-container">
-    <div class="col-md-2"></div>
-    <div class="col-md-2">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-2">
         <a class="menubar-listitem-icon" asp-controller="Home" asp-action="Index">
             <i class="fa fa-home" aria-hidden="true"></i>
         </a>
     </div>
-    <div class="col-md-2">
+    <div class="col-xs-2">
         <a class="menubar-listitem-icon" asp-controller="Home" asp-action="Rules">
             <i class="fa fa-legal" aria-hidden="true"></i>
         </a>
     </div>
-    <div class="col-md-2">
+    <div class="col-xs-2">
         @if (User.Identity.IsAuthenticated)
         {
             <a class="menubar-listitem-icon" asp-controller="Home" asp-action="Categories">
@@ -18,7 +18,7 @@
             </a>
         }
     </div>
-    <div class="col-md-2">
+    <div class="col-xs-2">
         @if (User.Identity.IsAuthenticated)
         {
             <a class="menubar-listitem-icon" asp-controller="Home" asp-action="Game">
@@ -26,9 +26,9 @@
             </a>
         }
     </div>
-    <div class="col-md-2">
-        <form asp-controller="Account" asp-action="Logout" method="post" class="menubar-listitem-link">
-            <button type="submit" class="btn btn-link">Log ud</button>
+    <div class="col-xs-2">
+        <form asp-controller="Account" asp-action="Logout" method="post" class="menubar-listitem-icon">
+            <button type="submit" class="fabutton"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
         </form>
     </div>
 </div>
