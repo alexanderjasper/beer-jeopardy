@@ -17,7 +17,7 @@
                 <div class="col-xs-6">
                     <label asp-for="AnswerQuestion100.Answer"></label>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-5">
                     <label asp-for="AnswerQuestion100.Question"></label>
                 </div>
             </div>
@@ -26,10 +26,20 @@
             </div>
             <div class="row answer-question-container">
                 <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion100.Answer" class="form-control answer-question-input"></textarea>
+                    <textarea asp-for="AnswerQuestion100.Answer" class="form-control answer-question-input" id="a1"></textarea>
                 </div>
-                <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion100.Question" class="form-control answer-question-input"></textarea>
+                <div class="col-xs-5">
+                    <textarea asp-for="AnswerQuestion100.Question" class="form-control answer-question-input" id="q1"></textarea>
+                </div>
+                <div class="col-xs-1">
+                    <table class="up-down-table">
+                        <tr>
+                            <td style="visibility: hidden;"><button type="button" class="fabutton" onclick="MoveAnswerQuestion(1,'up')"><i class="fa fa-sort-up fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(1,'down')"><i class="fa fa-sort-down fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="row">
@@ -37,10 +47,20 @@
             </div>
             <div class="row answer-question-container">
                 <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion200.Answer" class="form-control answer-question-input"></textarea>
+                    <textarea asp-for="AnswerQuestion200.Answer" class="form-control answer-question-input" id="a2"></textarea>
                 </div>
-                <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion200.Question" class="form-control answer-question-input"></textarea>
+                <div class="col-xs-5">
+                    <textarea asp-for="AnswerQuestion200.Question" class="form-control answer-question-input" id="q2"></textarea>
+                </div>
+                <div class="col-xs-1">
+                    <table class="up-down-table">
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(2,'up')"><i class="fa fa-sort-up fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(2,'down')"><i class="fa fa-sort-down fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="row">
@@ -48,10 +68,20 @@
             </div>
             <div class="row answer-question-container">
                 <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion300.Answer" class="form-control answer-question-input"></textarea>
+                    <textarea asp-for="AnswerQuestion300.Answer" class="form-control answer-question-input" id="a3"></textarea>
                 </div>
-                <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion300.Question" class="form-control answer-question-input"></textarea>
+                <div class="col-xs-5">
+                    <textarea asp-for="AnswerQuestion300.Question" class="form-control answer-question-input" id="q3"></textarea>
+                </div>
+                <div class="col-xs-1">
+                    <table class="up-down-table">
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(3,'up')"><i class="fa fa-sort-up fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(3,'down')"><i class="fa fa-sort-down fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="row">
@@ -59,10 +89,20 @@
             </div>
             <div class="row answer-question-container">
                 <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion400.Answer" class="form-control answer-question-input"></textarea>
+                    <textarea asp-for="AnswerQuestion400.Answer" class="form-control answer-question-input" id="a4"></textarea>
                 </div>
-                <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion400.Question" class="form-control answer-question-input"></textarea>
+                <div class="col-xs-5">
+                    <textarea asp-for="AnswerQuestion400.Question" class="form-control answer-question-input" id="q4"></textarea>
+                </div>
+                <div class="col-xs-1">
+                    <table class="up-down-table">
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(4,'up')"><i class="fa fa-sort-up fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(4,'down')"><i class="fa fa-sort-down fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div class="row">
@@ -70,10 +110,20 @@
             </div>
             <div class="row answer-question-container">
                 <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion500.Answer" class="form-control answer-question-input"></textarea>
+                    <textarea asp-for="AnswerQuestion500.Answer" class="form-control answer-question-input" id="a5"></textarea>
                 </div>
-                <div class="col-xs-6">
-                    <textarea asp-for="AnswerQuestion500.Question" class="form-control answer-question-input"></textarea>
+                <div class="col-xs-5">
+                    <textarea asp-for="AnswerQuestion500.Question" class="form-control answer-question-input" id="q5"></textarea>
+                </div>
+                <div class="col-xs-1">
+                    <table class="up-down-table">
+                        <tr>
+                            <td><button type="button" class="fabutton" onclick="MoveAnswerQuestion(5,'up')"><i class="fa fa-sort-up fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                        <tr>
+                            <td style="visibility: hidden;"><button type="button" class="fabutton" onclick="MoveAnswerQuestion(5,'down')"><i class="fa fa-sort-down fa-lg" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </p>
