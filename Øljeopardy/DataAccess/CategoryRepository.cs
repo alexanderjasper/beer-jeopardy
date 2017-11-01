@@ -64,19 +64,12 @@ namespace Øljeopardy.DataAccess
 
         public List<Category> GetCategoriesByUserId(string userId)
         {
-            var categories = new List<Category>();
             using (_context)
             {
-                var query = from c in _context.Categories
-                    where c.UserId == userId
-                    orderby c.Name
-                    select c;
-                foreach (var category in query)
-                {
-                    categories.Add(category);
-                }
+                return _context.Categories
+                    .Where(c => c.UserId == userId)
+                    .OrderBy(c => c.Name).ToList();
             }
-            return categories;
         }
     }
 }
