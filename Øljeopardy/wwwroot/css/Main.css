@@ -106,3 +106,6 @@ h1, h2 {
 
 .up-down-table {
   margin: 8px 0 0 -100%; }
+
+.form-control {
+  font-size: 16px; }
