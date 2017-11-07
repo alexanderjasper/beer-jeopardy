@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Øljeopardy.Models.ManageViewModels
+namespace Oljeopardy.Models.ManageViewModels
 {
     public class SetPasswordViewModel
     {

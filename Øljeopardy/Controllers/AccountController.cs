@@ -1,20 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Øljeopardy.Models;
-using Øljeopardy.Models.AccountViewModels;
-using Øljeopardy.Services;
+using Oljeopardy.Models;
+using Oljeopardy.Models.AccountViewModels;
+using Oljeopardy.Services;
 
-namespace Øljeopardy.Controllers
+namespace Oljeopardy.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

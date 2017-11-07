@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Øljeopardy.Controllers;
+using Oljeopardy.Controllers;
 
 namespace Microsoft.AspNetCore.Mvc
 {

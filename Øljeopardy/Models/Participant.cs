@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Øljeopardy.Models.Enums;
+using static Oljeopardy.Models.Enums;
 
-namespace Øljeopardy.Models
+namespace Oljeopardy.Models
 {
     public class Participant : JeopardyEntity
     {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Øljeopardy.Models;
-using Øljeopardy.Models.JeopardyViewModels;
+using Oljeopardy.Models;
+using Oljeopardy.Models.JeopardyViewModels;
 
-namespace Øljeopardy
+namespace Oljeopardy
 {
     public static class AutoMapperConfig
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Øljeopardy.Models
+namespace Oljeopardy.Models
 {
     public class ErrorViewModel
     {

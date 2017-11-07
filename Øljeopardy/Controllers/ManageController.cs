@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -9,12 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Øljeopardy.Models;
-using Øljeopardy.Models.ManageViewModels;
-using Øljeopardy.Services;
+using Oljeopardy.Models;
+using Oljeopardy.Models.ManageViewModels;
+using Oljeopardy.Services;
 
-namespace Øljeopardy.Controllers
+namespace Oljeopardy.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

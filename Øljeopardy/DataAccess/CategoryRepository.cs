@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Øljeopardy.Data;
-using Øljeopardy.Models;
+using Oljeopardy.Data;
+using Oljeopardy.Models;
 
-namespace Øljeopardy.DataAccess
+namespace Oljeopardy.DataAccess
 {
     public class CategoryRepository : ICategoryRepository
     {

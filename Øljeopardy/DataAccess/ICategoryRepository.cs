@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Øljeopardy.Models;
+using Oljeopardy.Models;
 
-namespace Øljeopardy.DataAccess
+namespace Oljeopardy.DataAccess
 {
     public interface ICategoryRepository
     {

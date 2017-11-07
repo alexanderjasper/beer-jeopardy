@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Øljeopardy.Models.JeopardyViewModels
+namespace Oljeopardy.Models.JeopardyViewModels
 {
     public class CategoryViewModel
     {

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
-using Øljeopardy.Models;
+using Oljeopardy.Models;
 
-namespace Øljeopardy.Data
+namespace Oljeopardy.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

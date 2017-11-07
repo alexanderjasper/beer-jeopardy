@@ -9,12 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Øljeopardy.Data;
-using Øljeopardy.DataAccess;
-using Øljeopardy.Models;
-using Øljeopardy.Services;
+using Oljeopardy.Data;
+using Oljeopardy.DataAccess;
+using Oljeopardy.Data;
+using Oljeopardy.Models;
+using Oljeopardy.Services;
 
-namespace Øljeopardy
+namespace Oljeopardy
 {
     public class Startup
     {

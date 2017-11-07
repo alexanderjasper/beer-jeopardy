@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Øljeopardy.Data.Migrations
+namespace Oljeopardy.Data.Migrations
 {
     public partial class AddEntities : Migration
     {

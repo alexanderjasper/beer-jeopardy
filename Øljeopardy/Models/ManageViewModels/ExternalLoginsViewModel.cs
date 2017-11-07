@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace Øljeopardy.Models.ManageViewModels
+namespace Oljeopardy.Models.ManageViewModels
 {
     public class ExternalLoginsViewModel
     {
