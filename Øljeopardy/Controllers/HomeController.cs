@@ -81,9 +81,7 @@ namespace Oljeopardy.Controllers
 
         public IActionResult CreateCategory(CategoryViewModel model)
         {
-            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-            var claim = claimsIdentity.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-            var userId = claim.Value;
+            var userId = _userManager.GetUserId(HttpContext.User);
             var category = Mapper.Map<CategoryViewModel,Category>(model);
             _categoryRepository.AddCategory(category, userId);
 
