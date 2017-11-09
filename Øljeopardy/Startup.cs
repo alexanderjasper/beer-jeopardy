@@ -13,6 +13,7 @@ using Oljeopardy.Data;
 using Oljeopardy.DataAccess;
 using Oljeopardy.Data;
 using Oljeopardy.Models;
+using Oljeopardy.Models.Email;
 using Oljeopardy.Services;
 
 namespace Oljeopardy
@@ -49,6 +50,8 @@ namespace Oljeopardy
             services.AddMvc();
 
             services.AddAutoMapper();
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
