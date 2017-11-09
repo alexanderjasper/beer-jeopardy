@@ -19,6 +19,8 @@
     </environment>
 </head>
 <body>
+    <div class="wrapper">
+
     @Html.Partial("~/Views/Shared/Navbar.cshtml")
     <div class="container">
         @RenderBody()
@@ -46,5 +48,6 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    </div>
 </body>
 </html>
