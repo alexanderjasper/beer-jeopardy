@@ -31,7 +31,7 @@ namespace Oljeopardy.Services
                 _emailService.Send(emailMessage);
                 return Task.CompletedTask;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                throw new Exception("Could not send email");
             }

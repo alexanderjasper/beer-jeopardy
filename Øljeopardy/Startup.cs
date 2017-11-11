@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Oljeopardy.Data;
 using Oljeopardy.DataAccess;
-using Oljeopardy.Data;
 using Oljeopardy.Models;
 using Oljeopardy.Models.Email;
 using Oljeopardy.Services;
