@@ -1,0 +1,22 @@
+﻿@model Oljeopardy.Models.JeopardyViewModels.AddGameViewModel
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <hr />
+    Start et nyt spil
+    <form asp-controller="Home" asp-action="Game">
+        <div class="row">
+            <div class="col-xs-12">
+                <label asp-for="GameName"></label>
+                <input asp-for="GameName" class="form-control" />
+            </div>
+            <div class="col-xs-12">
+                <select asp-for="ChosenCategoryGuid"
+                        asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))" class="dropdown">
+                    <option selected disabled>Vælg en kategori</option>
+                </select>
+            </div>
+            <input type="button" class="menubutton" value="Opret spil" onClick="ValidateForm(this.form)"/>
+        </div>
+    </form>
+</div>

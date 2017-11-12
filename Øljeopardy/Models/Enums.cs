@@ -11,7 +11,8 @@ namespace Oljeopardy.Models
         {
             Guess,
             Read,
-            Won
+            Won,
+            Choose
         }
 
         public enum GameStatus

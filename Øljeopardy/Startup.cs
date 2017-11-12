@@ -45,6 +45,7 @@ namespace Oljeopardy
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IGameRepository, GameRepository>();
 
             services.AddMvc();
 

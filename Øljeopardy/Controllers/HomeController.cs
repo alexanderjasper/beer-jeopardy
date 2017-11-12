@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -16,13 +17,15 @@ namespace Oljeopardy.Controllers
         private IMapper Mapper { get; set; }
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IGameRepository _gameRepository;
 
-        public HomeController(ApplicationDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager, ICategoryRepository categoryRepository)
+        public HomeController(ApplicationDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager, ICategoryRepository categoryRepository, IGameRepository gameRepository)
         {
             _context = context;
             Mapper = mapper;
             _userManager = userManager;
             _categoryRepository = categoryRepository;
+            _gameRepository = gameRepository;
         }
 
         public IActionResult Index()
@@ -64,35 +67,25 @@ namespace Oljeopardy.Controllers
             return View();
         }
 
-        public IActionResult Game()
+        [HttpPost]
+        public IActionResult Game(AddGameViewModel model)
         {
             ViewData["Title"] = "Spil";
 
-            return View();
-        }
+            var returnModel = new GameViewModel();
 
-        public IActionResult Category(string message = null)
-        {
-            ViewData["Title"] = "Kategori";
-            ViewData["Message"] = message;
-
-            return View();
-        }
-
-        public IActionResult CreateCategory(CategoryViewModel model)
-        {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var category = Mapper.Map<CategoryViewModel,Category>(model);
-            _categoryRepository.AddCategory(category, userId);
-
-            ViewData["Title"] = "Kategorier";
-
-            var categoriesModel = new CategoriesViewModel()
+            if (model != null && model.ChosenCategoryGuid != Guid.Empty)
             {
-                PageAction = Enums.CategoriesPageAction.AddedCategory
-            };
-
-            return RedirectToAction("Categories", categoriesModel);
+                var addedGame = _gameRepository.AddGame(model.GameName, model.ChosenCategoryGuid, userId);
+                returnModel.Game = addedGame;
+            }
+            else
+            {
+                var activeGame = _gameRepository.GetActiveGameForUser(userId) ?? new Game();
+                returnModel.Game = activeGame;
+            }
+            return View(returnModel);
         }
 
         public IActionResult Error()
