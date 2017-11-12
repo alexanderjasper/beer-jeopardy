@@ -13,9 +13,9 @@ namespace Oljeopardy.Models
         public GameStatus GameStatus { get; set; }
         public DateTime ActiveTime { get; set; }
         public int Version { get; set; }
-        public ApplicationUser LatestChooser { get; set; }
-        public Guid SelectedGameCategoryId { get; set; }
+        public string LatestCategoryChooserId { get; set; }
+        public Guid? SelectedGameCategoryId { get; set; }
 
-        public GameCategory SelectedGameCategory { get; set; }
+        public virtual GameCategory SelectedGameCategory { get; set; }
     }
 }
