@@ -11,7 +11,7 @@ namespace Oljeopardy.DataAccess
         Game AddGame(string name, Guid chosenCategoryGuid, string userId);
         Game GetGameById(Guid gameId);
         List<Game> GetActiveGames();
-        Participant AddParticipant(Guid gameId, Enums.TurnType turnType, string userId);
+        Participant AddParticipant(Guid gameId, Guid participantId, Enums.TurnType turnType, string userId);
         GameCategory AddGameCategory(Guid chosenCategoryId, Guid participantId, Guid gameId, string userId);
         Game GetActiveGameForUser(string userId);
     }

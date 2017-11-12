@@ -45,12 +45,7 @@ namespace Oljeopardy.DataAccess
                     ParticipantId = addedParticipant.Id
                 };
                 _context.Add(gameCategory);
-
                 _context.SaveChanges();
-
-
-
-
 
                 return gameToAdd;
             }
@@ -73,7 +68,7 @@ namespace Oljeopardy.DataAccess
                 .ToList();
         }
 
-        public Participant AddParticipant(Guid gameId, Enums.TurnType turnType, string userId)
+        public Participant AddParticipant(Guid gameId, Guid categoryId, Enums.TurnType turnType, string userId)
         {
             try
             {
@@ -84,9 +79,17 @@ namespace Oljeopardy.DataAccess
                     TurnType = turnType
                 };
 
-                _context.Add(participant);
+                var addedparticipant = _context.Add(participant).Entity;
+
+                var gameCategory = new GameCategory()
+                {
+                    CategoryId = categoryId,
+                    GameId = gameId,
+                    ParticipantId = addedparticipant.Id
+                };
+
                 _context.SaveChanges();
-                return _context.Participants.FirstOrDefault();
+                return addedparticipant;
             }
             catch
             {
@@ -118,8 +121,11 @@ namespace Oljeopardy.DataAccess
 
         public Game GetActiveGameForUser(string userId)
         {
+            var allGamesForUser = _context.Participants
+                .Where(x => x.UserId == userId)
+                .Select(x => x.GameId);
             return _context.Games
-                .FirstOrDefault(x => x.UserId == userId && x.ActiveTime >= DateTime.Now.AddHours(-2));
+                .FirstOrDefault(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && allGamesForUser.Contains(x.Id));
         }
     }
 }

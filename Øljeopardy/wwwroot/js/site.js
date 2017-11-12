@@ -4,9 +4,23 @@
     });
 }, 3000);
 
-function ValidateForm(form) {
-    if (form.ChosenCategoryGuid.selectedIndex === 0) {
+function ValidateForm(form, id) {
+    if (id === "Categories" && form.ChosenCategoryGuid.selectedIndex === 0) {
         alert("Vælg en kategori, du vil redigere");
+        return false;
+    }
+    if (id === "Participate") {
+        if (form.ChosenGameGuid.selectedIndex === 0) {
+            alert("Vælg et spil, du vil deltage i");
+            return false;
+        }
+        if (form.ChosenCategoryGuid.selectedIndex === 0) {
+            alert("Vælg en kategori, du bruge i spillet");
+            return false;
+        }
+    }
+    if (id === "AddGame" && form.ChosenCategoryGuid.selectedIndex === 0) {
+        alert("Vælg en kategori, du vil bruge i spillet");
         return false;
     }
     form.submit();

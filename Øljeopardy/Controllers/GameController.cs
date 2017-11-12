@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Oljeopardy.DataAccess;
 using Oljeopardy.Models;
 using Oljeopardy.Models.JeopardyViewModels;
@@ -14,11 +15,13 @@ namespace Oljeopardy.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IGameRepository _gameRepository;
 
-        public GameController(ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager)
+        public GameController(ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager, IGameRepository gameRepository)
         {
             _categoryRepository = categoryRepository;
             _userManager = userManager;
+            _gameRepository = gameRepository;
         }
 
         public IActionResult Add()
@@ -37,7 +40,23 @@ namespace Oljeopardy.Controllers
         public IActionResult Participate()
         {
             ViewData["Title"] = "Deltag i et spil";
-            return View();
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var model = new ParticipateGameViewModel()
+            {
+                GameList = _gameRepository.GetActiveGames(),
+                CategoryList = _categoryRepository.GetCategoriesByUserId(userId)
+            };
+
+            return View(model);
+        }
+
+        public IActionResult CompleteParticipation(ParticipateGameViewModel model)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            _gameRepository.AddParticipant(model.ChosenGameGuid, model.ChosenCategoryGuid, Enums.TurnType.Guess, userId);
+
+            return RedirectToAction("Game", "Home");
         }
     }
 }

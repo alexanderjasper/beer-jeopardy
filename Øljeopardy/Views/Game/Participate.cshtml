@@ -1,7 +1,24 @@
-﻿@model Oljeopardy.Models.JeopardyViewModels.CategoryViewModel
+﻿@model Oljeopardy.Models.JeopardyViewModels.ParticipateGameViewModel
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <hr />
     Deltag i et spil
+    <form asp-controller="Game" asp-action="CompleteParticipation">
+        <div class="row">
+            <div class="col-xs-12">
+                <select asp-for="ChosenGameGuid"
+                        asp-items="@(new SelectList(Model.GameList, "Id", "Name"))" class="dropdown">
+                    <option selected disabled>Vælg et spil</option>
+                </select>
+            </div>
+            <div class="col-xs-12">
+                <select asp-for="ChosenCategoryGuid"
+                        asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))" class="dropdown">
+                    <option selected disabled>Vælg en kategori</option>
+                </select>
+            </div>
+            <input type="button" class="menubutton" value="Deltag i spil" onClick="ValidateForm(this.form, 'Participate')" />
+        </div>
+    </form>
 </div>
