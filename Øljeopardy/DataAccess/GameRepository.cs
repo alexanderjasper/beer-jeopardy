@@ -23,8 +23,8 @@ namespace Oljeopardy.DataAccess
             {
                 var gameToAdd = new Game()
                 {
-                    Id = new Guid(),
                     UserId = userId,
+                    Name = name,
                     GameStatus = Enums.GameStatus.Active,
                     ActiveTime = DateTime.Now,
                     Version = 0
@@ -33,7 +33,6 @@ namespace Oljeopardy.DataAccess
                 var addedGame = _context.Add(gameToAdd).Entity;
                 var participant = new Participant()
                 {
-                    Id = new Guid(),
                     GameId = addedGame.Id,
                     TurnType = Enums.TurnType.Choose,
                     UserId = userId

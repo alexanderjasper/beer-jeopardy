@@ -67,7 +67,6 @@ namespace Oljeopardy.Controllers
             return View();
         }
 
-        [HttpPost]
         public IActionResult Game(AddGameViewModel model)
         {
             ViewData["Title"] = "Spil";
