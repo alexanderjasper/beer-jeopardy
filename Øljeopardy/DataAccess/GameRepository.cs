@@ -127,5 +127,15 @@ namespace Oljeopardy.DataAccess
             return _context.Games
                 .FirstOrDefault(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && allGamesForUser.Contains(x.Id));
         }
+
+        public Participant GetUserParticipant(Guid gameId, string userId)
+        {
+            return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+        }
+
+        public Participant GetParticipant(Guid participantId)
+        {
+            return _context.Participants.FirstOrDefault(x => x.Id == participantId);
+        }
     }
 }

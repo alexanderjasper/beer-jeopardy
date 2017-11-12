@@ -14,5 +14,7 @@ namespace Oljeopardy.DataAccess
         Participant AddParticipant(Guid gameId, Guid participantId, Enums.TurnType turnType, string userId);
         GameCategory AddGameCategory(Guid chosenCategoryId, Guid participantId, Guid gameId, string userId);
         Game GetActiveGameForUser(string userId);
+        Participant GetUserParticipant(Guid gameId, string userId);
+        Participant GetParticipant(Guid participantId);
     }
 }

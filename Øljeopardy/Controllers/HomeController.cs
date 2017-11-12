@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -67,29 +68,69 @@ namespace Oljeopardy.Controllers
             return View();
         }
 
-        public IActionResult Game(AddGameViewModel model)
+        public IActionResult Game()
         {
             ViewData["Title"] = "Spil";
 
-            var returnModel = new GameViewModel();
-
             var userId = _userManager.GetUserId(HttpContext.User);
-            if (model != null && model.ChosenCategoryGuid != Guid.Empty)
+            var activeGame = _gameRepository.GetActiveGameForUser(userId) ?? new Game();
+
+            var gameViewModel = new GameViewModel();
+            if (activeGame.Id != Guid.Empty)
             {
-                var addedGame = _gameRepository.AddGame(model.GameName, model.ChosenCategoryGuid, userId);
-                returnModel.Game = addedGame;
+                gameViewModel = GetGameViewModel(activeGame.Id, userId);
             }
-            else
-            {
-                var activeGame = _gameRepository.GetActiveGameForUser(userId) ?? new Game();
-                returnModel.Game = activeGame;
-            }
-            return View(returnModel);
+
+            return View(gameViewModel);
         }
 
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private GameViewModel GetGameViewModel(Guid gameId, string userId)
+        {
+            var model = new GameViewModel();
+            model.Game = _gameRepository.GetGameById(gameId);
+            if (model.Game.Id != Guid.Empty)
+            {
+                
+            }
+            model.UsersOwnCategory = _categoryRepository.GetUsersCategoryForActiveGame(gameId, userId);
+            var userParticipant = _gameRepository.GetUserParticipant(gameId, userId);
+
+            var gameCategories = _categoryRepository.GetGameCategoriesForGame(gameId);
+            foreach (var gameCategory in gameCategories.Where(x => x.ParticipantId != userParticipant.Id))
+            {
+                var gameCategoryViewModel = new GameCategoryViewModel()
+                {
+                    GameCategory = gameCategory,
+                    Category = _categoryRepository.GetCategoryById(gameCategory.CategoryId)
+                };
+                model.OtherGameCategories.Add(gameCategoryViewModel);
+            }
+
+            if (model.Game.LatestCategoryChooserId != null)
+            {
+                model.LatestCategoryChooserName =
+                    _userManager.FindByIdAsync(model.Game.LatestCategoryChooserId).Result.UserName;
+            }
+
+            if (model.Game.SelectedGameCategory != null)
+            {
+                var categoryOwnerParticipant =
+                    _gameRepository.GetParticipant(model.Game.SelectedGameCategory.ParticipantId);
+                model.CategoryOwnerName = _userManager.FindByIdAsync(categoryOwnerParticipant.UserId).Result.UserName;
+            }
+
+            if (model.Game.SelectedGameCategoryId != null)
+            {
+                var chosenCategory = _categoryRepository.GetCategoryById(model.Game.SelectedGameCategoryId.Value);
+                model.ChosenCategoryName = chosenCategory.Name;
+            }
+
+            return model;
         }
     }
 }

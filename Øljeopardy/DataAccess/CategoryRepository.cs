@@ -67,5 +67,18 @@ namespace Oljeopardy.DataAccess
                     .OrderBy(c => c.Name).ToList();
             }
         }
+
+        public Category GetUsersCategoryForActiveGame(Guid gameId, string userId)
+        {
+            var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+            var gameCategory =
+                _context.GameCategories.FirstOrDefault(x => x.GameId == gameId && x.ParticipantId == participant.Id);
+            return _context.Categories.FirstOrDefault(x => x.Id == gameCategory.CategoryId);
+        }
+
+        public List<GameCategory> GetGameCategoriesForGame(Guid gameId)
+        {
+            return _context.GameCategories.Where(x => x.GameId == gameId).ToList();
+        }
     }
 }

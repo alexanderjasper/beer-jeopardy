@@ -10,5 +10,7 @@ namespace Oljeopardy.DataAccess
         bool UpdateCategory(Category category, string userId);
         bool AddCategory(Category category, string userId);
         List<Category> GetCategoriesByUserId(string userId);
+        Category GetUsersCategoryForActiveGame(Guid gameId, string userId);
+        List<GameCategory> GetGameCategoriesForGame(Guid gameId);
     }
 }

@@ -37,6 +37,18 @@ namespace Oljeopardy.Controllers
             return View(model);
         }
 
+        public IActionResult CompleteAdd(AddGameViewModel model)
+        {
+
+            var userId = _userManager.GetUserId(HttpContext.User);
+            if (model != null && model.ChosenCategoryGuid != Guid.Empty)
+            {
+                _gameRepository.AddGame(model.GameName, model.ChosenCategoryGuid, userId);
+            }
+
+            return RedirectToAction("Game", "Home");
+        }
+
         public IActionResult Participate()
         {
             ViewData["Title"] = "Deltag i et spil";
