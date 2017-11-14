@@ -17,5 +17,6 @@ namespace Oljeopardy.Models
         public Guid? SelectedAnswerQuestionId { get; set; }
 
         public virtual GameCategory SelectedGameCategory { get; set; }
+        public List<GameCategory> GameCategories { get; set; }
     }
 }

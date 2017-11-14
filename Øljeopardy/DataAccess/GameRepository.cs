@@ -89,6 +89,7 @@ namespace Oljeopardy.DataAccess
                     GameId = gameId,
                     ParticipantId = addedparticipant.Id
                 };
+                _context.Add(gameCategory);
 
                 _context.SaveChanges();
                 return addedparticipant;
@@ -195,7 +196,7 @@ namespace Oljeopardy.DataAccess
                             _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestionId, gameId);
                         if (answerQuestionGameCategory != null)
                         {
-                            switch (answerQuestion.PointsValue)
+                            switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestionId))
                             {
                                 case 100:
                                     answerQuestionGameCategory.Won100ParticipantId = winnerParticipant.Id;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
@@ -103,6 +104,7 @@ namespace Oljeopardy.Controllers
                 }
 
                 var gameCategories = _categoryRepository.GetGameCategoriesForGame(gameId);
+                model.OtherGameCategories = new List<GameCategoryViewModel>();
                 foreach (var gameCategory in gameCategories.Where(x => x.ParticipantId != userParticipant.Id))
                 {
                     var gameCategoryViewModel = new GameCategoryViewModel()
