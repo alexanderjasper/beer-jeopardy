@@ -70,5 +70,41 @@ namespace Oljeopardy.Controllers
 
             return RedirectToAction("Game", "Home");
         }
+
+        public IActionResult SelectWinner(GameViewModel model)
+        {
+            try
+            {
+                if (model.ChosenWinnerId != null && model.Game != null)
+                {
+                    var userId = _userManager.GetUserId(HttpContext.User);
+                    _gameRepository.SetAnswerQuestionWinner(model.ChosenWinnerId, model.Game.Id, userId, model.ChosenAnswerQuestionGuid);
+                    return RedirectToAction("Game", "Home");
+                }
+                throw new Exception("No winner was chosen");
+            }
+            catch
+            {
+                throw new Exception("Could not submit winner");
+            }
+        }
+
+        public IActionResult SelectAnswer(GameViewModel model)
+        {
+            try
+            {
+                if (model.ChosenWinnerId != null && model.Game != null)
+                {
+                    var userId = _userManager.GetUserId(HttpContext.User);
+                    _gameRepository.SetSelectedAnswerQuestion(model.Game.Id, userId, model.ChosenAnswerQuestionGuid);
+                    return RedirectToAction("Game", "Home");
+                }
+                throw new Exception("No answer selected");
+            }
+            catch
+            {
+                throw new Exception("Could not submit AnswerQuestion selection");
+            }
+        }
     }
 }

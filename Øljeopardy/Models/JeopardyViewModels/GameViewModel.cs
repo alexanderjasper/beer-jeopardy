@@ -13,5 +13,9 @@ namespace Oljeopardy.Models.JeopardyViewModels
         public string LatestCategoryChooserName { get; set; }
         public string CategoryOwnerName { get; set; }
         public string ChosenCategoryName { get; set; }
+        public Enums.TurnType UserTurnType { get; set; }
+
+        public string ChosenWinnerId { get; set; }
+        public Guid ChosenAnswerQuestionGuid { get; set; }
     }
 }

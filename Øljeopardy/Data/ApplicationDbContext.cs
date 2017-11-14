@@ -21,10 +21,6 @@ namespace Oljeopardy.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<GameCategory>()
-                .HasOne(e => e.Game)
-                .WithOne(e => e.SelectedGameCategory)
-                .HasForeignKey<Game>(e => e.SelectedGameCategoryId);
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;

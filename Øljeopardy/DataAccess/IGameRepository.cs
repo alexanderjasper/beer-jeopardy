@@ -16,5 +16,8 @@ namespace Oljeopardy.DataAccess
         Game GetActiveGameForUser(string userId);
         Participant GetUserParticipant(Guid gameId, string userId);
         Participant GetParticipant(Guid participantId);
+        Dictionary<int, int> GetPointsForParticipant(Guid participantId);
+        void SetAnswerQuestionWinner(string winnerId, Guid gameId, string submitterUserId, Guid answerQuestionId);
+        void SetSelectedAnswerQuestion(Guid gameId, string submitterUserId, Guid answerQuestionId);
     }
 }

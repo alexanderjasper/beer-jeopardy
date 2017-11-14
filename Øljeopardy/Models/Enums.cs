@@ -11,7 +11,6 @@ namespace Oljeopardy.Models
         {
             Guess,
             Read,
-            Won,
             Choose
         }
 

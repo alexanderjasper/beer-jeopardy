@@ -8,3 +8,22 @@
 <div class="row">
     <hr />
 </div>
+
+@if (Model.UserTurnType == Enums.TurnType.Choose)
+{
+    <div>
+        CHOOSE
+    </div>
+}
+@if (Model.UserTurnType == Enums.TurnType.Read)
+{
+    <div>
+        READ
+    </div>
+}
+@if (Model.UserTurnType == Enums.TurnType.Guess)
+{
+    <div>
+        GUESS
+    </div>
+}
