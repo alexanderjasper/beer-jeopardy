@@ -121,10 +121,10 @@ namespace Oljeopardy.Controllers
                         _userManager.FindByIdAsync(model.Game.LatestCategoryChooserId).Result.UserName;
                 }
 
-                if (model.Game.SelectedGameCategory != null)
+                if (model.Game.SelectedAnswerQuestionId != null && model.Game.SelectedAnswerQuestionId.Value != Guid.Empty)
                 {
                     var categoryOwnerParticipant =
-                        _gameRepository.GetParticipant(model.Game.SelectedGameCategory.ParticipantId);
+                        _categoryRepository.GetParticipantFromAnswerQuestion(model.Game.SelectedAnswerQuestionId.Value, model.Game.Id);
                     model.CategoryOwnerName =
                         _userManager.FindByIdAsync(categoryOwnerParticipant.UserId).Result.UserName;
                 }

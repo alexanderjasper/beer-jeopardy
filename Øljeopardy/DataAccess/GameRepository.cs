@@ -220,6 +220,8 @@ namespace Oljeopardy.DataAccess
                                     throw new Exception("Could not parse PointsValue for AnswerQuestion");
                             }
                             game.SelectedAnswerQuestionId = null;
+                            game.LatestCategoryChooserId = null;
+                            game.UserId = winnerId;
 
                             _context.Update(winnerParticipant);
                             _context.Update(submitterParticipant);
@@ -252,8 +254,22 @@ namespace Oljeopardy.DataAccess
                     game.GameStatus == Enums.GameStatus.Active &&
                     submitterParticipant.TurnType == Enums.TurnType.Choose)
                 {
+                    var ownerParticipant = _categoryRepository.GetParticipantFromAnswerQuestion(answerQuestion.Id, gameId);
+                    if (ownerParticipant == null)
+                    {
+                        throw new DataException("Could not find owner of AnswerQuestion");
+                    }
+
+                    ownerParticipant.TurnType = Enums.TurnType.Read;
                     game.SelectedAnswerQuestionId = answerQuestionId;
+                    game.LatestCategoryChooserId = submitterUserId;
+                    game.UserId = null;
                     submitterParticipant.TurnType = Enums.TurnType.Guess;
+
+                    _context.Update(ownerParticipant);
+                    _context.Update(game);
+                    _context.Update(submitterParticipant);
+                    _context.SaveChanges();
                 }
             }
             catch

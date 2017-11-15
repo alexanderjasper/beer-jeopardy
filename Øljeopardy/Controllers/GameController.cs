@@ -93,7 +93,7 @@ namespace Oljeopardy.Controllers
         {
             try
             {
-                if (model.ChosenWinnerId != null && model.Game != null)
+                if (model.ChosenAnswerQuestionGuid != null && model.Game != null)
                 {
                     var userId = _userManager.GetUserId(HttpContext.User);
                     _gameRepository.SetSelectedAnswerQuestion(model.Game.Id, userId, model.ChosenAnswerQuestionGuid);

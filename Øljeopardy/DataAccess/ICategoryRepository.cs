@@ -16,5 +16,6 @@ namespace Oljeopardy.DataAccess
         Category GetCategoryFromAnswerQuestion(Guid answerQuestionId);
         GameCategory GetGameCategoryFromAnswerQuestion(Guid answerquestionId, Guid gameId);
         int GetAnswerQuestionPointsValue(Guid answerQuestionId);
+        Participant GetParticipantFromAnswerQuestion(Guid answerQuestionId, Guid gameId);
     }
 }

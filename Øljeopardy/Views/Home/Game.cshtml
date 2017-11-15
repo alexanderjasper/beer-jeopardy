@@ -11,7 +11,63 @@
 
 @if (Model.UserTurnType == Enums.TurnType.Choose)
 {
-    <div>CHOOSE</div>
+    <form asp-action="SelectAnswer" asp-controller="Game">
+        @foreach (var gameCategory in Model.OtherGameCategories)
+        {
+            <div class="row">
+                @gameCategory.Category.Name
+            </div>
+            <div class="row">
+                @if (gameCategory.GameCategory.Won100ParticipantId == Guid.Empty)
+                {
+                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion100.Id" />
+                }
+                else
+                {
+                <input type="radio" disabled="disabled" />
+                }
+                @if (gameCategory.GameCategory.Won200ParticipantId == Guid.Empty)
+                {
+                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion200.Id" />
+                }
+                else
+                {
+                <input type="radio" disabled="disabled" />
+                }
+                @if (gameCategory.GameCategory.Won300ParticipantId == Guid.Empty)
+                {
+                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion300.Id" />
+                }
+                else
+                {
+                <input type="radio" disabled="disabled" />
+                }
+                @if (gameCategory.GameCategory.Won400ParticipantId == Guid.Empty)
+                {
+                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion400.Id" />
+                }
+                else
+                {
+                <input type="radio" disabled="disabled" />
+                }
+                @if (gameCategory.GameCategory.Won500ParticipantId == Guid.Empty)
+                {
+                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion500.Id" />
+                }
+                else
+                {
+                <input type="radio" disabled="disabled" />
+                }
+            </div>
+        }
+        @if (Model.OtherGameCategories.Count > 0)
+        {
+        <div class="row">
+            <input type="button" class="menubutton" value="Vælg" onClick="ValidateForm(this.form, 'SelectAnswerQuestion')" />
+        </div>
+        }
+        <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
+    </form>
 }
 @if (Model.UserTurnType == Enums.TurnType.Read)
 {
@@ -28,9 +84,24 @@
         <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden"/>
     </form>
 }
-@if (Model.UserTurnType == Enums.TurnType.Guess)
+@if (Model.UserTurnType == Enums.TurnType.Guess && Model.Game != null)
+{
+    @if (Model.Game.UserId != null)
+    {
+    <div>
+        Det er nogens tur til at vælge kategori.
+    </div>
+    }
+    else
+    {
+        <div>
+            @Model.LatestCategoryChooserName har valgt @Model.CategoryOwnerName's kategori @Model.ChosenCategoryName.
+        </div>
+    }
+}
+@if(Model.Game == null)
 {
     <div>
-        GUESS
+        Du deltager ikke i et spil.
     </div>
 }

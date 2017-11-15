@@ -143,5 +143,24 @@ namespace Oljeopardy.DataAccess
                 throw new Exception("Could not get Points for AnswerQuestion");
             }
         }
+
+        public Participant GetParticipantFromAnswerQuestion(Guid answerQuestionId, Guid gameId)
+        {
+            try
+            {
+                var userId = _context.Categories
+                    .FirstOrDefault(x => x.AnswerQuestion100.Id == answerQuestionId || 
+                    x.AnswerQuestion200.Id == answerQuestionId || 
+                    x.AnswerQuestion300.Id == answerQuestionId ||
+                    x.AnswerQuestion400.Id == answerQuestionId || 
+                    x.AnswerQuestion500.Id == answerQuestionId)
+                    .UserId;
+                return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+            }
+            catch
+            {
+                throw new DataException("Could not get Participant from AnswerQuestion");
+            }
+        }
     }
 }
