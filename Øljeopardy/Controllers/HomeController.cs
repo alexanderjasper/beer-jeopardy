@@ -135,6 +135,11 @@ namespace Oljeopardy.Controllers
                         _categoryRepository.GetCategoryFromAnswerQuestion(model.Game.SelectedAnswerQuestionId.Value);
                     model.ChosenCategoryName = chosenCategory.Name;
                 }
+
+                var gameUsersTask = _gameRepository.GetUsersForGameAsync(gameId, userId);
+                gameUsersTask.Wait();
+                var gameUsers = gameUsersTask.Result;
+                model.UserList = Mapper.Map<List<GameUserViewModel>>(gameUsers);
             }
 
             return model;

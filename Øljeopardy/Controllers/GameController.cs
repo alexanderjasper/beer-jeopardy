@@ -78,7 +78,7 @@ namespace Oljeopardy.Controllers
                 if (model.ChosenWinnerId != null && model.Game != null)
                 {
                     var userId = _userManager.GetUserId(HttpContext.User);
-                    _gameRepository.SetAnswerQuestionWinner(model.ChosenWinnerId, model.Game.Id, userId, model.ChosenAnswerQuestionGuid);
+                    _gameRepository.SetAnswerQuestionWinner(model.ChosenWinnerId, model.Game.Id, userId);
                     return RedirectToAction("Game", "Home");
                 }
                 throw new Exception("No winner was chosen");

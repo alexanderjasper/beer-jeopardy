@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Oljeopardy.Data;
 using Oljeopardy.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Oljeopardy.DataAccess
 {
@@ -12,11 +13,13 @@ namespace Oljeopardy.DataAccess
     {
         private readonly ApplicationDbContext _context;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GameRepository(ApplicationDbContext context, ICategoryRepository categoryRepository)
+        public GameRepository(ApplicationDbContext context, ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _categoryRepository = categoryRepository;
+            _userManager = userManager;
         }
 
         public Game AddGame(string name, Guid chosenCategoryGuid, string userId)
@@ -167,7 +170,7 @@ namespace Oljeopardy.DataAccess
             return 100 * dic[100] + 200 * dic[200] + 300 * dic[300] + 400 * dic[400] + 500 * dic[500];
         }
 
-        public void SetAnswerQuestionWinner(string winnerId, Guid gameId, string submitterUserId, Guid answerQuestionId)
+        public void SetAnswerQuestionWinner(string winnerId, Guid gameId, string submitterUserId)
         {
             try
             {
@@ -176,7 +179,7 @@ namespace Oljeopardy.DataAccess
                     _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == winnerId);
                 var submitterParticipant =
                     _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == submitterUserId);
-                var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == answerQuestionId);
+                var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == game.SelectedAnswerQuestionId);
                 if (game != null &&
                     winnerParticipant != null &&
                     submitterParticipant != null &&
@@ -189,14 +192,14 @@ namespace Oljeopardy.DataAccess
                     submitterParticipant.TurnType = Enums.TurnType.Guess;
 
 
-                    var answerQuestionCategory = _categoryRepository.GetCategoryFromAnswerQuestion(answerQuestionId);
+                    var answerQuestionCategory = _categoryRepository.GetCategoryFromAnswerQuestion(answerQuestion.Id);
                     if (answerQuestionCategory != null)
                     {
                         var answerQuestionGameCategory =
-                            _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestionId, gameId);
+                            _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestion.Id, gameId);
                         if (answerQuestionGameCategory != null)
                         {
-                            switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestionId))
+                            switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestion.Id))
                             {
                                 case 100:
                                     answerQuestionGameCategory.Won100ParticipantId = winnerParticipant.Id;
@@ -257,6 +260,34 @@ namespace Oljeopardy.DataAccess
             {
                 throw new DataException("Could not set selected AnswerQuestion");
             }
+        }
+
+        public async Task<List<GameUser>> GetUsersForGameAsync(Guid gameId, string ownUserId = null)
+        {
+            var userIds = new List<string>();
+            if (ownUserId != null)
+            {
+                userIds = _context.Participants.Where(x => x.GameId == gameId && x.UserId != ownUserId).Select(x => x.UserId).ToList();
+            }
+            else
+            {
+                userIds = _context.Participants.Where(x => x.GameId == gameId).Select(x => x.UserId).ToList();
+            }
+            var gameUsers = new List<GameUser>();
+            foreach (var userId in userIds)
+            {
+                var applicationUser = await _userManager.FindByIdAsync(userId);
+                if (applicationUser != null)
+                {
+                    var gameUser = new GameUser()
+                    {
+                        UserId = userId,
+                        Name = applicationUser.UserName
+                    };
+                    gameUsers.Add(gameUser);
+                }
+            }
+            return gameUsers;
         }
     }
 }

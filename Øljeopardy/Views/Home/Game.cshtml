@@ -11,15 +11,22 @@
 
 @if (Model.UserTurnType == Enums.TurnType.Choose)
 {
-    <div>
-        CHOOSE
-    </div>
+    <div>CHOOSE</div>
 }
 @if (Model.UserTurnType == Enums.TurnType.Read)
 {
-    <div>
-        READ
-    </div>
+    <form asp-controller="Game" asp-action="SelectWinner">
+        <div class="row">
+            <div class="col-xs-12">
+                <select asp-for="ChosenWinnerId"
+                        asp-items="@(new SelectList(Model.UserList, "UserId", "Name"))" class="dropdown">
+                    <option selected disabled>Vælg vinderen</option>
+                </select>
+            </div>
+            <input type="button" class="menubutton" value="Vælg vinder" onClick="ValidateForm(this.form, 'SelectWinner')" />
+        </div>
+        <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden"/>
+    </form>
 }
 @if (Model.UserTurnType == Enums.TurnType.Guess)
 {

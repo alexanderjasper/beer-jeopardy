@@ -23,6 +23,10 @@ function ValidateForm(form, id) {
         alert("Vælg en kategori, du vil bruge i spillet");
         return false;
     }
+    if (id === "SelectWinner" && form.ChosenWinnerId.selectedIndex === 0) {
+        alert("Vælg den spiller, der vandt runden");
+        return false;
+    }
     form.submit();
 }
 

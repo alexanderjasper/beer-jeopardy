@@ -12,6 +12,7 @@ namespace Oljeopardy
             {
                 CreateMap<Category, CategoryViewModel>().ReverseMap();
                 CreateMap<AnswerQuestion, AnswerQuestionViewModel>().ReverseMap();
+                CreateMap<GameUser, GameUserViewModel>().ReverseMap();
             }
         }
     }
