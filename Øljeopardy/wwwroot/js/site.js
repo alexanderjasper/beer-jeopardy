@@ -49,3 +49,11 @@ function MoveAnswerQuestion(position, direction) {
     targetQuestion.value = thisQuestionValue;
     targetAnswer.value = thisAnswerValue;
 }
+
+function selectAnswerQuestion(elem) {
+    var labels = document.getElementsByClassName('category-radio-button-label')
+    for (i = 0; i < labels.length; i++) {
+        labels[i].classList.remove('selected');
+    }
+    elem.classList.add('selected');
+}

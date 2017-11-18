@@ -12,57 +12,90 @@
     <form asp-action="SelectAnswer" asp-controller="Game">
         @foreach (var gameCategory in Model.OtherGameCategories)
         {
-            <div class="row">
-                @gameCategory.Category.Name
-            </div>
-            <div class="row">
-                @if (gameCategory.GameCategory.Won100ParticipantId == Guid.Empty)
-                {
-                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion100.Id" />
-                }
-                else
-                {
-                <input type="radio" disabled="disabled" />
-                }
-                @if (gameCategory.GameCategory.Won200ParticipantId == Guid.Empty)
-                {
-                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion200.Id" />
-                }
-                else
-                {
-                <input type="radio" disabled="disabled" />
-                }
-                @if (gameCategory.GameCategory.Won300ParticipantId == Guid.Empty)
-                {
-                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion300.Id" />
-                }
-                else
-                {
-                <input type="radio" disabled="disabled" />
-                }
-                @if (gameCategory.GameCategory.Won400ParticipantId == Guid.Empty)
-                {
-                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion400.Id" />
-                }
-                else
-                {
-                <input type="radio" disabled="disabled" />
-                }
-                @if (gameCategory.GameCategory.Won500ParticipantId == Guid.Empty)
-                {
-                <input asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion500.Id" />
-                }
-                else
-                {
-                <input type="radio" disabled="disabled" />
-                }
+            <div class="category-select-container">
+                <div class="row">
+                    @gameCategory.Category.Name
+                </div>
+                <div class="row">
+                    @if (gameCategory.GameCategory.Won100ParticipantId == Guid.Empty)
+                    {
+                        <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
+                            100
+                            <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion100.Id" />
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="category-radio-button-label inactive">
+                            100
+                            <input class="category-radio-button" type="radio" disabled="disabled" />
+                        </label>
+                    }
+                    @if (gameCategory.GameCategory.Won200ParticipantId == Guid.Empty)
+                    {
+                        <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
+                            200
+                            <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion200.Id" />
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="category-radio-button-label inactive">
+                            200
+                            <input class="category-radio-button" type="radio" disabled="disabled" />
+                        </label>
+                    }
+                    @if (gameCategory.GameCategory.Won300ParticipantId == Guid.Empty)
+                    {
+                        <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
+                            300
+                            <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion300.Id" />
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="category-radio-button-label inactive">
+                            300
+                            <input class="category-radio-button" type="radio" disabled="disabled" />
+                        </label>
+                    }
+                    @if (gameCategory.GameCategory.Won400ParticipantId == Guid.Empty)
+                    {
+                        <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
+                            400
+                            <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion400.Id" />
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="category-radio-button-label inactive">
+                            400
+                            <input class="category-radio-button" type="radio" disabled="disabled" />
+                        </label>
+                    }
+                    @if (gameCategory.GameCategory.Won500ParticipantId == Guid.Empty)
+                    {
+                        <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
+                            500
+                            <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion500.Id" />
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="category-radio-button-label inactive">
+                            500
+                            <input class="category-radio-button" type="radio" disabled="disabled" />
+                        </label>
+                    }
+                </div>
             </div>
         }
         @if (Model.OtherGameCategories.Count > 0)
         {
-        <div class="row">
-            <input type="button" class="menubutton" value="Vælg" onClick="ValidateForm(this.form, 'SelectAnswerQuestion')" />
-        </div>
+            <div style="height:20px;"></div>
+            <div class="row">
+                <input type="button" class="menubutton" value="Vælg" onClick="ValidateForm(this.form, 'SelectAnswerQuestion')" />
+            </div>
         }
         <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
     </form>
@@ -71,24 +104,26 @@
 {
     <form asp-controller="Game" asp-action="SelectWinner">
         <div class="row">
-            <div class="col-xs-12">
-                <select asp-for="ChosenWinnerId"
-                        asp-items="@(new SelectList(Model.UserList, "UserId", "Name"))" class="dropdown">
-                    <option selected disabled>Vælg vinderen</option>
-                </select>
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <select class="form-control" asp-for="ChosenWinnerId"
+                            asp-items="@(new SelectList(Model.UserList, "UserId", "Name"))" class="dropdown">
+                        <option disabled>Vælg vinderen</option>
+                    </select>
+                </div>
+                <input type="button" class="menubutton" value="Vælg vinder" onClick="ValidateForm(this.form, 'SelectWinner')" />
             </div>
-            <input type="button" class="menubutton" value="Vælg vinder" onClick="ValidateForm(this.form, 'SelectWinner')" />
         </div>
-        <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden"/>
+        <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
     </form>
 }
 @if (Model.UserTurnType == Enums.TurnType.Guess && Model.Game != null)
 {
     @if (Model.Game.UserId != null)
     {
-    <div>
-        Det er nogens tur til at vælge kategori.
-    </div>
+        <div>
+            Det er nogens tur til at vælge kategori.
+        </div>
     }
     else
     {
@@ -97,7 +132,7 @@
         </div>
     }
 }
-@if(Model.Game == null)
+@if (Model.Game == null)
 {
     <div>
         Du deltager ikke i et spil.
