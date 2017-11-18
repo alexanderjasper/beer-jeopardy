@@ -140,6 +140,13 @@ else
         }
         @if (Model.UserTurnType == Enums.TurnType.Read)
         {
+            <div style="text-align: center">
+                @Model.LatestCategoryChooserName har valgt din kategori @Model.UsersOwnCategory.Name til @Model.ChosenAnswerQuestionPoints point.
+            </div>
+            <h4>Svar:</h4>
+            <div style="text-align: center">@Model.ChosenAnswerQuestion.Answer</div>
+            <h4>Spørgsmål:</h4>
+            <div style="text-align: center; height: 30px;">@Model.ChosenAnswerQuestion.Question</div>
             <form asp-controller="Game" asp-action="SelectWinner">
                 <div class="row">
                     <div class="form-group">

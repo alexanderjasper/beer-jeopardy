@@ -194,6 +194,16 @@ namespace Oljeopardy.Controllers
 
                 model.Highscore = GetHighScoreViewModel(model.Game.Id);
 
+                if (model.UserTurnType == Enums.TurnType.Read)
+                {
+                    if (model.Game.SelectedAnswerQuestionId != null)
+                    {
+                        var chosenAnswerQuestion = _categoryRepository.GetAnswerQuestionById(model.Game.SelectedAnswerQuestionId.Value);
+                        model.ChosenAnswerQuestion = Mapper.Map<AnswerQuestionViewModel>(chosenAnswerQuestion);
+                        model.ChosenAnswerQuestionPoints = _categoryRepository.GetAnswerQuestionPointsValue(chosenAnswerQuestion.Id);
+                    }
+                }
+
                 _cache.Set("GameVersion:" + userId, model.Game.Version);
             }
 
