@@ -130,8 +130,16 @@ namespace Oljeopardy.DataAccess
             var allGamesForUser = _context.Participants
                 .Where(x => x.UserId == userId)
                 .Select(x => x.GameId);
-            return _context.Games
-                .FirstOrDefault(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && allGamesForUser.Contains(x.Id));
+            var activeGamesForUser = _context.Games.Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && allGamesForUser.Contains(x.Id) && x.GameStatus == Enums.GameStatus.Active);
+            if (activeGamesForUser.Count() > 0)
+            {
+                return activeGamesForUser.FirstOrDefault();
+            }
+            else
+            {
+                return _context.Games
+                    .Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && allGamesForUser.Contains(x.Id)).OrderByDescending(x => x.ActiveTime).FirstOrDefault();
+            }
         }
 
         public Participant GetUserParticipant(Guid gameId, string userId)
@@ -144,7 +152,7 @@ namespace Oljeopardy.DataAccess
             return _context.Participants.FirstOrDefault(x => x.Id == participantId);
         }
 
-        public Dictionary<int,int> GetPointsForParticipant(Guid participantId)
+        public Dictionary<int, int> GetPointsForParticipant(Guid participantId)
         {
             try
             {
@@ -188,8 +196,23 @@ namespace Oljeopardy.DataAccess
                     winnerParticipant.TurnType == Enums.TurnType.Guess &&
                     submitterParticipant.TurnType == Enums.TurnType.Read)
                 {
-                    winnerParticipant.TurnType = Enums.TurnType.Choose;
-                    submitterParticipant.TurnType = Enums.TurnType.Guess;
+                    if (_categoryRepository.WinnerHasAnswerQuestionsToSelect(gameId, winnerParticipant, answerQuestion.Id))
+                    {
+                        winnerParticipant.TurnType = Enums.TurnType.Choose;
+                        submitterParticipant.TurnType = Enums.TurnType.Guess;
+                    }
+                    else
+                    {
+                        if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(gameId, winnerParticipant.Id))
+                        {
+                            winnerParticipant.TurnType = Enums.TurnType.ChooseOwn;
+                            submitterParticipant.TurnType = Enums.TurnType.Guess;
+                        }
+                        else
+                        {
+                            game.GameStatus = Enums.GameStatus.Finished;
+                        }
+                    }
 
 
                     var answerQuestionCategory = _categoryRepository.GetCategoryFromAnswerQuestion(answerQuestion.Id);
@@ -227,6 +250,7 @@ namespace Oljeopardy.DataAccess
                             _context.Update(submitterParticipant);
                             _context.Update(answerQuestionGameCategory);
                             _context.Update(game);
+
                             _context.SaveChanges();
                             return;
                         }
@@ -252,7 +276,7 @@ namespace Oljeopardy.DataAccess
                     submitterParticipant != null &&
                     answerQuestion != null &&
                     game.GameStatus == Enums.GameStatus.Active &&
-                    submitterParticipant.TurnType == Enums.TurnType.Choose)
+                    submitterParticipant.TurnType == Enums.TurnType.Choose || submitterParticipant.TurnType == Enums.TurnType.ChooseOwn)
                 {
                     var ownerParticipant = _categoryRepository.GetParticipantFromAnswerQuestion(answerQuestion.Id, gameId);
                     if (ownerParticipant == null)
@@ -260,11 +284,18 @@ namespace Oljeopardy.DataAccess
                         throw new DataException("Could not find owner of AnswerQuestion");
                     }
 
-                    ownerParticipant.TurnType = Enums.TurnType.Read;
                     game.SelectedAnswerQuestionId = answerQuestionId;
                     game.LatestCategoryChooserId = submitterUserId;
                     game.UserId = null;
-                    submitterParticipant.TurnType = Enums.TurnType.Guess;
+                    if (submitterParticipant.TurnType != Enums.TurnType.ChooseOwn)
+                    {
+                        ownerParticipant.TurnType = Enums.TurnType.Read;
+                        submitterParticipant.TurnType = Enums.TurnType.Guess;
+                    }
+                    else
+                    {
+                        submitterParticipant.TurnType = Enums.TurnType.Read;
+                    }
 
                     _context.Update(ownerParticipant);
                     _context.Update(game);
@@ -304,6 +335,26 @@ namespace Oljeopardy.DataAccess
                 }
             }
             return gameUsers;
+        }
+
+        public Game IncrementGameVersion(Guid gameId)
+        {
+            try
+            {
+                var game = _context.Games.FirstOrDefault(x => x.Id == gameId);
+                if (game != null)
+                {
+                    game.Version += 1;
+                    _context.Update(game);
+                    _context.SaveChanges();
+                    return game;
+                }
+                throw new Exception("Could not find game to increment");
+            }
+            catch
+            {
+                throw new Exception("Could not increment game version");
+            }
         }
     }
 }

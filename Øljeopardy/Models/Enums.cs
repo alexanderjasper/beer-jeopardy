@@ -11,13 +11,14 @@ namespace Oljeopardy.Models
         {
             Guess,
             Read,
-            Choose
+            Choose,
+            ChooseOwn
         }
 
         public enum GameStatus
         {
             Active,
-            Inactive
+            Finished
         }
 
         public enum CategoriesPageAction

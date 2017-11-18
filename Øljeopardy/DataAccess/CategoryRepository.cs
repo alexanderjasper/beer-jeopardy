@@ -116,7 +116,14 @@ namespace Oljeopardy.DataAccess
 
         public List<GameCategory> GetGameCategoriesForGame(Guid gameId)
         {
-            return _context.GameCategories.Where(x => x.GameId == gameId).ToList();
+            try
+            {
+                return _context.GameCategories.Where(x => x.GameId == gameId).ToList();
+            }
+            catch
+            {
+                throw new Exception("Could not get gamecategories for game");
+            }
         }
 
         public int GetAnswerQuestionPointsValue(Guid answerQuestionId)
@@ -161,6 +168,75 @@ namespace Oljeopardy.DataAccess
             {
                 throw new DataException("Could not get Participant from AnswerQuestion");
             }
+        }
+
+        public List<GameCategory> GetOtherPlayersGameCategories(Guid gameId, Guid participantId)
+        {
+            try
+            {
+                return GetGameCategoriesForGame(gameId).Where(x => x.ParticipantId != participantId).ToList();
+            }
+            catch
+            {
+                throw new Exception("Could not get gamecategories for game");
+            }
+        }
+
+        public bool WinnerHasAnswerQuestionsToSelect(Guid gameId, Participant winnerParticipant, Guid chosenAnswerQuestionId)
+        {
+            try
+            {
+                if (winnerParticipant == null)
+                {
+                    throw new Exception("Winner participant is null");
+                }
+                var otherPlayersGamecategories = GetOtherPlayersGameCategories(gameId, winnerParticipant.Id);
+                foreach (var gameCategory in otherPlayersGamecategories)
+                {
+                    var category = GetCategoryById(gameCategory.CategoryId);
+                    if (category != null)
+                    {
+                        if ((gameCategory.Won100ParticipantId == Guid.Empty && category.AnswerQuestion100.Id != chosenAnswerQuestionId) ||
+                            (gameCategory.Won200ParticipantId == Guid.Empty && category.AnswerQuestion200.Id != chosenAnswerQuestionId) ||
+                            (gameCategory.Won300ParticipantId == Guid.Empty && category.AnswerQuestion300.Id != chosenAnswerQuestionId) ||
+                            (gameCategory.Won400ParticipantId == Guid.Empty && category.AnswerQuestion400.Id != chosenAnswerQuestionId) ||
+                            (gameCategory.Won500ParticipantId == Guid.Empty && category.AnswerQuestion500.Id != chosenAnswerQuestionId))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Could not get winner's Category");
+                    }
+                }
+                return false;
+            }
+            catch
+            {
+                throw new Exception("Could not determine if winner has AnswerQuestions to select");
+            }
+        }
+
+        public bool ParticipantsGamecategoryHasAnswerQuestionsToSelect(Guid gameId, Guid participantId)
+        {
+            var gameCategory = _context.GameCategories.FirstOrDefault(x => x.GameId == gameId && x.ParticipantId == participantId);
+            if (gameCategory != null)
+            {
+                if (gameCategory.Won100ParticipantId == Guid.Empty ||
+                    gameCategory.Won200ParticipantId == Guid.Empty ||
+                    gameCategory.Won300ParticipantId == Guid.Empty ||
+                    gameCategory.Won400ParticipantId == Guid.Empty ||
+                    gameCategory.Won500ParticipantId == Guid.Empty)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                throw new Exception("Could not determine if participant has AnswerQuestions to select");
+            }
+            return false;
         }
     }
 }

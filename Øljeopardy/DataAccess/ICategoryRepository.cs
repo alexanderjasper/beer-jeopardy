@@ -17,5 +17,8 @@ namespace Oljeopardy.DataAccess
         GameCategory GetGameCategoryFromAnswerQuestion(Guid answerquestionId, Guid gameId);
         int GetAnswerQuestionPointsValue(Guid answerQuestionId);
         Participant GetParticipantFromAnswerQuestion(Guid answerQuestionId, Guid gameId);
+        List<GameCategory> GetOtherPlayersGameCategories(Guid gameId, Guid participantId);
+        bool WinnerHasAnswerQuestionsToSelect(Guid gameId, Participant winnerParticipant, Guid chosenAnswerQuestionId);
+        bool ParticipantsGamecategoryHasAnswerQuestionsToSelect(Guid gameId, Guid participantId);
     }
 }

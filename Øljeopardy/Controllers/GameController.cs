@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Oljeopardy.DataAccess;
 using Oljeopardy.Models;
 using Oljeopardy.Models.JeopardyViewModels;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Oljeopardy.Controllers
 {
@@ -16,12 +17,14 @@ namespace Oljeopardy.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IGameRepository _gameRepository;
+        private IMemoryCache _cache;
 
-        public GameController(ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager, IGameRepository gameRepository)
+        public GameController(ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager, IGameRepository gameRepository, IMemoryCache cache)
         {
             _categoryRepository = categoryRepository;
             _userManager = userManager;
             _gameRepository = gameRepository;
+            _cache = cache;
         }
 
         public IActionResult Add()
@@ -67,6 +70,7 @@ namespace Oljeopardy.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             _gameRepository.AddParticipant(model.ChosenGameGuid, model.ChosenCategoryGuid, Enums.TurnType.Guess, userId);
+            _gameRepository.IncrementGameVersion(model.ChosenGameGuid);
 
             return RedirectToAction("Game", "Home");
         }
@@ -79,6 +83,7 @@ namespace Oljeopardy.Controllers
                 {
                     var userId = _userManager.GetUserId(HttpContext.User);
                     _gameRepository.SetAnswerQuestionWinner(model.ChosenWinnerId, model.Game.Id, userId);
+                    _gameRepository.IncrementGameVersion(model.Game.Id);
                     return RedirectToAction("Game", "Home");
                 }
                 throw new Exception("No winner was chosen");
@@ -97,6 +102,7 @@ namespace Oljeopardy.Controllers
                 {
                     var userId = _userManager.GetUserId(HttpContext.User);
                     _gameRepository.SetSelectedAnswerQuestion(model.Game.Id, userId, model.ChosenAnswerQuestionGuid);
+                    _gameRepository.IncrementGameVersion(model.Game.Id);
                     return RedirectToAction("Game", "Home");
                 }
                 throw new Exception("No answer selected");
@@ -105,6 +111,25 @@ namespace Oljeopardy.Controllers
             {
                 throw new Exception("Could not submit AnswerQuestion selection");
             }
+        }
+
+        [HttpGet]
+        [Route("checkIfGameChanged")]
+        public IActionResult CheckIfGameChanged()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var game = _gameRepository.GetActiveGameForUser(userId);
+
+            var cachedVersion = _cache.Get("GameVersion:" + userId);
+
+            if (cachedVersion != null)
+            {
+                if (game != null && cachedVersion != null && (cachedVersion.ToString() != game.Version.ToString()))
+                {
+                    return Ok(true);
+                }
+            }
+            return Ok(false);            
         }
     }
 }

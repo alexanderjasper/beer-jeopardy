@@ -20,5 +20,6 @@ namespace Oljeopardy.DataAccess
         void SetAnswerQuestionWinner(string winnerId, Guid gameId, string submitterUserId);
         void SetSelectedAnswerQuestion(Guid gameId, string submitterUserId, Guid answerQuestionId);
         Task<List<GameUser>> GetUsersForGameAsync(Guid gameId, string userId = null);
+        Game IncrementGameVersion(Guid gameId);
     }
 }

@@ -48,6 +48,7 @@ namespace Oljeopardy
             services.AddTransient<IGameRepository, GameRepository>();
 
             services.AddMvc();
+            services.AddMemoryCache();
 
             services.AddAutoMapper();
             services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());

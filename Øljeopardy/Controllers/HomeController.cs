@@ -10,6 +10,7 @@ using Oljeopardy.Data;
 using Oljeopardy.DataAccess;
 using Oljeopardy.Models;
 using Oljeopardy.Models.JeopardyViewModels;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Oljeopardy.Controllers
 {
@@ -20,14 +21,21 @@ namespace Oljeopardy.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IGameRepository _gameRepository;
+        private IMemoryCache _cache;
 
-        public HomeController(ApplicationDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager, ICategoryRepository categoryRepository, IGameRepository gameRepository)
+        public HomeController(ApplicationDbContext context, 
+            IMapper mapper, 
+            UserManager<ApplicationUser> userManager, 
+            ICategoryRepository categoryRepository, 
+            IGameRepository gameRepository,
+            IMemoryCache cache)
         {
             _context = context;
             Mapper = mapper;
             _userManager = userManager;
             _categoryRepository = categoryRepository;
             _gameRepository = gameRepository;
+            _cache = cache;
         }
 
         public IActionResult Index()
@@ -105,14 +113,28 @@ namespace Oljeopardy.Controllers
 
                 var gameCategories = _categoryRepository.GetGameCategoriesForGame(gameId);
                 model.OtherGameCategories = new List<GameCategoryViewModel>();
-                foreach (var gameCategory in gameCategories.Where(x => x.ParticipantId != userParticipant.Id))
+                if (userParticipant.TurnType == Enums.TurnType.Choose)
                 {
+                    foreach (var gameCategory in gameCategories.Where(x => x.ParticipantId != userParticipant.Id))
+                    {
+                        var gameCategoryViewModel = new GameCategoryViewModel()
+                        {
+                            GameCategory = gameCategory,
+                            Category = _categoryRepository.GetCategoryById(gameCategory.CategoryId)
+                        };
+                        model.OtherGameCategories.Add(gameCategoryViewModel);
+                    }
+                }
+                else
+                {
+                    var gameCategory = gameCategories.FirstOrDefault(x => x.ParticipantId == userParticipant.Id);
                     var gameCategoryViewModel = new GameCategoryViewModel()
                     {
                         GameCategory = gameCategory,
                         Category = _categoryRepository.GetCategoryById(gameCategory.CategoryId)
                     };
                     model.OtherGameCategories.Add(gameCategoryViewModel);
+
                 }
 
                 if (model.Game.LatestCategoryChooserId != null)
@@ -140,6 +162,8 @@ namespace Oljeopardy.Controllers
                 gameUsersTask.Wait();
                 var gameUsers = gameUsersTask.Result;
                 model.UserList = Mapper.Map<List<GameUserViewModel>>(gameUsers);
+
+                _cache.Set("GameVersion:" + userId, model.Game.Version);
             }
 
             return model;
