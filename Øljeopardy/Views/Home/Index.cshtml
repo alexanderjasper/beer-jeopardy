@@ -1,25 +1,29 @@
 ﻿<h1>@ViewData["Title"]</h1>
+<hr />
 
 <div class="row">
-    <hr />
     <form>
-        @if (Context.User.Identity.IsAuthenticated)
-        {
-            <div>
-                <button asp-controller="Game" asp-action="Participate" class="menubutton">Deltag i et spil</button>
+        <div class="row">
+            <div class="center-block">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <div class="row button-container">
+                        <button asp-controller="Game" asp-action="Participate" class="menubutton">Deltag i et spil</button>
+                    </div>
+                    <div class="row button-container">
+                        <button asp-controller="Game" asp-action="Add" class="menubutton">Opret nyt spil</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="row button-container">
+                        <button asp-controller="Account" asp-action="Login" class="menubutton">Log ind</button>
+                    </div>
+                    <div class="row button-container">
+                        <button asp-controller="Account" asp-action="Register" class="menubutton">Ny bruger</button>
+                    </div>
+                }
             </div>
-            <div>
-                <button asp-controller="Game" asp-action="Add" class="menubutton">Opret nyt spil</button>
-            </div>
-        }
-        else
-        {
-            <div>
-                <button asp-controller="Account" asp-action="Login" class="menubutton">Log ind</button>
-            </div>
-            <div>
-                <button asp-controller="Account" asp-action="Register" class="menubutton">Ny bruger</button>
-            </div>
-        }
+        </div>
     </form>
 </div>

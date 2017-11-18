@@ -1,4 +1,5 @@
-﻿var gulp = require("gulp"),
+/// <binding AfterBuild='sass' />
+var gulp = require("gulp"),
     fs = require("fs"),
     sass = require("gulp-sass");
 

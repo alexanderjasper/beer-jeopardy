@@ -1,12 +1,11 @@
 ﻿@model RegisterViewModel
 
 <h2>@ViewData["Title"]</h2>
+<hr />
 
 <div class="row">
     <div>
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Opret ny konto.</h4>
-            <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName"></label>
@@ -28,7 +27,9 @@
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="menubutton">Opret</button>
+            <div class="row button-container">
+                <button type="submit" class="menubutton">Opret</button>
+            </div>
         </form>
     </div>
 </div>

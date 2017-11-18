@@ -1,13 +1,11 @@
 ﻿@model Oljeopardy.Models.JeopardyViewModels.GameViewModel
 <h1>@ViewData["Title"]</h1>
+<hr />
+
 @if (@Model.Game != null)
 {
     <h3>@Model.Game.Name</h3>
 }
-
-<div class="row">
-    <hr />
-</div>
 
 @if (Model.UserTurnType == Enums.TurnType.Choose)
 {
