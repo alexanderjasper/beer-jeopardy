@@ -172,9 +172,19 @@ else
             }
             else
             {
-                <div>
-                    @Model.LatestCategoryChooserName har valgt @Model.CategoryOwnerName's kategori @Model.ChosenCategoryName.
-                </div>
+                @if (@Model.CategoryOwnerName.Last() == 's')
+                {
+                    <h4>
+                        @Model.LatestCategoryChooserName har valgt @(Model.CategoryOwnerName)' kategori @Model.ChosenCategoryName til @Model.ChosenAnswerQuestionPoints point.
+                    </h4>
+                }
+                else
+                {
+                    <h4>
+                        @Model.LatestCategoryChooserName har valgt @(Model.CategoryOwnerName)s kategori @Model.ChosenCategoryName til @Model.ChosenAnswerQuestionPoints point.
+                    </h4>
+                }
+
             }
         }
     }
