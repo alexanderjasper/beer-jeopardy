@@ -68,7 +68,7 @@ namespace Oljeopardy.DataAccess
         public List<Game> GetActiveGames()
         {
             return _context.Games
-                .Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2))
+                .Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && x.GameStatus == Enums.GameStatus.Active)
                 .OrderBy(x => x.Name)
                 .ToList();
         }
