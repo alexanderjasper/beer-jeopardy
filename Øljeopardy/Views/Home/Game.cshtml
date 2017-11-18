@@ -11,21 +11,31 @@
 else
 {
     <h2>@Model.Game.Name</h2>
-    
-    <table>
-        <tr>
-            <th>Navn</th>
-            <th>Point</th>
-        </tr>
-        @foreach (var highscoreentry in Model.Highscore.HighscoreEntries)
-        {
-            <tr>
-                <td style="padding-right: 20px;">@highscoreentry.UserName</td>
-                <td>@highscoreentry.Score</td>
-            </tr>
-        }
-    </table>
-
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 highscore-container">
+            <div class="row" style="height: 40px; border-bottom: solid; border-width:1px; padding-top: 10px;">
+                <div class="col-xs-7" style="text-align: center;">
+                    Navn
+                </div>
+                <div class="col-xs-4" style="text-align: right;">
+                    Point
+                </div>
+            </div>
+            <div class="row" style="height: 10px;"></div>
+            @foreach (var highscoreentry in Model.Highscore.HighscoreEntries)
+            {
+                <div class="row" style="height: 30px;">
+                    <div class="col-xs-7" style="text-align: center;">
+                        @highscoreentry.UserName
+                    </div>
+                    <div class="col-xs-4" style="text-align: right;">
+                            @highscoreentry.Score
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div style="height: 20px;"></div>
 
     @if (Model.Game.GameStatus == Enums.GameStatus.Finished)
     {
