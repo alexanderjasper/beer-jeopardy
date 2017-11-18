@@ -356,5 +356,17 @@ namespace Oljeopardy.DataAccess
                 throw new Exception("Could not increment game version");
             }
         }
+
+        public List<Participant> GetParticipantsForGame(Guid gameId)
+        {
+            try
+            {
+                return _context.Participants.Where(x => x.GameId == gameId).ToList();
+            }
+            catch
+            {
+                throw new Exception("Could not get participants for game");
+            }
+        }
     }
 }

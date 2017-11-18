@@ -15,6 +15,7 @@ namespace Oljeopardy.Models.JeopardyViewModels
         public string ChosenCategoryName { get; set; }
         public Enums.TurnType UserTurnType { get; set; }
         public List<GameUserViewModel> UserList { get; set; }
+        public HighscoreViewmodel Highscore { get; set; }
 
         public string ChosenWinnerId { get; set; }
         public Guid ChosenAnswerQuestionGuid { get; set; }

@@ -163,10 +163,38 @@ namespace Oljeopardy.Controllers
                 var gameUsers = gameUsersTask.Result;
                 model.UserList = Mapper.Map<List<GameUserViewModel>>(gameUsers);
 
+                model.Highscore = GetHighScoreViewModel(model.Game.Id);
+
                 _cache.Set("GameVersion:" + userId, model.Game.Version);
             }
 
             return model;
+        }
+
+        private HighscoreViewmodel GetHighScoreViewModel(Guid gameId)
+        {
+            try
+            {
+                var model = new HighscoreViewmodel()
+                {
+                    HighscoreEntries = new List<HighscoreEntryViewmodel>()
+                };
+                var participants = _gameRepository.GetParticipantsForGame(gameId);
+                foreach (var participant in participants)
+                {
+                    model.HighscoreEntries.Add(new HighscoreEntryViewmodel()
+                    {
+                        UserName = _userManager.FindByIdAsync(participant.UserId).Result.UserName,
+                        Score = _gameRepository.GetPointsSumForParticipant(participant.Id)
+                    });
+                }
+                model.HighscoreEntries = model.HighscoreEntries.OrderByDescending(x => x.Score).ToList();
+                return model;
+            }
+            catch
+            {
+                throw new Exception("Could not get high score view model");
+            }
         }
     }
 }

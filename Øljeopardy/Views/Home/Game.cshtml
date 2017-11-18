@@ -10,12 +10,28 @@
 }
 else
 {
-    <h3>@Model.Game.Name</h3>
+    <h2>@Model.Game.Name</h2>
+    
+    <table>
+        <tr>
+            <th>Navn</th>
+            <th>Point</th>
+        </tr>
+        @foreach (var highscoreentry in Model.Highscore.HighscoreEntries)
+        {
+            <tr>
+                <td style="padding-right: 20px;">@highscoreentry.UserName</td>
+                <td>@highscoreentry.Score</td>
+            </tr>
+        }
+    </table>
+
+
     @if (Model.Game.GameStatus == Enums.GameStatus.Finished)
     {
-        <div>
+        <h3>
             Spillet er slut.
-        </div>
+        </h3>
     }
     else
     {
@@ -133,9 +149,9 @@ else
         {
             @if (Model.Game.UserId != null)
             {
-                <div>
+                <h4>
                     Det er nogens tur til at vælge kategori.
-                </div>
+                </h4>
             }
             else
             {
