@@ -42,7 +42,36 @@ namespace Oljeopardy.Controllers
         {
             ViewData["Title"] = "Øljeopardy";
 
-            return View();
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var activeGame = _gameRepository.GetActiveGameForUser(userId);
+            bool hasActiveGame = false;
+            if (activeGame != null && activeGame.GameStatus == Enums.GameStatus.Active)
+            {
+                hasActiveGame = true;
+            }
+
+            var activeGames = _gameRepository.GetActiveGames();
+            bool activeGameExists = false;
+            if (activeGames != null && activeGames.Count() > 0)
+            {
+                activeGameExists = true;
+            }
+
+            var categories = _categoryRepository.GetCategoriesByUserId(userId);
+            bool hasCategory = false;
+            if (categories != null && categories.Count() > 0)
+            {
+                hasCategory = true;
+            }
+
+            var model = new HomeViewModel()
+            {
+                HasActiveGame = hasActiveGame,
+                HasCategory = hasCategory,
+                ActiveGameExists = activeGameExists
+            };
+
+            return View(model);
         }
 
         public IActionResult Categories(Enums.CategoriesPageAction pageAction)

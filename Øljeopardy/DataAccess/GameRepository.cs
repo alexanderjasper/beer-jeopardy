@@ -67,10 +67,14 @@ namespace Oljeopardy.DataAccess
 
         public List<Game> GetActiveGames()
         {
-            return _context.Games
-                .Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && x.GameStatus == Enums.GameStatus.Active)
-                .OrderBy(x => x.Name)
-                .ToList();
+            try
+            {
+                return _context.Games.Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && x.GameStatus == Enums.GameStatus.Active).OrderBy(x => x.Name).ToList();
+            }
+            catch
+            {
+                throw new Exception("Could not get active Games");
+            }
         }
 
         public Participant AddParticipant(Guid gameId, Guid categoryId, Enums.TurnType turnType, string userId)

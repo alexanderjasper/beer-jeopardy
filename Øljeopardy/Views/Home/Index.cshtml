@@ -1,4 +1,5 @@
-﻿<h1>@ViewData["Title"]</h1>
+﻿@model Oljeopardy.Models.JeopardyViewModels.HomeViewModel
+<h1>@ViewData["Title"]</h1>
 <hr />
 
 <div class="row">
@@ -7,12 +8,45 @@
             <div class="center-block">
                 @if (Context.User.Identity.IsAuthenticated)
                 {
-                    <div class="row button-container">
-                        <button asp-controller="Game" asp-action="Participate" class="menubutton">Deltag i et spil</button>
-                    </div>
-                    <div class="row button-container">
-                        <button asp-controller="Game" asp-action="Add" class="menubutton">Opret nyt spil</button>
-                    </div>
+                    @if (!Model.HasCategory)
+                    {
+                        <h4>
+                            Du har endnu ikke oprettet en kategori.
+                        </h4>
+                        <div class="row button-container">
+                            <button asp-controller="Category" asp-action="Create" class="menubutton">Opret kategori</button>
+                        </div>
+                    }
+                    else if (!Model.HasActiveGame)
+                    {
+                        <h4>
+                            Du deltager ikke i et spil.
+                        </h4>
+                        @if (Model.ActiveGameExists)
+                        {
+                        <div class="row button-container">
+                            <button asp-controller="Game" asp-action="Participate" class="menubutton">Deltag i et spil</button>
+                        </div>
+                        }
+                        else
+                        {
+                            <h4>
+                                Der er ingen aktive spil.
+                            </h4>
+                        }
+                        <div class="row button-container">
+                            <button asp-controller="Game" asp-action="Add" class="menubutton">Opret nyt spil</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <h4>
+                            Du deltager i et spil.
+                        </h4>
+                        <div class="row button-container">
+                            <button asp-controller="Home" asp-action="Game" class="menubutton">Gå til spillet</button>
+                        </div>
+                    }
                 }
                 else
                 {
