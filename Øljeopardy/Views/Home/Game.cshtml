@@ -153,7 +153,7 @@ else
                         <div class="col-xs-12">
                             <select class="form-control" asp-for="ChosenWinnerId"
                                     asp-items="@(new SelectList(Model.UserList, "UserId", "Name"))" class="dropdown">
-                                <option disabled>Vælg vinderen</option>
+                                <option selected disabled>Vælg vinderen</option>
                             </select>
                         </div>
                         <input type="button" class="menubutton" value="Vælg vinder" onClick="ValidateForm(this.form, 'SelectWinner')" />
