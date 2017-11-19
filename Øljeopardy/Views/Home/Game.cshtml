@@ -47,6 +47,18 @@ else
     {
         @if (Model.UserTurnType == Enums.TurnType.Choose || Model.UserTurnType == Enums.TurnType.ChooseOwn)
         {
+            @if (Model.OtherGameCategories == null || Model.OtherGameCategories.Count() == 0)
+            {
+                <h4>
+                    Du er i øjeblikket den eneste deltager. Vent, indtil nogen tilmelder sig.
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    Vælg en kategori og et pointtal.
+                </h4>
+            }
             <form asp-action="SelectAnswer" asp-controller="Game">
                 @foreach (var gameCategory in Model.OtherGameCategories)
                 {
@@ -144,9 +156,10 @@ else
                 @Model.LatestCategoryChooserName har valgt din kategori @Model.UsersOwnCategory.Name til @Model.ChosenAnswerQuestionPoints point.
             </div>
             <h4>Svar:</h4>
-            <div style="text-align: center">@Model.ChosenAnswerQuestion.Answer</div>
-            <h4>Spørgsmål:</h4>
-            <div style="text-align: center; height: 30px;">@Model.ChosenAnswerQuestion.Question</div>
+            <div style="text-align: center; font-weight: 700;">@Model.ChosenAnswerQuestion.Answer</div>
+            <h5 style="font-style: italic;">Spørgsmål:</h5>
+            <div style="text-align: center; font-size: 12px; font-style: italic;">@Model.ChosenAnswerQuestion.Question</div>
+            <div style="height: 14px;"></div>
             <form asp-controller="Game" asp-action="SelectWinner">
                 <div class="row">
                     <div class="form-group">
