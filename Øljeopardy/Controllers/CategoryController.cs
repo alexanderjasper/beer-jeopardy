@@ -37,11 +37,17 @@ namespace Oljeopardy.Controllers
             ViewData["Title"] = "Rediger kategori";
             ViewData["Message"] = message;
 
-            var category = _categoryRepository.GetCategoryById(categoriesViewModel.ChosenCategoryGuid);
+            if (categoriesViewModel.ChosenCategoryGuid != null)
+            {
+                var category = _categoryRepository.GetCategoryById(categoriesViewModel.ChosenCategoryGuid.Value);
+                var categoryViewModel = Mapper.Map<CategoryViewModel>(category);
+                return View("Category", categoryViewModel);
+            }
 
-            var categoryViewModel = Mapper.Map<CategoryViewModel>(category);
-
-            return View("Category", categoryViewModel);
+            else
+            {
+                throw new Exception("No category chosen");
+            }
         }
 
         public IActionResult SubmitCategory(CategoryViewModel categoryViewModel)

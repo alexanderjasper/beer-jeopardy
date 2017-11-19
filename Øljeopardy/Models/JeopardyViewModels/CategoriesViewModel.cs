@@ -11,6 +11,6 @@ namespace Oljeopardy.Models.JeopardyViewModels
         public Enums.CategoriesPageAction PageAction { get; set; }
 
         public List<Category> CategoryList { get; set; }
-        public Guid ChosenCategoryGuid { get; set; }
+        public Guid? ChosenCategoryGuid { get; set; }
     }
 }
