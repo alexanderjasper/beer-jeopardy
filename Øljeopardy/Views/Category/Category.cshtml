@@ -5,6 +5,11 @@
     <hr />
     <form asp-controller="Category" asp-action="SubmitCategory" method="post">
         <input asp-for="Id" type="hidden" />
+        <input asp-for="AnswerQuestion100.Id" type="hidden" />
+        <input asp-for="AnswerQuestion200.Id" type="hidden" />
+        <input asp-for="AnswerQuestion300.Id" type="hidden" />
+        <input asp-for="AnswerQuestion400.Id" type="hidden" />
+        <input asp-for="AnswerQuestion500.Id" type="hidden" />
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="row">
             <div class="col-xs-12">

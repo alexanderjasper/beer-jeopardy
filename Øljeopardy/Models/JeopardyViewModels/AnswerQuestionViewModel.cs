@@ -8,6 +8,8 @@ namespace Oljeopardy.Models.JeopardyViewModels
 {
     public class AnswerQuestionViewModel
     {
+        public Guid Id { get; set; }
+
         [Display(Name = "Svar")]
         public string Answer { get; set; }
 

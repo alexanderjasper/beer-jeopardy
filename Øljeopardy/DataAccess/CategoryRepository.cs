@@ -155,13 +155,17 @@ namespace Oljeopardy.DataAccess
         {
             try
             {
-                var userId = _context.Categories
-                    .FirstOrDefault(x => x.AnswerQuestion100.Id == answerQuestionId || 
-                    x.AnswerQuestion200.Id == answerQuestionId || 
+                var category = _context.Categories
+                    .FirstOrDefault(x => x.AnswerQuestion100.Id == answerQuestionId ||
+                    x.AnswerQuestion200.Id == answerQuestionId ||
                     x.AnswerQuestion300.Id == answerQuestionId ||
-                    x.AnswerQuestion400.Id == answerQuestionId || 
-                    x.AnswerQuestion500.Id == answerQuestionId)
-                    .UserId;
+                    x.AnswerQuestion400.Id == answerQuestionId ||
+                    x.AnswerQuestion500.Id == answerQuestionId);
+                if (category == null)
+                {
+                    throw new Exception("Could not get category from AnswerQuestion");
+                }
+                var userId = category.UserId;
                 return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
             }
             catch
