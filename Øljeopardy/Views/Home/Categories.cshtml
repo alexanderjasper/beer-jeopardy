@@ -34,3 +34,10 @@
         <form><button type="button" onclick="loadCreateCategory()" class="menubutton">Opret kategori</button></form>
     </div>
 </div>
+<script>
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 3000);
+</script>

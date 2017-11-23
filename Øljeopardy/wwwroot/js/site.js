@@ -1,10 +1,4 @@
-﻿var removeAlert = setTimeout(function () {
-    $(".alert").fadeTo(500, 0).slideUp(500, function () {
-        $(this).remove();
-    });
-}, 3000);
-
-$(document).on('click', '.navbar-collapse.in', function (e) {
+﻿$(document).on('click', '.navbar-collapse.in', function (e) {
     if ($(e.target).is('a')) {
         $(this).collapse('hide');
     }
