@@ -1,8 +1,14 @@
-﻿window.setTimeout(function () {
+﻿var removeAlert = setTimeout(function () {
     $(".alert").fadeTo(500, 0).slideUp(500, function () {
         $(this).remove();
     });
 }, 3000);
+
+$(document).on('click', '.navbar-collapse.in', function (e) {
+    if ($(e.target).is('a')) {
+        $(this).collapse('hide');
+    }
+});
 
 function MoveAnswerQuestion(position, direction) {
     var thisQuestionId = 'q'.concat(position);
@@ -38,6 +44,12 @@ var loadRules = function () {
 var loadCategories = function () {
     $("#master-container").load('/Home/Categories');
 };
+var loadCategoriesAdded = function () {
+    $("#master-container").load('/Home/Categories?pageAction=AddedCategory');
+};
+var loadCategoriesEdited = function () {
+    $("#master-container").load('/Home/Categories?pageAction=EditedCategory');
+};
 var loadGame = function () {
     $("#master-container").load('/Home/Game');
 };
@@ -55,12 +67,19 @@ var loadParticipateGame = function () {
 };
 
 var submitCategory = function () {
+    var form = $('#categoryForm');
+    var id = $('#Id')[0].value;
     $.ajax({
         url: '/Category/SubmitCategory',
-        data: $('#categoryForm').serialize(),
+        data: form.serialize(),
         async: false
     });
-    loadCategories();
+    if (id === '') {
+        loadCategoriesAdded();
+    }
+    else {
+        loadCategoriesEdited();
+    }
 };
 var editCategory = function () {
     var form = $('#categoryEditForm');
