@@ -14,7 +14,7 @@
                             Du har endnu ikke oprettet en kategori.
                         </h4>
                         <div class="row button-container">
-                            <button asp-controller="Category" asp-action="Create" class="menubutton">Opret kategori</button>
+                            <button type="button" onclick="loadCreateCategory()" class="menubutton">Opret kategori</button>
                         </div>
                     }
                     else if (!Model.HasActiveGame)
@@ -24,9 +24,9 @@
                         </h4>
                         @if (Model.ActiveGameExists)
                         {
-                        <div class="row button-container">
-                            <button asp-controller="Game" asp-action="Participate" class="menubutton">Deltag i et spil</button>
-                        </div>
+                            <div class="row button-container">
+                                <button type="button" onclick="loadParticipateGame()" class="menubutton">Deltag i et spil</button>
+                            </div>
                         }
                         else
                         {
@@ -35,7 +35,7 @@
                             </h4>
                         }
                         <div class="row button-container">
-                            <button asp-controller="Game" asp-action="Add" class="menubutton">Opret nyt spil</button>
+                            <button type="button" onclick="loadAddGame()" class="menubutton">Opret nyt spil</button>
                         </div>
                     }
                     else
@@ -44,7 +44,7 @@
                             Du deltager i et spil.
                         </h4>
                         <div class="row button-container">
-                            <button asp-controller="Home" asp-action="Game" class="menubutton">Gå til spillet</button>
+                            <button type="button" onclick="loadGame()" class="menubutton">Gå til spillet</button>
                         </div>
                     }
                 }

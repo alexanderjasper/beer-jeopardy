@@ -37,7 +37,7 @@ namespace Oljeopardy.Controllers
                 CategoryList = _categoryRepository.GetCategoriesByUserId(userId)
             };
 
-            return View(model);
+            return PartialView(model);
         }
 
         public IActionResult CompleteAdd(AddGameViewModel model)
@@ -63,7 +63,7 @@ namespace Oljeopardy.Controllers
                 CategoryList = _categoryRepository.GetCategoriesByUserId(userId)
             };
 
-            return View(model);
+            return PartialView(model);
         }
 
         public IActionResult CompleteParticipation(ParticipateGameViewModel model)

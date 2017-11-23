@@ -3,7 +3,7 @@
 
 <div class="row">
     <hr />
-    <form asp-controller="Category" asp-action="SubmitCategory" method="post">
+    <form  id="categoryForm" method="post">
         <input asp-for="Id" type="hidden" />
         <input asp-for="AnswerQuestion100.Id" type="hidden" />
         <input asp-for="AnswerQuestion200.Id" type="hidden" />
@@ -148,8 +148,8 @@
                 </div>
             </div>
         </p>
-        <div class="row button-container" style="margin-top: 30px;">
-            <button type="submit" class="menubutton">Gem</button>
-        </div>
     </form>
+    <div class="row button-container" style="margin-top: 30px;">
+        <button class="menubutton" onclick="submitCategory()">Gem</button>
+    </div>
 </div>

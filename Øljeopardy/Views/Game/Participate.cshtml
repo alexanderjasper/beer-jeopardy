@@ -3,7 +3,7 @@
 
 <div class="row">
     <hr />
-    <form asp-controller="Game" asp-action="CompleteParticipation">
+    <form id="completeParticipationForm">
         <div class="row">
             <div class="form-group">
                 <div class="col-xs-12">
@@ -19,7 +19,7 @@
                     </select>
                 </div>
             </div>
-            <input type="button" class="menubutton" value="Deltag i spil" onClick="ValidateForm(this.form, 'Participate')" />
+            <input type="button" class="menubutton" value="Deltag i spil" onClick="completeParticipation()" />
         </div>
     </form>
 </div>

@@ -3,7 +3,7 @@
 <hr />
 
 <div class="row">
-    <form asp-controller="Game" asp-action="CompleteAdd">
+    <form id="addGameForm">
         <div class="row">
             <div class="form-group">
                 <div class="col-xs-12">
@@ -16,7 +16,7 @@
                         <option selected disabled>Vælg en kategori</option>
                     </select>
                 </div>
-                <input type="button" class="menubutton" value="Opret spil" onClick="ValidateForm(this.form, 'AddGame')" />
+                <input type="button" class="menubutton" value="Opret spil" onClick="completeAddGame()" />
             </div>
         </div>
     </form>

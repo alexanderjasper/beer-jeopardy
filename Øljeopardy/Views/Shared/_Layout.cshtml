@@ -22,7 +22,9 @@
 <body>
     @Html.Partial("~/Views/Shared/Navbar.cshtml")
     <div class="container body-content">
-        @RenderBody()
+        <div id="master-container">
+            @RenderBody()
+        </div>
     </div>
 
     <environment include="Development">
@@ -45,8 +47,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
+    <div>
     @RenderSection("Scripts", required: false)
     </div>
 </body>
-</html>
+</html> 

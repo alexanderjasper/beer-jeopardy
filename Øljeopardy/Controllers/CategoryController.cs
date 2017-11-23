@@ -28,10 +28,9 @@ namespace Oljeopardy.Controllers
             ViewData["Title"] = "Opret kategori";
             ViewData["Message"] = message;
 
-            return View("Category");
+            return PartialView("Category");
         }
 
-        [HttpPost]
         public IActionResult Edit(CategoriesViewModel categoriesViewModel, string message = null)
         {
             ViewData["Title"] = "Rediger kategori";
@@ -41,7 +40,7 @@ namespace Oljeopardy.Controllers
             {
                 var category = _categoryRepository.GetCategoryById(categoriesViewModel.ChosenCategoryGuid.Value);
                 var categoryViewModel = Mapper.Map<CategoryViewModel>(category);
-                return View("Category", categoryViewModel);
+                return PartialView("Category", categoryViewModel);
             }
 
             else

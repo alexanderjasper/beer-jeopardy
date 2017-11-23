@@ -74,6 +74,42 @@ namespace Oljeopardy.Controllers
             return View(model);
         }
 
+        public IActionResult Main()
+        {
+            ViewData["Title"] = "Øljeopardy";
+
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var activeGame = _gameRepository.GetActiveGameForUser(userId);
+            bool hasActiveGame = false;
+            if (activeGame != null && activeGame.GameStatus == Enums.GameStatus.Active)
+            {
+                hasActiveGame = true;
+            }
+
+            var activeGames = _gameRepository.GetActiveGames();
+            bool activeGameExists = false;
+            if (activeGames != null && activeGames.Count() > 0)
+            {
+                activeGameExists = true;
+            }
+
+            var categories = _categoryRepository.GetCategoriesByUserId(userId);
+            bool hasCategory = false;
+            if (categories != null && categories.Count() > 0)
+            {
+                hasCategory = true;
+            }
+
+            var model = new HomeViewModel()
+            {
+                HasActiveGame = hasActiveGame,
+                HasCategory = hasCategory,
+                ActiveGameExists = activeGameExists
+            };
+
+            return PartialView("Index", model);
+        }
+
         public IActionResult Categories(Enums.CategoriesPageAction pageAction)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
@@ -96,14 +132,14 @@ namespace Oljeopardy.Controllers
             ViewData["Message"] = message;
             ViewData["Title"] = "Kategorier";
 
-            return View(model);
+            return PartialView(model);
         }
 
         public IActionResult Rules()
         {
             ViewData["Title"] = "Regler";
 
-            return View();
+            return PartialView();
         }
 
         public IActionResult Game()
@@ -119,7 +155,7 @@ namespace Oljeopardy.Controllers
                 gameViewModel = GetGameViewModel(activeGame.Id, userId);
             }
 
-            return View(gameViewModel);
+            return PartialView(gameViewModel);
         }
 
         public IActionResult Error()

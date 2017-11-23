@@ -13,7 +13,7 @@
     @if (@Model.CategoryList != null && Model.CategoryList.Count() > 0)
     {
         <div>
-            <form asp-controller="Category" asp-action="Edit">
+            <form id="categoryEditForm">
                 <div class="row">
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -24,14 +24,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row button-container">
-                    <input type="button" class="menubutton" value="Rediger kategori" onClick="ValidateForm(this.form, 'Categories')" />
-                </div>
             </form>
+            <div class="row button-container">
+                <button class="menubutton" onclick="editCategory()">Rediger kategori</button>
+            </div>
         </div>
     }
     <div class="row button-container">
-        <form><button asp-controller="Category" asp-action="Create" class="menubutton">Opret kategori</button></form>
+        <form><button type="button" onclick="loadCreateCategory()" class="menubutton">Opret kategori</button></form>
     </div>
-</div>
 </div>

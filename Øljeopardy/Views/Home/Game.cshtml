@@ -59,7 +59,7 @@ else
                     Vælg en kategori og et pointtal.
                 </h4>
             }
-            <form asp-action="SelectAnswer" asp-controller="Game">
+            <form id="selectAnswerForm">
                 @foreach (var gameCategory in Model.OtherGameCategories)
                 {
                     <div class="category-select-container">
@@ -144,7 +144,7 @@ else
                 {
                     <div style="height:20px;"></div>
                     <div class="row">
-                        <input type="button" class="menubutton" value="Vælg" onClick="ValidateForm(this.form, 'SelectAnswerQuestion')" />
+                        <input type="button" class="menubutton" value="Vælg" onClick="selectAnswer()" />
                     </div>
                 }
                 <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
@@ -160,7 +160,7 @@ else
             <h5 style="font-style: italic;">Spørgsmål:</h5>
             <div style="text-align: center; font-size: 12px; font-style: italic;">@Model.ChosenAnswerQuestion.Question</div>
             <div style="height: 14px;"></div>
-            <form asp-controller="Game" asp-action="SelectWinner">
+            <form id="selectWinnerForm">
                 <div class="row">
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -169,7 +169,7 @@ else
                                 <option selected disabled>Vælg vinderen</option>
                             </select>
                         </div>
-                        <input type="button" class="menubutton" value="Vælg vinder" onClick="ValidateForm(this.form, 'SelectWinner')" />
+                        <input type="button" class="menubutton" value="Vælg vinder" onClick="selectWinner()" />
                     </div>
                 </div>
                 <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
@@ -207,7 +207,7 @@ else
     function checkIfGameChanged() {
         $.getJSON("/checkIfGameChanged", function (data) {
             if (data) {
-                window.location.href = "/Home/Game";
+                loadGame();
             }
             else {
                 setTimeout(checkIfGameChanged, 1000);
