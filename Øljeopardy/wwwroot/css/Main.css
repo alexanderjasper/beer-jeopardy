@@ -89,11 +89,15 @@ hr {
 
 .arrow-container-up {
   padding-top: 20px;
-  font-size: 2em; }
+  font-size: 2em;
+  margin-right: -10px;
+  right: 15px; }
 
 .arrow-container-down {
   padding-top: 5px;
-  font-size: 2em; }
+  font-size: 2em;
+  margin-right: -10px;
+  right: 15px; }
 
 .arrow-button {
   display: block; }
