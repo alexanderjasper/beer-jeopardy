@@ -64,12 +64,28 @@ namespace Oljeopardy.DataAccess
             }
         }
 
+        public bool DeleteCategory(Category category, string userId)
+        {
+            try
+            {
+                category.UserId = userId;
+                category.Deleted = DateTime.Now;
+                _context.Update(category);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Could not delete category");
+            }
+        }
+
         public List<Category> GetCategoriesByUserId(string userId)
         {
             using (_context)
             {
                 return _context.Categories
-                    .Where(c => c.UserId == userId)
+                    .Where(c => c.UserId == userId && c.Deleted == null)
                     .OrderBy(c => c.Name).ToList();
             }
         }

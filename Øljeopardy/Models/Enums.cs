@@ -25,7 +25,8 @@ namespace Oljeopardy.Models
         {
             Nothing,
             AddedCategory,
-            EditedCategory
+            EditedCategory,
+            DeletedCategory
         }
     }
 }

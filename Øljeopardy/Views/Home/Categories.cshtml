@@ -10,29 +10,36 @@
             <strong>@ViewData["Message"]</strong>
         </div>
     }
-    @if (@Model.CategoryList != null && Model.CategoryList.Count() > 0)
-    {
-        <div>
-            <form id="categoryEditForm">
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <select class="form-control" asp-for="ChosenCategoryGuid"
-                                    asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))" class="dropdown">
-                                <option selected disabled>Vælg en kategori</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <div class="row button-container">
-                <button class="menubutton" onclick="editCategory()">Rediger kategori</button>
-            </div>
-        </div>
-    }
     <div class="row button-container">
         <form><button type="button" onclick="loadCreateCategory()" class="menubutton">Opret kategori</button></form>
     </div>
+    <div style="height:20px"></div>
+    @if (@Model.CategoryList != null && Model.CategoryList.Count() > 0)
+    {
+        @foreach (var category in @Model.CategoryList)
+        {
+            <div class="category-list-item">
+                <div class="row vertical-align">
+                    <div class="col-xs-8">
+                        @(category.Name)
+                    </div>
+                    <div class="col-xs-2">
+                        <a class="a-button" onclick="editCategory('@(category.Id)')"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+                    </div>
+                    <div class="col-xs-2">
+                        <a class="a-button" onclick="deleteCategory('@(category.Id)')"><i class="fa fa-trash-o fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h4>
+            Du har endnu ikke oprettet en kategori.
+        </h4>
+    }
+    <div style="height: 30px"></div>
 </div>
 <script>
     window.setTimeout(function () {

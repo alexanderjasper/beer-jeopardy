@@ -128,6 +128,9 @@ namespace Oljeopardy.Controllers
                 case Enums.CategoriesPageAction.EditedCategory:
                     message = "Kategori redigeret";
                     break;
+                case Enums.CategoriesPageAction.DeletedCategory:
+                    message = "Kategori slettet";
+                    break;
             }
             ViewData["Message"] = message;
             ViewData["Title"] = "Kategorier";
@@ -165,8 +168,10 @@ namespace Oljeopardy.Controllers
 
         private GameViewModel GetGameViewModel(Guid gameId, string userId)
         {
-            var model = new GameViewModel();
-            model.Game = _gameRepository.GetGameById(gameId);
+            var model = new GameViewModel
+            {
+                Game = _gameRepository.GetGameById(gameId)
+            };
             if (model.Game != null)
             {
                 model.UsersOwnCategory = _categoryRepository.GetUsersCategoryForActiveGame(gameId, userId);

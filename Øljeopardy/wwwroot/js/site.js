@@ -25,7 +25,7 @@ function MoveAnswerQuestion(position, direction) {
 }
 
 function selectAnswerQuestion(elem) {
-    var labels = document.getElementsByClassName('category-radio-button-label')
+    var labels = document.getElementsByClassName('category-radio-button-label');
     for (i = 0; i < labels.length; i++) {
         labels[i].classList.remove('selected');
     }
@@ -43,6 +43,9 @@ var loadCategoriesAdded = function () {
 };
 var loadCategoriesEdited = function () {
     $("#master-container").load('/Home/Categories?pageAction=EditedCategory');
+};
+var loadCategoriesDeleted = function () {
+    $("#master-container").load('/Home/Categories?pageAction=DeletedCategory');
 };
 var loadGame = function () {
     $("#master-container").load('/Home/Game');
@@ -75,16 +78,25 @@ var submitCategory = function () {
         loadCategoriesEdited();
     }
 };
-var editCategory = function () {
-    var form = $('#categoryEditForm');
-    var selectedIndex = form[0][0].selectedIndex;
-    if (selectedIndex === 0) {
-        alert("Vælg en kategori, du vil redigere");
-        return false;
-    }
-    $.post('/Category/Edit', form.serialize()).done(function (data) {
+var editCategory = function (categoryId) {
+    $.post('/Category/Edit', { chosenCategoryGuid: categoryId }).done(function (data) {
         $("#master-container").html(data);
     });
+};
+var deleteCategory = function (categoryId) {
+    var r = confirm('Kategorien slettes permanent og kan ikke gendannes!');
+    if (r == true) {
+        $.ajax({
+            url: '/Category/Delete',
+            type: 'post',
+            data: { chosenCategoryGuid: categoryId },
+            async: false
+        }).done(function (data) {
+            if (data) {
+                loadCategoriesDeleted();
+            }
+        });
+    }
 };
 var completeAddGame = function () {
     var form = $('#addGameForm');
@@ -98,7 +110,7 @@ var completeAddGame = function () {
         data: form.serialize(),
         async: false
     });
-    loadGame()
+    loadGame();
 };
 var completeParticipation = function () {
     var form = $('#completeParticipationForm');
@@ -118,7 +130,7 @@ var completeParticipation = function () {
         data: form.serialize(),
         async: false
     });
-    loadGame()
+    loadGame();
 };
 var selectWinner = function () {
     var form = $('#selectWinnerForm');
@@ -132,7 +144,7 @@ var selectWinner = function () {
         data: form.serialize(),
         async: false
     });
-    loadGame()
+    loadGame();
 };
 var selectAnswer = function () {
     var form = $('#selectAnswerForm');
@@ -141,5 +153,5 @@ var selectAnswer = function () {
         data: form.serialize(),
         async: false
     });
-    loadGame()
+    loadGame();
 };

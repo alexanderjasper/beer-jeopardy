@@ -31,16 +31,31 @@ namespace Oljeopardy.Controllers
             return PartialView("Category");
         }
 
-        public IActionResult Edit(CategoriesViewModel categoriesViewModel, string message = null)
+        public IActionResult Edit(CategoriesViewModel categoriesViewModel)
         {
             ViewData["Title"] = "Rediger kategori";
-            ViewData["Message"] = message;
 
             if (categoriesViewModel.ChosenCategoryGuid != null)
             {
                 var category = _categoryRepository.GetCategoryById(categoriesViewModel.ChosenCategoryGuid.Value);
                 var categoryViewModel = Mapper.Map<CategoryViewModel>(category);
                 return PartialView("Category", categoryViewModel);
+            }
+
+            else
+            {
+                throw new Exception("No category chosen");
+            }
+        }
+
+        public bool Delete(CategoriesViewModel categoriesViewModel)
+        {
+            ViewData["Title"] = "Rediger kategori";
+
+            if (categoriesViewModel.ChosenCategoryGuid != null)
+            {
+                var category = _categoryRepository.GetCategoryById(categoriesViewModel.ChosenCategoryGuid.Value);
+                return _categoryRepository.DeleteCategory(category, _userManager.GetUserId(HttpContext.User));
             }
 
             else

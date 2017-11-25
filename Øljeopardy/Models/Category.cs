@@ -14,5 +14,6 @@ namespace Oljeopardy.Models
         public AnswerQuestion AnswerQuestion300 { get; set; }
         public AnswerQuestion AnswerQuestion400 { get; set; }
         public AnswerQuestion AnswerQuestion500 { get; set; }
+        public DateTime? Deleted { get; set; }
     }
 }
