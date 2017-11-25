@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Oljeopardy.Data;
 using Oljeopardy.Models;
+using System.Globalization;
 
 namespace Oljeopardy.DataAccess
 {
@@ -86,7 +87,8 @@ namespace Oljeopardy.DataAccess
             {
                 return _context.Categories
                     .Where(c => c.UserId == userId && c.Deleted == null)
-                    .OrderBy(c => c.Name).ToList();
+                    .AsEnumerable()
+                    .OrderBy(c => c.Name, StringComparer.Create(new CultureInfo("da-DK"), true)).ToList();
             }
         }
 
