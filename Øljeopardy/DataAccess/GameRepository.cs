@@ -32,7 +32,8 @@ namespace Oljeopardy.DataAccess
                     Name = name,
                     GameStatus = Enums.GameStatus.Active,
                     ActiveTime = DateTime.Now,
-                    Version = 0
+                    Version = 0,
+                    LatestCategoryChooserId = userId
                 };
 
                 var addedGame = _context.Add(gameToAdd).Entity;
@@ -247,7 +248,7 @@ namespace Oljeopardy.DataAccess
                                     throw new Exception("Could not parse PointsValue for AnswerQuestion");
                             }
                             game.SelectedAnswerQuestionId = null;
-                            game.LatestCategoryChooserId = null;
+                            game.LatestCategoryChooserId = winnerParticipant.UserId;
                             game.UserId = winnerId;
 
                             _context.Update(winnerParticipant);

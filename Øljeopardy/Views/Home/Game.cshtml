@@ -181,9 +181,27 @@ else
         {
             @if (Model.Game.UserId != null)
             {
-                <h4>
-                    Det er nogens tur til at vælge kategori.
-                </h4>
+                @if (Model.Game.LatestCategoryChooserId != null)
+                {
+                    @if (@Model.LatestCategoryChooserName.Last() == 's')
+                    {
+                        <h4>
+                            Det er @(Model.LatestCategoryChooserName)'tur til at vælge kategori.
+                        </h4>
+                    }
+                    else
+                    {
+                        <h4>
+                            Det er @(Model.LatestCategoryChooserName)s tur til at vælge kategori.
+                        </h4>
+                    }
+                }
+                else
+                {
+                    <h4>
+                        Det er nogens tur til at vælge kategori.
+                    </h4>
+                }
             }
             else
             {
