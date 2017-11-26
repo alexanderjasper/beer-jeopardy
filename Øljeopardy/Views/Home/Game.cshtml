@@ -160,20 +160,22 @@ else
             <h5 style="font-style: italic;">Spørgsmål:</h5>
             <div style="text-align: center; font-size: 12px; font-style: italic;">@Model.ChosenAnswerQuestion.Question</div>
             <div style="height: 14px;"></div>
-            <form id="selectWinnerForm">
-                <div class="row">
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <select class="form-control" asp-for="ChosenWinnerId"
-                                    asp-items="@(new SelectList(Model.UserList, "UserId", "Name"))" class="dropdown">
-                                <option selected disabled>Vælg vinderen</option>
-                            </select>
+
+            <h4>
+                Vælg rundens vinder:
+            </h4>
+
+            @foreach (var user in Model.UserList)
+            {
+                <div class="category-list-item">
+                    <div class="vertical-align">
+                        <div>
+                            @(user.Name)
                         </div>
-                        <input type="button" class="menubutton" value="Vælg vinder" onClick="selectWinner()" />
+                        <button style="float: right" class="smallbutton" onclick="selectWinner('@(user.UserId)','@(Model.Game.Id)')">Vælg</button>
                     </div>
                 </div>
-                <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
-            </form>
+            }
         }
         @if (Model.UserTurnType == Enums.TurnType.Guess && Model.Game != null)
         {

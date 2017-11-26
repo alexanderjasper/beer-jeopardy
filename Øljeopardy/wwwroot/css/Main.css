@@ -78,6 +78,29 @@ hr {
   margin-left: auto;
   margin-right: auto; }
 
+.smallbutton {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  width: 65px;
+  height: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  outline: none;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  font-size: 12px;
+  background: #368015;
+  color: #fff;
+  box-shadow: 0 3px 2px #0D3E0F;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  margin-left: auto;
+  margin-right: -5px;
+  margin-bottom: 4px; }
+
 .textbutton {
   text-align: center;
   margin-top: 10px;
@@ -174,7 +197,8 @@ hr {
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   border: solid;
-  border-width: 1px; }
+  border-width: 1px;
+  box-shadow: 3px 3px 2px #999966; }
 
 .category-list-item {
   max-width: 600px;
@@ -184,7 +208,8 @@ hr {
   border: solid;
   border-width: 1px;
   padding: 10px 17px 10px 10px;
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+  box-shadow: 3px 3px 2px #999966; }
 
 .a-button {
   color: black;

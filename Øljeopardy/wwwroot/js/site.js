@@ -85,7 +85,7 @@ var editCategory = function (categoryId) {
 };
 var deleteCategory = function (categoryId) {
     var r = confirm('Kategorien slettes permanent og kan ikke gendannes!');
-    if (r == true) {
+    if (r === true) {
         $.ajax({
             url: '/Category/Delete',
             type: 'post',
@@ -132,16 +132,11 @@ var completeParticipation = function () {
     });
     loadGame();
 };
-var selectWinner = function () {
-    var form = $('#selectWinnerForm');
-    var selectedIndex = form[0][0].selectedIndex;
-    if (selectedIndex === 0) {
-        alert("Vælg den spiller, der vandt runden");
-        return false;
-    }
+var selectWinner = function (winnerId, gameId) {
     $.ajax({
         url: '/Game/SelectWinner',
-        data: form.serialize(),
+        type: 'post',
+        data: { ChosenWinnerId: winnerId, Game: { Id: gameId } },
         async: false
     });
     loadGame();
