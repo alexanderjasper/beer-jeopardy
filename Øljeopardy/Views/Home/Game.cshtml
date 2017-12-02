@@ -7,6 +7,21 @@
     <h4>
         Du deltager ikke i et spil.
     </h4>
+    @if (Model.ActiveGameExists)
+    {
+        <div class="row button-container">
+            <button type="button" onclick="loadParticipateGame()" class="menubutton">Deltag i et spil</button>
+        </div>
+    }
+    else
+    {
+        <h4>
+            Der er ingen aktive spil.
+        </h4>
+    }
+    <div class="row button-container">
+        <button type="button" onclick="loadAddGame()" class="menubutton">Opret nyt spil</button>
+    </div>
 }
 else
 {

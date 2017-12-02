@@ -157,6 +157,16 @@ namespace Oljeopardy.Controllers
             {
                 gameViewModel = GetGameViewModel(activeGame.Id, userId);
             }
+            else
+            {
+                var activeGames = _gameRepository.GetActiveGames();
+                bool activeGameExists = false;
+                if (activeGames != null && activeGames.Count() > 0)
+                {
+                    activeGameExists = true;
+                }
+                gameViewModel.ActiveGameExists = activeGameExists;
+            }
 
             return PartialView(gameViewModel);
         }

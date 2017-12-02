@@ -18,6 +18,7 @@ namespace Oljeopardy.Models.JeopardyViewModels
         public HighscoreViewmodel Highscore { get; set; }
         public AnswerQuestionViewModel ChosenAnswerQuestion { get; set; }
         public int ChosenAnswerQuestionPoints { get; set; }
+        public bool ActiveGameExists { get; set; }
 
         public string ChosenWinnerId { get; set; }
         public Guid ChosenAnswerQuestionGuid { get; set; }
