@@ -14,6 +14,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+                <li><a onclick="loadMain()"><i class="fa fa-home navbar-icon" aria-hidden="true"></i> Forside</a></li>
                 <li><a onclick="loadRules()"><i class="fa fa-legal navbar-icon" aria-hidden="true"></i> Regler</a></li>
                 @if (User.Identity.IsAuthenticated)
                 {
