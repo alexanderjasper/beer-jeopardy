@@ -159,7 +159,10 @@ else
                 {
                     <div style="height:20px;"></div>
                     <div class="row">
-                        <input type="button" class="menubutton" value="Vælg" onClick="selectAnswer()" />
+                        <button type="button" onClick="selectAnswer(this)" class="menubutton has-spinner">
+                            <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                            <span class="btn-text">Vælg</span>
+                        </button>
                     </div>
                 }
                 <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
@@ -187,7 +190,10 @@ else
                         <div>
                             @(user.Name)
                         </div>
-                        <button style="float: right" class="smallbutton" onclick="selectWinner('@(user.UserId)','@(Model.Game.Id)')">Vælg</button>
+                        <button style="float: right" class="smallbutton has-spinner" onclick="selectWinner('@(user.UserId)','@(Model.Game.Id)', this)">
+                            <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                            <span class="btn-text">Vælg</span>
+                        </button>
                     </div>
                 </div>
             }

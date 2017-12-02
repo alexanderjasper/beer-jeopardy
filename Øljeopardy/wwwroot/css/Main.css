@@ -218,3 +218,20 @@ hr {
 .vertical-align {
   display: flex;
   align-items: center; }
+
+.spinner {
+  display: inline-block;
+  opacity: 0;
+  max-width: 0;
+  /* Duration fixed since we animate additional hidden width */ }
+
+.has-spinner.active {
+  cursor: progress; }
+
+.has-spinner.active .spinner {
+  opacity: 1;
+  max-width: 50px;
+  /* More than it will ever come, notice that this affects on animation duration */ }
+
+.has-spinner.active .btn-text {
+  display: none; }

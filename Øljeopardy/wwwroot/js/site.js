@@ -24,6 +24,10 @@ function MoveAnswerQuestion(position, direction) {
     targetAnswer.value = thisAnswerValue;
 }
 
+function addSpinner(button) {
+    button.classList.add('active');
+}
+
 function checkIfGameChanged() {
     $.ajax({
         url: "/checkIfGameChanged",
@@ -152,7 +156,8 @@ var completeParticipation = function () {
     });
     loadGame();
 };
-var selectWinner = function (winnerId, gameId) {
+var selectWinner = function (winnerId, gameId, button) {
+    addSpinner(button);
     $.ajax({
         url: '/Game/SelectWinner',
         type: 'post',
@@ -161,7 +166,10 @@ var selectWinner = function (winnerId, gameId) {
     });
     loadGame();
 };
-var selectAnswer = function () {
+var selectAnswer = function (button) {
+    if (button != null) {
+        addSpinner(button);
+    }
     var form = $('#selectAnswerForm');
     $.ajax({
         url: '/Game/SelectAnswer',
