@@ -12,5 +12,7 @@ namespace Oljeopardy.Models.JeopardyViewModels
 
         public List<Category> CategoryList { get; set; }
         public Guid? ChosenCategoryGuid { get; set; }
+        public bool ActiveGameExists { get; set; }
+        public bool HasActiveGame { get; set; }
     }
 }

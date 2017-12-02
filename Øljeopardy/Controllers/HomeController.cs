@@ -42,34 +42,7 @@ namespace Oljeopardy.Controllers
         {
             ViewData["Title"] = "Øljeopardy";
 
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var activeGame = _gameRepository.GetActiveGameForUser(userId);
-            bool hasActiveGame = false;
-            if (activeGame != null && activeGame.GameStatus == Enums.GameStatus.Active)
-            {
-                hasActiveGame = true;
-            }
-
-            var activeGames = _gameRepository.GetActiveGames();
-            bool activeGameExists = false;
-            if (activeGames != null && activeGames.Count() > 0)
-            {
-                activeGameExists = true;
-            }
-
-            var categories = _categoryRepository.GetCategoriesByUserId(userId);
-            bool hasCategory = false;
-            if (categories != null && categories.Count() > 0)
-            {
-                hasCategory = true;
-            }
-
-            var model = new HomeViewModel()
-            {
-                HasActiveGame = hasActiveGame,
-                HasCategory = hasCategory,
-                ActiveGameExists = activeGameExists
-            };
+            var model = GetHomeViewModel();
 
             return View(model);
         }
@@ -78,36 +51,53 @@ namespace Oljeopardy.Controllers
         {
             ViewData["Title"] = "Øljeopardy";
 
+            var model = GetHomeViewModel();
+
+            return PartialView("Index", model);
+        }
+
+        private HomeViewModel GetHomeViewModel()
+        {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var activeGame = _gameRepository.GetActiveGameForUser(userId);
-            bool hasActiveGame = false;
-            if (activeGame != null && activeGame.GameStatus == Enums.GameStatus.Active)
-            {
-                hasActiveGame = true;
-            }
-
-            var activeGames = _gameRepository.GetActiveGames();
-            bool activeGameExists = false;
-            if (activeGames != null && activeGames.Count() > 0)
-            {
-                activeGameExists = true;
-            }
-
-            var categories = _categoryRepository.GetCategoriesByUserId(userId);
-            bool hasCategory = false;
-            if (categories != null && categories.Count() > 0)
-            {
-                hasCategory = true;
-            }
 
             var model = new HomeViewModel()
             {
-                HasActiveGame = hasActiveGame,
-                HasCategory = hasCategory,
-                ActiveGameExists = activeGameExists
+                HasActiveGame = HasActiveGame(userId),
+                HasCategory = HasCategory(userId),
+                ActiveGameExists = ActiveGameExists()
             };
 
-            return PartialView("Index", model);
+            return model;
+        }
+
+        private bool HasActiveGame(string userId)
+        {
+            var activeGame = _gameRepository.GetActiveGameForUser(userId);
+            if (activeGame != null && activeGame.GameStatus == Enums.GameStatus.Active)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool ActiveGameExists()
+        {
+            var activeGames = _gameRepository.GetActiveGames();
+            if (activeGames != null && activeGames.Count() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool HasCategory(string userId)
+        {
+            var categories = _categoryRepository.GetCategoriesByUserId(userId);
+            if (categories != null && categories.Count() > 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         public IActionResult Categories(Enums.CategoriesPageAction pageAction)
@@ -116,7 +106,9 @@ namespace Oljeopardy.Controllers
             var model = new CategoriesViewModel()
             {
                 PageAction = pageAction,
-                CategoryList = _categoryRepository.GetCategoriesByUserId(userId)
+                CategoryList = _categoryRepository.GetCategoriesByUserId(userId),
+                ActiveGameExists = ActiveGameExists(),
+                HasActiveGame = HasActiveGame(userId)
             };
 
             var message = "";
@@ -159,13 +151,7 @@ namespace Oljeopardy.Controllers
             }
             else
             {
-                var activeGames = _gameRepository.GetActiveGames();
-                bool activeGameExists = false;
-                if (activeGames != null && activeGames.Count() > 0)
-                {
-                    activeGameExists = true;
-                }
-                gameViewModel.ActiveGameExists = activeGameExists;
+                gameViewModel.ActiveGameExists = ActiveGameExists();
             }
 
             return PartialView(gameViewModel);

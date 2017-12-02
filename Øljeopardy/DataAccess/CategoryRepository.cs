@@ -83,13 +83,10 @@ namespace Oljeopardy.DataAccess
 
         public List<Category> GetCategoriesByUserId(string userId)
         {
-            using (_context)
-            {
-                return _context.Categories
-                    .Where(c => c.UserId == userId && c.Deleted == null)
-                    .AsEnumerable()
-                    .OrderBy(c => c.Name, StringComparer.Create(new CultureInfo("da-DK"), true)).ToList();
-            }
+            return _context.Categories
+                .Where(c => c.UserId == userId && c.Deleted == null)
+                .AsEnumerable()
+                .OrderBy(c => c.Name, StringComparer.Create(new CultureInfo("da-DK"), true)).ToList();
         }
 
         public Category GetUsersCategoryForActiveGame(Guid gameId, string userId)
