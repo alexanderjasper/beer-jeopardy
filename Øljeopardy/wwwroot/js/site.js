@@ -24,6 +24,25 @@ function MoveAnswerQuestion(position, direction) {
     targetAnswer.value = thisAnswerValue;
 }
 
+function checkIfGameChanged() {
+    $.ajax({
+        url: "/checkIfGameChanged",
+        async: false,
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                loadGame();
+            }
+            else {
+                gameBottomMargin = $('#gameBottomMargin');
+                if (gameBottomMargin.length && gameBottomMargin.length > 0) {
+                    setTimeout(checkIfGameChanged, 1000);
+                }
+            }
+        }
+    });
+};
+
 function selectAnswerQuestion(elem) {
     var labels = document.getElementsByClassName('category-radio-button-label');
     for (i = 0; i < labels.length; i++) {
@@ -49,6 +68,7 @@ var loadCategoriesDeleted = function () {
 };
 var loadGame = function () {
     $("#master-container").load('/Home/Game');
+    setTimeout(checkIfGameChanged, 1000);
 };
 var loadMain = function () {
     $("#master-container").load('/Home/Main');

@@ -237,18 +237,8 @@ else
         }
     }
 }
+<div id="gameBottomMargin" style="height: 30px;"></div>
 
 <script>
-    function checkIfGameChanged() {
-        $.getJSON("/checkIfGameChanged", function (data) {
-            if (data) {
-                loadGame();
-            }
-            else {
-                setTimeout(checkIfGameChanged, 1000);
-            }
-        })
-    };
 
-    setTimeout(checkIfGameChanged, 1000);
 </script>
