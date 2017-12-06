@@ -88,8 +88,13 @@ var loadParticipateGame = function () {
 };
 
 var submitCategory = function () {
+    var name = $('#Name')[0].value;
     var form = $('#categoryForm');
     var id = $('#Id')[0].value;
+    if (name === null || $.trim(name) == '') {
+        alert("Du skal navngive din kategori");
+        return false;
+    }
     $.ajax({
         url: '/Category/SubmitCategory',
         data: form.serialize(),
@@ -108,7 +113,7 @@ var editCategory = function (categoryId) {
     });
 };
 var deleteCategory = function (categoryId) {
-    var r = confirm('Kategorien slettes permanent og kan ikke gendannes!');
+    var r = confirm('Kategorien slettes og kan ikke gendannes!');
     if (r === true) {
         $.ajax({
             url: '/Category/Delete',
@@ -146,7 +151,7 @@ var completeParticipation = function () {
     }
     var selectedCategoryIndex = form[0][1].selectedIndex;
     if (selectedCategoryIndex === 0) {
-        alert("Vælg en kategori, du bruge i spillet");
+        alert("Vælg en kategori, du vil bruge i spillet");
         return false;
     }
     $.ajax({
