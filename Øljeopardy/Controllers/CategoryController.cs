@@ -68,6 +68,11 @@ namespace Oljeopardy.Controllers
         {
             var category = Mapper.Map<Category>(categoryViewModel);
             var categoriesViewModel = new CategoriesViewModel();
+            category.Name = category.Name.Trim();
+            if (category.Name == "")
+            {
+                throw new Exception("Du skal navngive din kategori");
+            }
 
             if (categoryViewModel.Id != Guid.Empty)
             {
