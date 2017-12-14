@@ -183,3 +183,16 @@ var selectAnswer = function (button) {
     });
     loadGame();
 };
+var eatYourNote = function (button) {
+    if (button != null) {
+        addSpinner(button);
+    }
+    $.ajax({
+        url: '/Game/EatYourNote',
+        type: 'post',
+        success: function (data) {
+            $('#EatYourNoteButton').hide();
+            $('#EatYourNoteMessage').fadeIn();
+        }
+    })
+}

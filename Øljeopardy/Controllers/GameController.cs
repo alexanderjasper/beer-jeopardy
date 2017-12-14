@@ -113,6 +113,30 @@ namespace Oljeopardy.Controllers
             }
         }
 
+        public IActionResult EatYourNote()
+        {
+            try
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                var game = _gameRepository.GetActiveGameForUser(userId);
+                if (game != null && game.SelectedAnswerQuestionId != null)
+                {
+                    _gameRepository.SubmitEatYourNote(game.Id, userId, game.SelectedAnswerQuestionId.Value);
+                }
+                if (_gameRepository.AllEatYourNotesPressed(game.Id, game.SelectedAnswerQuestionId.Value))
+                {
+                    _gameRepository.ExecuteEatYourNote(game.Id, game.SelectedAnswerQuestionId.Value);
+                    _gameRepository.IncrementGameVersion(game.Id);
+                }
+                return Ok();
+            }
+            catch
+            {
+                throw new Exception("Could not submit Eat Your Note");
+            }
+        }
+
+
         [HttpGet]
         [Route("checkIfGameChanged")]
         public IActionResult CheckIfGameChanged()
@@ -131,5 +155,7 @@ namespace Oljeopardy.Controllers
             }
             return Ok(false);            
         }
+
+
     }
 }

@@ -12,9 +12,10 @@ using System;
 namespace Oljeopardy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171206212225_AddedEatYourNote")]
+    partial class AddedEatYourNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,16 +281,6 @@ namespace Oljeopardy.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("CategoryId");
-
-                    b.Property<bool>("EatYourNote100");
-
-                    b.Property<bool>("EatYourNote200");
-
-                    b.Property<bool>("EatYourNote300");
-
-                    b.Property<bool>("EatYourNote400");
-
-                    b.Property<bool>("EatYourNote500");
 
                     b.Property<Guid>("GameId");
 

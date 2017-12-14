@@ -203,6 +203,11 @@ namespace Oljeopardy.Controllers
 
                 }
 
+                if (userParticipant.TurnType == Enums.TurnType.Guess && model.Game.SelectedAnswerQuestionId != null)
+                {
+                    model.HasPressedEatYourNote = _gameRepository.GetEatYourNote(model.Game.Id, userId, model.Game.SelectedAnswerQuestionId.Value);
+                }
+
                 if (model.Game.LatestCategoryChooserId != null)
                 {
                     model.LatestCategoryChooserName =

@@ -15,6 +15,11 @@ namespace Oljeopardy.Models
         public Guid Won300ParticipantId { get; set; }
         public Guid Won400ParticipantId { get; set; }
         public Guid Won500ParticipantId { get; set; }
+        public bool EatYourNote100 { get; set; }
+        public bool EatYourNote200 { get; set; }
+        public bool EatYourNote300 { get; set; }
+        public bool EatYourNote400 { get; set; }
+        public bool EatYourNote500 { get; set; }
 
         public Category Category { get; set; }
         public Game Game { get; set; }
