@@ -227,45 +227,119 @@ namespace Oljeopardy.DataAccess
                     }
 
 
-                    var answerQuestionCategory = _categoryRepository.GetCategoryFromAnswerQuestion(answerQuestion.Id);
-                    if (answerQuestionCategory != null)
+                    var answerQuestionGameCategory =
+                        _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestion.Id, gameId);
+                    if (answerQuestionGameCategory != null)
                     {
-                        var answerQuestionGameCategory =
-                            _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestion.Id, gameId);
-                        if (answerQuestionGameCategory != null)
+                        switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestion.Id))
                         {
-                            switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestion.Id))
-                            {
-                                case 100:
-                                    answerQuestionGameCategory.Won100ParticipantId = winnerParticipant.Id;
-                                    break;
-                                case 200:
-                                    answerQuestionGameCategory.Won200ParticipantId = winnerParticipant.Id;
-                                    break;
-                                case 300:
-                                    answerQuestionGameCategory.Won300ParticipantId = winnerParticipant.Id;
-                                    break;
-                                case 400:
-                                    answerQuestionGameCategory.Won400ParticipantId = winnerParticipant.Id;
-                                    break;
-                                case 500:
-                                    answerQuestionGameCategory.Won500ParticipantId = winnerParticipant.Id;
-                                    break;
-                                default:
-                                    throw new Exception("Could not parse PointsValue for AnswerQuestion");
-                            }
-                            game.SelectedAnswerQuestionId = null;
-                            game.LatestCategoryChooserId = winnerParticipant.UserId;
-                            game.UserId = winnerId;
-
-                            _context.Update(winnerParticipant);
-                            _context.Update(submitterParticipant);
-                            _context.Update(answerQuestionGameCategory);
-                            _context.Update(game);
-
-                            _context.SaveChanges();
-                            return;
+                            case 100:
+                                answerQuestionGameCategory.Won100ParticipantId = winnerParticipant.Id;
+                                break;
+                            case 200:
+                                answerQuestionGameCategory.Won200ParticipantId = winnerParticipant.Id;
+                                break;
+                            case 300:
+                                answerQuestionGameCategory.Won300ParticipantId = winnerParticipant.Id;
+                                break;
+                            case 400:
+                                answerQuestionGameCategory.Won400ParticipantId = winnerParticipant.Id;
+                                break;
+                            case 500:
+                                answerQuestionGameCategory.Won500ParticipantId = winnerParticipant.Id;
+                                break;
+                            default:
+                                throw new Exception("Could not parse PointsValue for AnswerQuestion");
                         }
+                        game.SelectedAnswerQuestionId = null;
+                        game.LatestCategoryChooserId = winnerParticipant.UserId;
+                        game.UserId = winnerId;
+
+                        _context.Update(winnerParticipant);
+                        _context.Update(submitterParticipant);
+                        _context.Update(answerQuestionGameCategory);
+                        _context.Update(game);
+
+                        _context.SaveChanges();
+                        return;
+                    }
+                }
+                throw new Exception("Could not set Category winner");
+            }
+            catch
+            {
+                throw new DataException("Could not set category winner");
+            }
+        }
+
+        public void EatYourNote(string userId, Guid gameId)
+        {
+            try
+            {
+                var game = _context.Games.FirstOrDefault(x => x.Id == gameId);
+                var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+                var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == game.SelectedAnswerQuestionId);
+                if (game != null &&
+                    participant != null &&
+                    answerQuestion != null &&
+                    game.GameStatus == Enums.GameStatus.Active &&
+                    participant.TurnType == Enums.TurnType.Read)
+                {
+                    if (_categoryRepository.WinnerHasAnswerQuestionsToSelect(gameId, participant, answerQuestion.Id))
+                    {
+                        participant.TurnType = Enums.TurnType.Choose;
+                    }
+                    else
+                    {
+                        if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(gameId, participant.Id))
+                        {
+                            participant.TurnType = Enums.TurnType.ChooseOwn;
+                        }
+                        else
+                        {
+                            game.GameStatus = Enums.GameStatus.Finished;
+                        }
+                    }
+
+                    var answerQuestionGameCategory =
+                        _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestion.Id, gameId);
+                    if (answerQuestionGameCategory != null)
+                    {
+                        switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestion.Id))
+                        {
+                            case 100:
+                                answerQuestionGameCategory.Won100ParticipantId = participant.Id;
+                                answerQuestionGameCategory.EatYourNote100 = true;
+                                break;
+                            case 200:
+                                answerQuestionGameCategory.Won200ParticipantId = participant.Id;
+                                answerQuestionGameCategory.EatYourNote200 = true;
+                                break;
+                            case 300:
+                                answerQuestionGameCategory.Won300ParticipantId = participant.Id;
+                                answerQuestionGameCategory.EatYourNote300 = true;
+                                break;
+                            case 400:
+                                answerQuestionGameCategory.Won400ParticipantId = participant.Id;
+                                answerQuestionGameCategory.EatYourNote400 = true;
+                                break;
+                            case 500:
+                                answerQuestionGameCategory.Won500ParticipantId = participant.Id;
+                                answerQuestionGameCategory.EatYourNote500 = true;
+                                break;
+                            default:
+                                throw new Exception("Could not parse PointsValue for AnswerQuestion");
+                        }
+                        game.SelectedAnswerQuestionId = null;
+                        game.LatestCategoryChooserId = participant.UserId;
+                        game.UserId = userId;
+
+                        _context.Update(participant);
+                        _context.Update(answerQuestionGameCategory);
+                        _context.Update(game);
+
+                        _context.SaveChanges();
+                        return;
                     }
                 }
                 throw new Exception("Could not set Category winner");
@@ -378,152 +452,6 @@ namespace Oljeopardy.DataAccess
             catch
             {
                 throw new Exception("Could not get participants for game");
-            }
-        }
-
-        public bool GetEatYourNote(Guid gameId, string userId, Guid answerQuestionId)
-        {
-            try
-            {
-                var eatYourNote = _context.EatYourNotes.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId && x.AnswerQuestionId == answerQuestionId);
-                if (eatYourNote == null)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch
-            {
-                throw new Exception("Could not get Eat Your Note");
-            }
-        }
-
-        public EatYourNote SubmitEatYourNote(Guid gameId, string userId, Guid answerQuestionId)
-        {
-            try
-            {
-                if (GetEatYourNote(gameId, userId, answerQuestionId))
-                {
-                    throw new Exception("Already pressed Eat Your Note");
-                }
-                var eatYourNote = new EatYourNote()
-                {
-                    GameId = gameId,
-                    UserId = userId,
-                    AnswerQuestionId = answerQuestionId
-                };
-                var dbEatYourNote = _context.Add(eatYourNote).Entity;
-                _context.SaveChanges();
-
-                return dbEatYourNote;
-            }
-            catch
-            {
-                throw new Exception("Could not get Eat Your Note");
-            }
-        }
-
-        public void ExecuteEatYourNote(Guid gameId, Guid answerQuestionId)
-        {
-            try
-            {
-                var game = _context.Games.FirstOrDefault(x => x.Id == gameId);
-                var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == game.SelectedAnswerQuestionId);
-                if (answerQuestion != null && game.SelectedAnswerQuestionId != null)
-                {
-                    var category = _categoryRepository.GetCategoryFromAnswerQuestion(game.SelectedAnswerQuestionId.Value);
-                    var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == category.UserId);
-                    if (game != null &&
-                        participant != null &&
-                        game.GameStatus == Enums.GameStatus.Active &&
-                        participant.TurnType == Enums.TurnType.Read)
-                    {
-                        var answerQuestionCategory = _categoryRepository.GetCategoryFromAnswerQuestion(answerQuestion.Id);
-                        if (answerQuestionCategory != null)
-                        {
-                            var answerQuestionGameCategory =
-                                _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestion.Id, gameId);
-                            if (answerQuestionGameCategory != null)
-                            {
-                                switch (_categoryRepository.GetAnswerQuestionPointsValue(answerQuestion.Id))
-                                {
-                                    case 100:
-                                        answerQuestionGameCategory.Won100ParticipantId = participant.Id;
-                                        answerQuestionGameCategory.EatYourNote100 = true;
-                                        break;
-                                    case 200:
-                                        answerQuestionGameCategory.Won200ParticipantId = participant.Id;
-                                        answerQuestionGameCategory.EatYourNote200 = true;
-                                        break;
-                                    case 300:
-                                        answerQuestionGameCategory.Won300ParticipantId = participant.Id;
-                                        answerQuestionGameCategory.EatYourNote300 = true;
-                                        break;
-                                    case 400:
-                                        answerQuestionGameCategory.Won400ParticipantId = participant.Id;
-                                        answerQuestionGameCategory.EatYourNote400 = true;
-                                        break;
-                                    case 500:
-                                        answerQuestionGameCategory.Won500ParticipantId = participant.Id;
-                                        answerQuestionGameCategory.EatYourNote500 = true;
-                                        break;
-                                    default:
-                                        throw new Exception("Could not parse PointsValue for AnswerQuestion");
-                                }
-                                game.SelectedAnswerQuestionId = null;
-                                game.LatestCategoryChooserId = participant.UserId;
-                                game.UserId = category.UserId;
-
-                                _context.Update(answerQuestionGameCategory);
-                            }
-                        }
-
-                        if (_categoryRepository.WinnerHasAnswerQuestionsToSelect(gameId, participant, answerQuestion.Id))
-                        {
-                            participant.TurnType = Enums.TurnType.Choose;
-                        }
-                        else
-                        {
-                            if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(gameId, participant.Id))
-                            {
-                                participant.TurnType = Enums.TurnType.ChooseOwn;
-                            }
-                            else
-                            {
-                                game.GameStatus = Enums.GameStatus.Finished;
-                            }
-                        }
-                        _context.Update(participant);
-                        _context.Update(game);
-
-                        _context.SaveChanges();
-                        return;
-                    }
-                }
-                throw new Exception("Could not set Category winner");
-            }
-            catch
-            {
-                throw new DataException("Could not set category winner");
-            }
-        }
-
-        public bool AllEatYourNotesPressed(Guid gameId, Guid answerQuestionId)
-        {
-            try
-            {
-                var numberOfParticipants = _context.Participants.Count(x => x.GameId == gameId);
-                var numberOfEatYourNotes = _context.EatYourNotes.Count(x => x.GameId == gameId && x.AnswerQuestionId == answerQuestionId);
-
-                if (numberOfEatYourNotes >= numberOfParticipants - 1)
-                {
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                throw new Exception("Could not get Eat Your Note");
             }
         }
     }

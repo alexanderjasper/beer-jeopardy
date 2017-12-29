@@ -45,7 +45,7 @@ function checkIfGameChanged() {
             }
         }
     });
-};
+}
 
 function selectAnswerQuestion(elem) {
     var labels = document.getElementsByClassName('category-radio-button-label');
@@ -184,15 +184,19 @@ var selectAnswer = function (button) {
     loadGame();
 };
 var eatYourNote = function (button) {
+    promptAnswer = confirm("Bekræft, at ingen kunne gætte spørgsmålet.");
+    if (!promptAnswer) {
+        return false;
+    }
+
     if (button != null) {
         addSpinner(button);
     }
     $.ajax({
         url: '/Game/EatYourNote',
         type: 'post',
-        success: function (data) {
-            $('#EatYourNoteButton').hide();
-            $('#EatYourNoteMessage').fadeIn();
+        success: function () {
+            loadGame();
         }
-    })
-}
+    });
+};

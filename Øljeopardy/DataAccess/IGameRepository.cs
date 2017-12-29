@@ -23,9 +23,6 @@ namespace Oljeopardy.DataAccess
         Task<List<GameUser>> GetUsersForGameAsync(Guid gameId, string userId = null);
         Game IncrementGameVersion(Guid gameId);
         List<Participant> GetParticipantsForGame(Guid gameId);
-        bool AllEatYourNotesPressed(Guid gameId, Guid answerQuestionId);
-        void ExecuteEatYourNote(Guid gameId, Guid answerQuestionId);
-        EatYourNote SubmitEatYourNote(Guid gameId, string userId, Guid answerQuestionId);
-        bool GetEatYourNote(Guid gameId, string userId, Guid answerQuestionId);
+        void EatYourNote(string userId, Guid gameId);
     }
 }

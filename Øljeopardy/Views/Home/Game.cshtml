@@ -197,6 +197,14 @@ else
                     </div>
                 </div>
             }
+
+            <div class="row button-container" id="EatYourNoteButton">
+                <button type="button" onclick="eatYourNote()" class="menubutton">Æd den selv!</button>
+            </div>
+            <div id="EatYourNoteMessage" style="display: none;">
+                <div style="height: 6px;"></div>
+                <h4>Du har trykket Æd den selv.</h4>
+            </div>
         }
         @if (Model.UserTurnType == Enums.TurnType.Guess && Model.Game != null)
         {
@@ -238,21 +246,6 @@ else
                         @Model.LatestCategoryChooserName har valgt @(Model.CategoryOwnerName)s kategori @Model.ChosenCategoryName til @Model.ChosenAnswerQuestionPoints point.
                     </h4>
                 }
-                if (Model.HasPressedEatYourNote)
-                {
-                    <h4>Du har trykket Æd den selv.</h4>
-                }
-                else
-                {
-                    <div class="row button-container" id="EatYourNoteButton">
-                        <button type="button" onclick="eatYourNote()" class="menubutton">Æd den selv!</button>
-                    </div>
-                    <div id="EatYourNoteMessage" style="display: none;">
-                        <div style="height: 6px;"></div>
-                        <h4>Du har trykket Æd den selv.</h4>
-                    </div>
-                }
-
             }
         }
     }

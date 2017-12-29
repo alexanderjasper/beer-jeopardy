@@ -17,7 +17,6 @@ namespace Oljeopardy.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<GameCategory> GameCategories { get; set; }
         public DbSet<Participant> Participants { get; set; }
-        public DbSet<EatYourNote> EatYourNotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

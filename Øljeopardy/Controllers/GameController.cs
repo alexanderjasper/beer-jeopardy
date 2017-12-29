@@ -113,29 +113,21 @@ namespace Oljeopardy.Controllers
             }
         }
 
-        public IActionResult EatYourNote()
+        public IActionResult EatYourNote(GameViewModel model)
         {
             try
             {
                 var userId = _userManager.GetUserId(HttpContext.User);
                 var game = _gameRepository.GetActiveGameForUser(userId);
-                if (game != null && game.SelectedAnswerQuestionId != null)
-                {
-                    _gameRepository.SubmitEatYourNote(game.Id, userId, game.SelectedAnswerQuestionId.Value);
-                }
-                if (_gameRepository.AllEatYourNotesPressed(game.Id, game.SelectedAnswerQuestionId.Value))
-                {
-                    _gameRepository.ExecuteEatYourNote(game.Id, game.SelectedAnswerQuestionId.Value);
-                    _gameRepository.IncrementGameVersion(game.Id);
-                }
-                return Ok();
+                _gameRepository.EatYourNote(userId, game.Id);
+                _gameRepository.IncrementGameVersion(game.Id);
+                return RedirectToAction("Game", "Home");
             }
             catch
             {
                 throw new Exception("Could not submit Eat Your Note");
             }
         }
-
 
         [HttpGet]
         [Route("checkIfGameChanged")]
