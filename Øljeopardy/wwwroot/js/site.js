@@ -40,7 +40,7 @@ function checkIfGameChanged() {
             else {
                 gameBottomMargin = $('#gameBottomMargin');
                 if (gameBottomMargin.length && gameBottomMargin.length > 0) {
-                    setTimeout(checkIfGameChanged, 1000);
+                    setTimeout(checkIfGameChanged, 5000);
                 }
             }
         }
