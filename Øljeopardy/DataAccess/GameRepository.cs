@@ -26,6 +26,11 @@ namespace Oljeopardy.DataAccess
         {
             try
             {
+                var activeGame = GetActiveGameForUser(userId);
+                if (activeGame.ActiveTime >= DateTime.Now.AddHours(-2) && activeGame.GameStatus == Enums.GameStatus.Active)
+                {
+                    throw new DataException("User is already participating in a game.");
+                }
                 var gameToAdd = new Game()
                 {
                     UserId = userId,
