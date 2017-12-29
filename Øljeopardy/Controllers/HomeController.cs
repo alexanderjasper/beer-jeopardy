@@ -213,8 +213,11 @@ namespace Oljeopardy.Controllers
                 {
                     var categoryOwnerParticipant =
                         _categoryRepository.GetParticipantFromAnswerQuestion(model.Game.SelectedAnswerQuestionId.Value, model.Game.Id);
-                    model.CategoryOwnerName =
+                    if (categoryOwnerParticipant != null)
+                    {
+                        model.CategoryOwnerName =
                         _userManager.FindByIdAsync(categoryOwnerParticipant.UserId).Result.UserName;
+                    }
                 }
 
                 if (model.Game.SelectedAnswerQuestionId != null)
