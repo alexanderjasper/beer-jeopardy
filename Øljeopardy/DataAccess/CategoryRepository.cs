@@ -91,7 +91,7 @@ namespace Oljeopardy.DataAccess
 
         public Category GetUsersCategoryForActiveGame(Guid gameId, string userId)
         {
-            var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+            var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId && x.Deleted == null);
             var gameCategory =
                 _context.GameCategories.FirstOrDefault(x => x.GameId == gameId && x.ParticipantId == participant.Id);
             return _context.Categories.FirstOrDefault(x => x.Id == gameCategory.CategoryId);
@@ -133,7 +133,14 @@ namespace Oljeopardy.DataAccess
         {
             try
             {
-                return _context.GameCategories.Where(x => x.GameId == gameId).ToList();
+                var returnList = new List<GameCategory>();
+                var participants = _context.Participants.Where(x => x.GameId == gameId && x.Deleted == null);
+                foreach (var participant in participants)
+                {
+                    var gameCategory = _context.GameCategories.FirstOrDefault(x => x.ParticipantId == participant.Id);
+                    returnList.Add(gameCategory);
+                }
+                return returnList;
             }
             catch
             {
@@ -181,7 +188,7 @@ namespace Oljeopardy.DataAccess
                     throw new Exception("Could not get category from AnswerQuestion");
                 }
                 var userId = category.UserId;
-                return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+                return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId && x.Deleted == null);
             }
             catch
             {
@@ -198,6 +205,42 @@ namespace Oljeopardy.DataAccess
             catch
             {
                 throw new Exception("Could not get gamecategories for game");
+            }
+        }
+
+        public bool ParticipantHasAnswerQuestionsToSelect(Guid gameId, Participant winnerParticipant)
+        {
+            try
+            {
+                if (winnerParticipant == null)
+                {
+                    throw new Exception("Winner participant is null");
+                }
+                var otherPlayersGamecategories = GetOtherPlayersGameCategories(gameId, winnerParticipant.Id);
+                foreach (var gameCategory in otherPlayersGamecategories)
+                {
+                    var category = GetCategoryById(gameCategory.CategoryId);
+                    if (category != null)
+                    {
+                        if ((gameCategory.Won100ParticipantId == Guid.Empty) ||
+                            (gameCategory.Won200ParticipantId == Guid.Empty) ||
+                            (gameCategory.Won300ParticipantId == Guid.Empty) ||
+                            (gameCategory.Won400ParticipantId == Guid.Empty) ||
+                            (gameCategory.Won500ParticipantId == Guid.Empty))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Could not get winner's Category");
+                    }
+                }
+                return false;
+            }
+            catch
+            {
+                throw new Exception("Could not determine if winner has AnswerQuestions to select");
             }
         }
 

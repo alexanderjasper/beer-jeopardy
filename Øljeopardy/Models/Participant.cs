@@ -14,5 +14,6 @@ namespace Oljeopardy.Models
         public TurnType TurnType { get; set; }
 
         public Game Game { get; set; }
+        public DateTime? Deleted { get; set; }
     }
 }

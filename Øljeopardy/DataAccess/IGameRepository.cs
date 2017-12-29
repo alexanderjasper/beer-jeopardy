@@ -24,5 +24,8 @@ namespace Oljeopardy.DataAccess
         Game IncrementGameVersion(Guid gameId);
         List<Participant> GetParticipantsForGame(Guid gameId);
         void EatYourNote(string userId, Guid gameId);
+        void DeleteParticipant(Guid participantId);
+        Participant UpdateParticipant(Participant participant);
+        Game UpdateGame(Game game);
     }
 }

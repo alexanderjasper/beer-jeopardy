@@ -129,6 +129,60 @@ namespace Oljeopardy.Controllers
             }
         }
 
+        public IActionResult LeaveGame()
+        {
+            try
+            {
+                var userId = _userManager.GetUserId(HttpContext.User);
+                var game = _gameRepository.GetActiveGameForUser(userId);
+                var participant = _gameRepository.GetUserParticipant(game.Id, userId);
+                _gameRepository.DeleteParticipant(participant.Id);
+                if (participant.TurnType != Enums.TurnType.Guess)
+                {
+                    var participants = _gameRepository.GetParticipantsForGame(game.Id);
+                    if (participants.Count() <= 1)
+                    {
+                        game.GameStatus = Enums.GameStatus.Finished;
+                    }
+                    else
+                    {
+                        var firstParticipant = participants.FirstOrDefault(x => x.Id != participant.Id);
+                        if (firstParticipant.TurnType == Enums.TurnType.Guess)
+                        {
+                            if (_categoryRepository.ParticipantHasAnswerQuestionsToSelect(game.Id, firstParticipant))
+                            {
+                                firstParticipant.TurnType = Enums.TurnType.Choose;
+                            }
+                            else if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(game.Id, firstParticipant.Id))
+                            {
+                                firstParticipant.TurnType = Enums.TurnType.ChooseOwn;
+                            }
+                            else
+                            {
+                                game.GameStatus = Enums.GameStatus.Finished;
+                            }
+                            _gameRepository.UpdateParticipant(firstParticipant);
+                            game.LatestCategoryChooserId = firstParticipant.UserId;
+                            game.SelectedAnswerQuestionId = null;
+                            game.SelectedGameCategory = null;
+                            game.UserId = firstParticipant.UserId;
+                        }
+                    }
+                    _gameRepository.UpdateGame(game);
+                }
+                else
+                {
+                    throw new Exception("First participant does not have a valid TurnType.");
+                }
+                _gameRepository.IncrementGameVersion(game.Id);
+                return RedirectToAction("Game", "Home");
+            }
+            catch
+            {
+                throw new Exception("Could not submit Eat Your Note");
+            }
+        }
+
         [HttpGet]
         [Route("checkIfGameChanged")]
         public IActionResult CheckIfGameChanged()

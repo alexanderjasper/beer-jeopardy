@@ -200,3 +200,21 @@ var eatYourNote = function (button) {
         }
     });
 };
+
+var leaveGame = function (button) {
+    promptAnswer = confirm("Bekræft, at du vil forlade det aktuelle spil.");
+    if (!promptAnswer) {
+        return false;
+    }
+
+    if (button != null) {
+        addSpinner(button);
+    }
+    $.ajax({
+        url: '/Game/LeaveGame',
+        type: 'post',
+        success: function () {
+            loadMain();
+        }
+    });
+};

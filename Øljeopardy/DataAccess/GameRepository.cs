@@ -27,7 +27,7 @@ namespace Oljeopardy.DataAccess
             try
             {
                 var activeGame = GetActiveGameForUser(userId);
-                if (activeGame.ActiveTime >= DateTime.Now.AddHours(-2) && activeGame.GameStatus == Enums.GameStatus.Active)
+                if (activeGame != null && activeGame.ActiveTime >= DateTime.Now.AddHours(-2) && activeGame.GameStatus == Enums.GameStatus.Active)
                 {
                     throw new DataException("User is already participating in a game.");
                 }
@@ -138,7 +138,7 @@ namespace Oljeopardy.DataAccess
         public Game GetActiveGameForUser(string userId)
         {
             var allGamesForUser = _context.Participants
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && x.Deleted == null)
                 .Select(x => x.GameId);
             var activeGamesForUser = _context.Games.Where(x => x.ActiveTime >= DateTime.Now.AddHours(-2) && allGamesForUser.Contains(x.Id) && x.GameStatus == Enums.GameStatus.Active);
             if (activeGamesForUser.Count() > 0)
@@ -154,7 +154,7 @@ namespace Oljeopardy.DataAccess
 
         public Participant GetUserParticipant(Guid gameId, string userId)
         {
-            return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+            return _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId && x.Deleted == null);
         }
 
         public Participant GetParticipant(Guid participantId)
@@ -200,10 +200,8 @@ namespace Oljeopardy.DataAccess
             try
             {
                 var game = _context.Games.FirstOrDefault(x => x.Id == gameId);
-                var winnerParticipant =
-                    _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == winnerId);
-                var submitterParticipant =
-                    _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == submitterUserId);
+                var winnerParticipant = GetUserParticipant(gameId, winnerId);
+                var submitterParticipant = GetUserParticipant(gameId, submitterUserId);
                 var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == game.SelectedAnswerQuestionId);
                 if (game != null &&
                     winnerParticipant != null &&
@@ -282,7 +280,7 @@ namespace Oljeopardy.DataAccess
             try
             {
                 var game = _context.Games.FirstOrDefault(x => x.Id == gameId);
-                var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId);
+                var participant = GetUserParticipant(gameId, userId);
                 var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == game.SelectedAnswerQuestionId);
                 if (game != null &&
                     participant != null &&
@@ -355,13 +353,32 @@ namespace Oljeopardy.DataAccess
             }
         }
 
+        public void DeleteParticipant(Guid participantId)
+        {
+            try
+            {
+                var participant = GetParticipant(participantId);
+                if (participant == null)
+                {
+                    throw new DataException("Could not find participant.");
+                }
+                participant.Deleted = DateTime.Now;
+
+                _context.Update(participant);
+                _context.SaveChanges();
+            }
+            catch
+            {
+                throw new DataException("Could not delete participant.");
+            }
+        }
+
         public void SetSelectedAnswerQuestion(Guid gameId, string submitterUserId, Guid answerQuestionId)
         {
             try
             {
                 var game = _context.Games.FirstOrDefault(x => x.Id == gameId);
-                var submitterParticipant =
-                    _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == submitterUserId);
+                var submitterParticipant = GetUserParticipant(gameId, submitterUserId);
                 var answerQuestion = _context.AnswerQuestions.FirstOrDefault(x => x.Id == answerQuestionId);
                 if (game != null &&
                     submitterParticipant != null &&
@@ -405,11 +422,11 @@ namespace Oljeopardy.DataAccess
             var userIds = new List<string>();
             if (ownUserId != null)
             {
-                userIds = _context.Participants.Where(x => x.GameId == gameId && x.UserId != ownUserId).Select(x => x.UserId).ToList();
+                userIds = _context.Participants.Where(x => x.GameId == gameId && x.UserId != ownUserId && x.Deleted == null).Select(x => x.UserId).ToList();
             }
             else
             {
-                userIds = _context.Participants.Where(x => x.GameId == gameId).Select(x => x.UserId).ToList();
+                userIds = _context.Participants.Where(x => x.GameId == gameId && x.Deleted == null).Select(x => x.UserId).ToList();
             }
             var gameUsers = new List<GameUser>();
             foreach (var userId in userIds)
@@ -452,11 +469,39 @@ namespace Oljeopardy.DataAccess
         {
             try
             {
-                return _context.Participants.Where(x => x.GameId == gameId).ToList();
+                return _context.Participants.Where(x => x.GameId == gameId && x.Deleted == null).ToList();
             }
             catch
             {
                 throw new Exception("Could not get participants for game");
+            }
+        }
+
+        public Participant UpdateParticipant(Participant participant)
+        {
+            try
+            {
+                var DbParticipant = _context.Update(participant);
+                _context.SaveChanges();
+                return DbParticipant.Entity;
+            }
+            catch
+            {
+                throw new DataException("Could not update participant.");
+            }
+        }
+
+        public Game UpdateGame(Game game)
+        {
+            try
+            {
+                var DbGame = _context.Update(game);
+                _context.SaveChanges();
+                return DbGame.Entity;
+            }
+            catch
+            {
+                throw new DataException("Could not update participant.");
             }
         }
     }
