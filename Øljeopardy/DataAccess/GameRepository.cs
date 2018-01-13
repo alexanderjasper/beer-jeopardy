@@ -288,22 +288,6 @@ namespace Oljeopardy.DataAccess
                     game.GameStatus == Enums.GameStatus.Active &&
                     participant.TurnType == Enums.TurnType.Read)
                 {
-                    if (_categoryRepository.WinnerHasAnswerQuestionsToSelect(gameId, participant, answerQuestion.Id))
-                    {
-                        participant.TurnType = Enums.TurnType.Choose;
-                    }
-                    else
-                    {
-                        if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(gameId, participant.Id))
-                        {
-                            participant.TurnType = Enums.TurnType.ChooseOwn;
-                        }
-                        else
-                        {
-                            game.GameStatus = Enums.GameStatus.Finished;
-                        }
-                    }
-
                     var answerQuestionGameCategory =
                         _categoryRepository.GetGameCategoryFromAnswerQuestion(answerQuestion.Id, gameId);
                     if (answerQuestionGameCategory != null)
@@ -339,6 +323,23 @@ namespace Oljeopardy.DataAccess
 
                         _context.Update(participant);
                         _context.Update(answerQuestionGameCategory);
+
+                        if (_categoryRepository.WinnerHasAnswerQuestionsToSelect(gameId, participant, answerQuestion.Id))
+                        {
+                            participant.TurnType = Enums.TurnType.Choose;
+                        }
+                        else
+                        {
+                            if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(gameId, participant.Id))
+                            {
+                                participant.TurnType = Enums.TurnType.ChooseOwn;
+                            }
+                            else
+                            {
+                                game.GameStatus = Enums.GameStatus.Finished;
+                            }
+                        }
+
                         _context.Update(game);
 
                         _context.SaveChanges();
