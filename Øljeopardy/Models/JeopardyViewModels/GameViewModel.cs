@@ -8,6 +8,7 @@ namespace Oljeopardy.Models.JeopardyViewModels
     public class GameViewModel
     {
         public Game Game { get; set; }
+        public Guid? GameId { get; set; }
         public Category UsersOwnCategory { get; set; }
         public List<GameCategoryViewModel> OtherGameCategories { get; set; }
         public string LatestCategoryChooserName { get; set; }

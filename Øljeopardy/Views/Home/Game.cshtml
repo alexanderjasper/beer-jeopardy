@@ -74,99 +74,81 @@ else
                     Vælg en kategori og et pointtal.
                 </h4>
             }
-            <form id="selectAnswerForm">
-                @foreach (var gameCategory in Model.OtherGameCategories)
-                {
-                    <div class="category-select-container">
-                        <div class="row">
-                            @gameCategory.Category.Name
-                        </div>
-                        <div class="row">
-                            @if (gameCategory.GameCategory.Won100ParticipantId == Guid.Empty)
-                            {
-                                <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
-                                    100
-                                    <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion100.Id" />
-                                </label>
-                            }
-                            else
-                            {
-                                <label class="category-radio-button-label inactive">
-                                    100
-                                    <input class="category-radio-button" type="radio" disabled="disabled" />
-                                </label>
-                            }
-                            @if (gameCategory.GameCategory.Won200ParticipantId == Guid.Empty)
-                            {
-                                <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
-                                    200
-                                    <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion200.Id" />
-                                </label>
-                            }
-                            else
-                            {
-                                <label class="category-radio-button-label inactive">
-                                    200
-                                    <input class="category-radio-button" type="radio" disabled="disabled" />
-                                </label>
-                            }
-                            @if (gameCategory.GameCategory.Won300ParticipantId == Guid.Empty)
-                            {
-                                <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
-                                    300
-                                    <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion300.Id" />
-                                </label>
-                            }
-                            else
-                            {
-                                <label class="category-radio-button-label inactive">
-                                    300
-                                    <input class="category-radio-button" type="radio" disabled="disabled" />
-                                </label>
-                            }
-                            @if (gameCategory.GameCategory.Won400ParticipantId == Guid.Empty)
-                            {
-                                <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
-                                    400
-                                    <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion400.Id" />
-                                </label>
-                            }
-                            else
-                            {
-                                <label class="category-radio-button-label inactive">
-                                    400
-                                    <input class="category-radio-button" type="radio" disabled="disabled" />
-                                </label>
-                            }
-                            @if (gameCategory.GameCategory.Won500ParticipantId == Guid.Empty)
-                            {
-                                <label class="category-radio-button-label active" onclick="selectAnswerQuestion(this)">
-                                    500
-                                    <input class="category-radio-button" asp-for="ChosenAnswerQuestionGuid" type="radio" value="@gameCategory.Category.AnswerQuestion500.Id" />
-                                </label>
-                            }
-                            else
-                            {
-                                <label class="category-radio-button-label inactive">
-                                    500
-                                    <input class="category-radio-button" type="radio" disabled="disabled" />
-                                </label>
-                            }
-                        </div>
-                    </div>
-                }
-                @if (Model.OtherGameCategories.Count > 0)
-                {
-                    <div style="height:20px;"></div>
+            @foreach (var gameCategory in Model.OtherGameCategories)
+            {
+                <div class="category-select-container">
                     <div class="row">
-                        <button type="button" onClick="selectAnswer(this)" class="menubutton has-spinner">
-                            <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
-                            <span class="btn-text">Vælg</span>
-                        </button>
+                        @gameCategory.Category.Name
                     </div>
-                }
-                <input asp-for="Game.Id" value="@Model.Game.Id" type="hidden" />
-            </form>
+                    <div class="row">
+                        @if (gameCategory.GameCategory.Won100ParticipantId == Guid.Empty)
+                        {
+                            <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion100.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
+                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="btn-text">100</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="category-button unavailable">
+                                <span class="btn-text">100</span>
+                            </button>
+                        }
+                        @if (gameCategory.GameCategory.Won200ParticipantId == Guid.Empty)
+                        {
+                            <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion200.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
+                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="btn-text">200</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="category-button unavailable">
+                                <span class="btn-text">200</span>
+                            </button>
+                        }
+                        @if (gameCategory.GameCategory.Won300ParticipantId == Guid.Empty)
+                        {
+                            <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion300.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
+                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="btn-text">300</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="category-button unavailable">
+                                <span class="btn-text">300</span>
+                            </button>
+                        }
+                        @if (gameCategory.GameCategory.Won400ParticipantId == Guid.Empty)
+                        {
+                            <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion400.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
+                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="btn-text">400</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="category-button unavailable">
+                                <span class="btn-text">400</span>
+                            </button>
+                        }
+                        @if (gameCategory.GameCategory.Won500ParticipantId == Guid.Empty)
+                        {
+                            <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion500.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
+                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="btn-text">500</span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="category-button unavailable">
+                                <span class="btn-text">500</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
         }
         @if (Model.UserTurnType == Enums.TurnType.Read)
         {

@@ -40,7 +40,7 @@ function checkIfGameChanged() {
             else {
                 gameBottomMargin = $('#gameBottomMargin');
                 if (gameBottomMargin.length && gameBottomMargin.length > 0) {
-                    setTimeout(checkIfGameChanged, 5000);
+                    setTimeout(checkIfGameChanged, 2000);
                 }
             }
         }
@@ -171,14 +171,16 @@ var selectWinner = function (winnerId, gameId, button) {
     });
     loadGame();
 };
-var selectAnswer = function (button) {
+var selectAnswer = function (button, chosenAnswerQuestionId, gameId) {
     if (button != null) {
         addSpinner(button);
     }
-    var form = $('#selectAnswerForm');
     $.ajax({
         url: '/Game/SelectAnswer',
-        data: form.serialize(),
+        data: {
+            ChosenAnswerQuestionGuid: chosenAnswerQuestionId,
+            GameId: gameId
+        },
         async: false
     });
     loadGame();

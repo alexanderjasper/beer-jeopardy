@@ -98,11 +98,11 @@ namespace Oljeopardy.Controllers
         {
             try
             {
-                if (model.ChosenAnswerQuestionGuid != null && model.Game != null)
+                if (model.ChosenAnswerQuestionGuid != null && model.GameId != null)
                 {
                     var userId = _userManager.GetUserId(HttpContext.User);
-                    _gameRepository.SetSelectedAnswerQuestion(model.Game.Id, userId, model.ChosenAnswerQuestionGuid);
-                    _gameRepository.IncrementGameVersion(model.Game.Id);
+                    _gameRepository.SetSelectedAnswerQuestion(model.GameId.Value, userId, model.ChosenAnswerQuestionGuid);
+                    _gameRepository.IncrementGameVersion(model.GameId.Value);
                     return RedirectToAction("Game", "Home");
                 }
                 throw new Exception("No answer selected");

@@ -181,45 +181,37 @@ hr {
     margin-bottom: 30px;
 }
 
-.category-radio-button {
-    display: none;
-}
-
-.category-radio-button-label {
-    display: inline-block;
+.category-button {
     border: none;
     font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-    background: none;
     cursor: pointer;
+    width: 45px;
+    height: 30px;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 700;
     outline: none;
-    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
     transition: all 0.3s;
+    font-size: 12px;
+    background: #368015;
     color: #fff;
-    -webkit-appearance: none;
-    font-size: 15px;
-    padding: 10px 10px 0px 10px;
-    height: 37px;
-    vertical-align: top;
+    box-shadow: 0 3px 2px #0D3E0F;
     border-radius: 5px;
+    -webkit-appearance: none;
+    margin-left: auto;
+    margin-bottom: 4px;
 }
 
-.category-radio-button-label.active {
+.category-button.available {
     background: #368015;
     box-shadow: 0 2px #553F00;
 }
 
-.category-radio-button-label.inactive {
+.category-button.unavailable {
     background: #ff0000;
     box-shadow: 0 2px #aa0000;
-}
-
-.selected {
-    background: rgb(187,187,187) !important;
 }
 
 .category-select-container {
