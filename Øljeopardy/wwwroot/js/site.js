@@ -1,4 +1,4 @@
-﻿$(document).on('click', '.navbar-collapse.in', function (e) {
+$(document).on('click', '.navbar-collapse.in', function (e) {
     if ($(e.target).is('a')) {
         $(this).collapse('hide');
     }
@@ -29,22 +29,35 @@ function addSpinner(button) {
 }
 
 function checkIfGameChanged() {
-    $.ajax({
-        url: "/checkIfGameChanged",
-        async: false,
-        dataType: 'json',
-        success: function (data) {
-            if (data) {
-                loadGame();
-            }
-            else {
-                gameBottomMargin = $('#gameBottomMargin');
-                if (gameBottomMargin.length && gameBottomMargin.length > 0) {
-                    setTimeout(checkIfGameChanged, 2000);
-                }
-            }
+    let connection = new signalR.HubConnection('/gameUpdate');
+    
+    connection.on('gameUpdated', data => {
+        connection.stop();
+        gameBottomMargin = $('#gameBottomMargin');
+        if (gameBottomMargin.length && gameBottomMargin.length > 0) {
+            loadGame();
         }
     });
+
+    connection.start()
+        .then(() => connection.invoke('joinGroup',gameId));
+
+    //$.ajax({
+    //    url: "/checkIfGameChanged",
+    //    async: false,
+    //    dataType: 'json',
+    //    success: function (data) {
+    //        if (data) {
+    //            loadGame();
+    //        }
+    //        else {
+    //            gameBottomMargin = $('#gameBottomMargin');
+    //            if (gameBottomMargin.length && gameBottomMargin.length > 0) {
+    //                setTimeout(checkIfGameChanged, 2000);
+    //            }
+    //        }
+    //    }
+    //});
 }
 
 function selectAnswerQuestion(elem) {
@@ -72,7 +85,7 @@ var loadCategoriesDeleted = function () {
 };
 var loadGame = function () {
     $("#master-container").load('/Home/Game');
-    setTimeout(checkIfGameChanged, 1000);
+    checkIfGameChanged();
 };
 var loadMain = function () {
     $("#master-container").load('/Home/Main');
