@@ -123,9 +123,9 @@ namespace Oljeopardy.Controllers
                 _gameRepository.IncrementGameVersion(game.Id);
                 return RedirectToAction("Game", "Home");
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception("Could not submit Eat Your Note");
+                throw new Exception("Could not submit Eat Your Note",e);
             }
         }
 

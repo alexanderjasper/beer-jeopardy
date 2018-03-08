@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Oljeopardy.Data;
 using Oljeopardy.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
+using Oljeopardy.Services;
 
 namespace Oljeopardy.DataAccess
 {
@@ -14,12 +16,14 @@ namespace Oljeopardy.DataAccess
         private readonly ApplicationDbContext _context;
         private readonly ICategoryRepository _categoryRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private IHubContext<GameUpdateHub> _hubContext;
 
-        public GameRepository(ApplicationDbContext context, ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager)
+        public GameRepository(ApplicationDbContext context, ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager, IHubContext<GameUpdateHub> hubContext)
         {
             _context = context;
             _categoryRepository = categoryRepository;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         public Game AddGame(string name, Guid chosenCategoryGuid, string userId)
@@ -456,6 +460,7 @@ namespace Oljeopardy.DataAccess
                     game.Version += 1;
                     _context.Update(game);
                     _context.SaveChanges();
+                    _hubContext.Clients.Group(gameId.ToString()).InvokeAsync("GameUpdated", gameId.ToString());
                     return game;
                 }
                 throw new Exception("Could not find game to increment");

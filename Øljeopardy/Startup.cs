@@ -59,6 +59,7 @@ namespace Oljeopardy
 
             services.AddMvc();
             services.AddMemoryCache();
+            services.AddSignalR();
 
             services.AddAutoMapper();
             services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
@@ -88,6 +89,11 @@ namespace Oljeopardy
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameUpdateHub>("gameUpdate");
             });
         }
     }
