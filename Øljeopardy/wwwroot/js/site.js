@@ -28,6 +28,10 @@ function addSpinner(button) {
     button.classList.add('active');
 }
 
+function removeSpinner(button) {
+    button.classList.remove('active');
+}
+
 function checkIfGameChanged() {
     let connection = new signalR.HubConnection('/gameUpdate');
     
@@ -230,6 +234,10 @@ var leaveGame = function (button) {
         type: 'post',
         success: function () {
             loadMain();
+        },
+        error: function () {
+            removeSpinner(button);
+            alert('Du kan ikke forlade spillet, når det er din tur til at gøre noget.');
         }
     });
 };

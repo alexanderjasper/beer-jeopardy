@@ -136,9 +136,9 @@ namespace Oljeopardy.Controllers
                 var userId = _userManager.GetUserId(HttpContext.User);
                 var game = _gameRepository.GetActiveGameForUser(userId);
                 var participant = _gameRepository.GetUserParticipant(game.Id, userId);
-                _gameRepository.DeleteParticipant(participant.Id);
-                if (participant.TurnType != Enums.TurnType.Guess)
+                if (participant.TurnType == Enums.TurnType.Guess)
                 {
+                    _gameRepository.DeleteParticipant(participant.Id);
                     var participants = _gameRepository.GetParticipantsForGame(game.Id);
                     if (participants.Count() <= 1)
                     {
@@ -169,17 +169,17 @@ namespace Oljeopardy.Controllers
                         }
                     }
                     _gameRepository.UpdateGame(game);
+                    _gameRepository.IncrementGameVersion(game.Id);
                 }
                 else
                 {
-                    throw new Exception("First participant does not have a valid TurnType.");
+                    throw new Exception("Can only leave game when user's TurnType is Guess.");
                 }
-                _gameRepository.IncrementGameVersion(game.Id);
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Index", "Home");
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception("Could not submit Eat Your Note");
+                throw new Exception("Could not leave Game", e);
             }
         }
 
