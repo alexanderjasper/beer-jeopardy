@@ -126,12 +126,12 @@ hr {
   display: block; }
 
 .answer-label-container {
-  margin-top: 20px;
+  margin-top: 9px;
   font-size: 2em; }
 
 .question-label-container {
-  margin-top: 20px;
-  right: 7px;
+  margin-top: 9px;
+  right: 9px;
   font-size: 2em; }
 
 .points-group {

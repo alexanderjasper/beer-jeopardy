@@ -85,7 +85,7 @@ else
                         @if (gameCategory.GameCategory.Won100ParticipantId == Guid.Empty)
                         {
                             <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion100.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
-                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
                                 <span class="btn-text">100</span>
                             </button>
                         }
@@ -98,7 +98,7 @@ else
                         @if (gameCategory.GameCategory.Won200ParticipantId == Guid.Empty)
                         {
                             <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion200.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
-                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
                                 <span class="btn-text">200</span>
                             </button>
                         }
@@ -111,7 +111,7 @@ else
                         @if (gameCategory.GameCategory.Won300ParticipantId == Guid.Empty)
                         {
                             <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion300.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
-                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
                                 <span class="btn-text">300</span>
                             </button>
                         }
@@ -124,7 +124,7 @@ else
                         @if (gameCategory.GameCategory.Won400ParticipantId == Guid.Empty)
                         {
                             <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion400.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
-                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
                                 <span class="btn-text">400</span>
                             </button>
                         }
@@ -137,7 +137,7 @@ else
                         @if (gameCategory.GameCategory.Won500ParticipantId == Guid.Empty)
                         {
                             <button type="button" onClick="selectAnswer(this, '@(gameCategory.Category.AnswerQuestion500.Id)', '@(Model.Game.Id)')" class="category-button available has-spinner">
-                                <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
                                 <span class="btn-text">500</span>
                             </button>
                         }
@@ -174,7 +174,7 @@ else
                             @(user.Name)
                         </div>
                         <button style="float: right" class="smallbutton has-spinner" onclick="selectWinner('@(user.UserId)','@(Model.Game.Id)', this)">
-                            <span class="spinner"><i class="fa fa-refresh fa-spin fa-lg"></i></span>
+                            <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
                             <span class="btn-text">Vælg</span>
                         </button>
                     </div>

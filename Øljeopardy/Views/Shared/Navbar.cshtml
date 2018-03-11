@@ -10,16 +10,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a onclick="loadMain()" class="navbar-brand"><i class="fa fa-home navbar-icon" aria-hidden="true"></i>Øljeopardy</a>
+            <a onclick="loadMain()" class="navbar-brand"><i class="fas fa-home navbar-icon" aria-hidden="true"></i>Øljeopardy</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a onclick="loadMain()"><i class="fa fa-home navbar-icon" aria-hidden="true"></i> Forside</a></li>
-                <li><a onclick="loadRules()"><i class="fa fa-legal navbar-icon" aria-hidden="true"></i> Regler</a></li>
+                <li><a onclick="loadMain()"><i class="fas fa-home navbar-icon" aria-hidden="true"></i> Forside</a></li>
+                <li><a onclick="loadRules()"><i class="fas fa-balance-scale navbar-icon" aria-hidden="true"></i> Regler</a></li>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <li><a onclick="loadCategories()"><i class="fa fa-comments navbar-icon" aria-hidden="true"></i> Kategorier</a></li>
-                    <li><a onclick="loadGame()"><i class="fa fa-gamepad navbar-icon" aria-hidden="true"></i> Spil</a></li>
+                    <li><a onclick="loadCategories()"><i class="fas fa-comments navbar-icon" aria-hidden="true"></i> Kategorier</a></li>
+                    <li><a onclick="loadGame()"><i class="fas fa-gamepad navbar-icon" aria-hidden="true"></i> Spil</a></li>
                 }
             </ul>
             @await Html.PartialAsync("_LoginPartial")
