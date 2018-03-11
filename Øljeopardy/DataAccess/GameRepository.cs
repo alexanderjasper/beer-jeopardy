@@ -91,6 +91,12 @@ namespace Oljeopardy.DataAccess
         {
             try
             {
+                var duplicateParticipants = _context.Participants.Where(x => x.GameId == gameId && x.UserId == userId && x.Deleted == null);
+                if (duplicateParticipants.Any())
+                {
+                    throw new DataException("User is already participating in this game.");
+                }
+
                 var participant = new Participant()
                 {
                     UserId = userId,
@@ -111,9 +117,9 @@ namespace Oljeopardy.DataAccess
                 _context.SaveChanges();
                 return addedparticipant;
             }
-            catch
+            catch (Exception e)
             {
-                throw new DataException("Could not add new participant");
+                throw new DataException("Could not add new participant", e);
             }
 
         }
