@@ -4,6 +4,16 @@ $(document).on('click', '.navbar-collapse.in', function (e) {
     }
 });
 
+$(document).ready(function () {
+    $(document).click(function (event) {
+        var clickover = $(event.target);
+        var _opened = $(".navbar-collapse").hasClass("navbar-collapse collapse in");
+        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+            $("button.navbar-toggle").click();
+        }
+    });
+});
+
 function MoveAnswerQuestion(position, direction) {
     var thisQuestionId = 'q'.concat(position);
     var thisAnswerId = 'a'.concat(position);
