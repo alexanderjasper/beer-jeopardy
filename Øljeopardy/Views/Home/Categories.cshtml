@@ -10,33 +10,6 @@
             <strong>@ViewData["Message"]</strong>
         </div>
     }
-    @if (Model.HasActiveGame)
-    {
-        <h4>
-            Du deltager i et spil.
-        </h4>
-            <div class="row button-container">
-                <button type="button" onclick="loadGame()" class="menubutton">Gå til spillet</button>
-            </div>
-    }
-    else
-    {
-        @if (Model.ActiveGameExists)
-        {
-            <div class="row button-container">
-                <button type="button" onclick="loadParticipateGame()" class="menubutton">Deltag i et spil</button>
-            </div>
-        }
-        else
-        {
-            <h4>
-                Der er ingen aktive spil.
-            </h4>
-        }
-        <div class="row button-container">
-            <button type="button" onclick="loadAddGame()" class="menubutton">Opret nyt spil</button>
-        </div>
-    }
     <div class="row button-container">
         <form><button type="button" onclick="loadCreateCategory()" class="menubutton">Opret kategori</button></form>
     </div>
