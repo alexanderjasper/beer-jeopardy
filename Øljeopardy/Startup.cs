@@ -14,6 +14,7 @@ using Oljeopardy.DataAccess;
 using Oljeopardy.Models;
 using Oljeopardy.Models.Email;
 using Oljeopardy.Services;
+using DataTables.AspNet.AspNetCore;
 
 namespace Oljeopardy
 {
@@ -56,10 +57,12 @@ namespace Oljeopardy
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IGameRepository, GameRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddMvc();
             services.AddMemoryCache();
             services.AddSignalR();
+            services.RegisterDataTables();
 
             services.AddAutoMapper();
             services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());

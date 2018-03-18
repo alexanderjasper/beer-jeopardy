@@ -11,10 +11,11 @@
     <None Remove="Properties\PublishProfiles\Øljeopardy - Web Deploy.pubxml" />
   </ItemGroup>
 
-
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.1.0" />
+    <PackageReference Include="DataTables.AspNet.AspNetCore" Version="2.0.2" />
+    <PackageReference Include="jquery.datatables" Version="1.10.15" />
     <PackageReference Include="MailKit" Version="1.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-alpha2-final" />

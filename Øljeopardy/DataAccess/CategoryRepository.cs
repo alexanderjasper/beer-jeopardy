@@ -89,6 +89,13 @@ namespace Oljeopardy.DataAccess
                 .OrderBy(c => c.Name, StringComparer.Create(new CultureInfo("da-DK"), true)).ToList();
         }
 
+        public List<Category> GetOtherCategories(string userId)
+        {
+            return _context.Categories
+                .Where(c => c.UserId != userId && c.Deleted == null)
+                .ToList();
+        }
+
         public Category GetUsersCategoryForActiveGame(Guid gameId, string userId)
         {
             var participant = _context.Participants.FirstOrDefault(x => x.GameId == gameId && x.UserId == userId && x.Deleted == null);

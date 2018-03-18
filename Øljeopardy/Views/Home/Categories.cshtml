@@ -66,12 +66,38 @@
             Du har endnu ikke oprettet en kategori.
         </h4>
     }
+    <h2>Gemte kategorier</h2>
+
+    <h2>Delte kategorier</h2>
+
+    <table id="sharedCategories"></table>
+    <script>
+        $(document).ready(function () {
+            $('#sharedCategories').dataTable({
+                serverSide: true,
+                ajax: "/category/SharedCategories",
+                columns: [
+                    {
+                        name: 'kategori',
+                        data: 'category.name',
+                        title: 'Kategori',
+                    },
+                    {
+                        name: 'navn',
+                        data: 'ownerUserName',
+                        title: 'Navn',
+                    }
+                ]
+            });
+        });
+    </script>
+
     <div style="height: 30px"></div>
 </div>
 <script>
-    window.setTimeout(function () {
-        $(".alert").fadeTo(500, 0).slideUp(500, function () {
-            $(this).remove();
-        });
-    }, 3000);
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 3000);
 </script>
