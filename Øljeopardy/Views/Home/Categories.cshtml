@@ -20,18 +20,21 @@
         {
             <div class="category-list-item">
                 <div class="row vertical-align">
-                    <div class="col-xs-8">
+                    <div class="col-xs-12">
                         @(category.Name)
                     </div>
-                    <div class="col-xs-2">
-                        <a class="a-button" onclick="editCategory('@(category.Id)')"><i class="fas fa-edit fa-lg"></i></a>
-                    </div>
-                    <div class="col-xs-2">
-                        <a class="a-button" onclick="deleteCategory('@(category.Id)')">
-                            <i class="fas fa-trash-alt
-                                                                                          fa-lg"></i>
+                    @if (!category.Shared)
+                    {
+                        <a class="a-button pull-right" onclick="shareCategory('@(category.Id)')">
+                            <i class="fas fa-share fa-lg" style="margin-right: 20px;"></i>
                         </a>
-                    </div>
+                    }
+                    <a class="a-button" onclick="deleteCategory('@(category.Id)')">
+                        <i class="fas fa-trash-alt fa-lg" style="margin-right: 20px;"></i>
+                    </a>
+                    <a class="a-button pull-right" onclick="editCategory('@(category.Id)')">
+                        <i class="fas fa-edit fa-lg"  style="margin-right: 10px;"></i>
+                    </a>
                 </div>
             </div>
         }
@@ -43,8 +46,48 @@
         </h4>
     }
     <h2>Gemte kategorier</h2>
+    <table id="savedCategories"></table>
+    <script>
+        $(document).ready(function () {
+            $('#savedCategories').dataTable({
+                serverSide: true,
+                ajax: "/category/SavedCategories",
+                columns: [
+                    {
+                        data: 'gem',
+                        render: function (data, type, full, meta) {
+                            var id = full.category.id;
+                            return '<a class="a-button" onclick="unsaveCategory(&quot;' + full.category.id + '&quot);"><i class="fas fa-times fa-lg"></i></a>';
+                        },
+                        sortable: false,
+                        searchable: false,
+                        width: '5%'
+                    },
+                    {
+                        name: 'kategori',
+                        data: 'category.name',
+                        title: 'Kategori',
+                        sortable: true,
+                        searchable: true,
+                        width: '65%'
+                    },
+                    {
+                        name: 'oprettetaf',
+                        data: 'ownerUserName',
+                        title: 'Oprettet af',
+                        sortable: true,
+                        searchable: true,
+                        width: '30%'
+                    }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Danish.json'
+                }
+            });
+        });
+    </script>
 
-    <h2>Delte kategorier</h2>
+    <h2>Kategorikatalog</h2>
     <table id="sharedCategories"></table>
     <script>
         $(document).ready(function () {
@@ -56,26 +99,32 @@
                         data: 'gem',
                         render: function (data, type, full, meta) {
                             var id = full.category.id;
-                            return '<a class="a-button" onclick="saveCategory(&quot;' + full.category.id + '&quot);"><i class="far fa-save fa-lg"></i></a>';
+                            return '<a class="a-button" onclick="saveCategory(&quot;' + full.category.id + '&quot);"><i class="fas fa-save fa-lg"></i></a>';
                         },
                         sortable: false,
-                        searchable: false
+                        searchable: false,
+                        width: '5%'
                     },
                     {
                         name: 'kategori',
                         data: 'category.name',
                         title: 'Kategori',
                         sortable: true,
-                        searchable: true
+                        searchable: true,
+                        width: '65%'
                     },
                     {
-                        name: 'navn',
+                        name: 'oprettetaf',
                         data: 'ownerUserName',
-                        title: 'Navn',
+                        title: 'Oprettet af',
                         sortable: true,
-                        searchable: true
+                        searchable: true,
+                        width: '30%'
                     }
-                ]
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Danish.json'
+                }
             });
         });
     </script>

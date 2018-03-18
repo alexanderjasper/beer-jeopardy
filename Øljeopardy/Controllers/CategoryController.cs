@@ -69,13 +69,64 @@ namespace Oljeopardy.Controllers
             }
         }
 
+        public bool Save(Guid categoryId)
+        {
+            try
+            {
+                return _categoryRepository.SaveCategory(categoryId, _userManager.GetUserId(HttpContext.User));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not save category with id " + categoryId.ToString(), e);
+            }
+        }
+
+        public bool Unsave(Guid categoryId)
+        {
+            try
+            {
+                return _categoryRepository.UnsaveCategory(categoryId, _userManager.GetUserId(HttpContext.User));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not save category with id " + categoryId.ToString(), e);
+            }
+        }
+
+        public bool Share(Guid categoryId)
+        {
+            try
+            {
+                return _categoryRepository.ShareCategory(categoryId, _userManager.GetUserId(HttpContext.User));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not share category with id " + categoryId.ToString(), e);
+            }
+        }
+
         public IActionResult SharedCategories(IDataTablesRequest request)
         {
             // Nothing important here. Just creates some mock data.
             var userId = _userManager.GetUserId(HttpContext.User);
             var allOtherCategories = _categoryRepository.GetOtherCategories(userId);
+
+            return ProcessOtherCategories(allOtherCategories, request);
+        }
+
+        public IActionResult SavedCategories(IDataTablesRequest request)
+        {
+            // Nothing important here. Just creates some mock data.
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var allSavedCategories = _categoryRepository.GetSavedCategories(userId);
+
+            return ProcessOtherCategories(allSavedCategories, request);
+        }
+
+        private DataTablesJsonResult ProcessOtherCategories(List<Category> otherCategories, IDataTablesRequest request)
+        {
             var data = new List<OtherCategoryViewModel>();
-            foreach (var category in allOtherCategories)
+            foreach (var category in otherCategories)
             {
                 var otherUser = _userRepository.GetUserById(category.UserId);
                 if (otherUser == null)
@@ -93,7 +144,7 @@ namespace Oljeopardy.Controllers
             // If you want something rather easier, check IEnumerableExtensions Sample.
             var filteredData = String.IsNullOrWhiteSpace(request.Search.Value)
                 ? data
-                : data.Where(x => x.OwnerUserName.Contains(request.Search.Value));
+                : data.Where(x => x.OwnerUserName.ToLower().Contains(request.Search.Value.ToLower()) || x.Category.Name.ToLower().Contains(request.Search.Value.ToLower()));
 
             var sortColumns = request.Columns.FirstOrDefault(x => x.Sort != null);
             if (sortColumns != null)

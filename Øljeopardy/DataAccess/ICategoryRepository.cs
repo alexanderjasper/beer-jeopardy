@@ -11,8 +11,10 @@ namespace Oljeopardy.DataAccess
         bool UpdateCategory(Category category, string userId);
         bool AddCategory(Category category, string userId);
         bool DeleteCategory(Category category, string userId);
+        bool SaveCategory(Guid categoryId, string userId);
         List<Category> GetCategoriesByUserId(string userId);
         List<Category> GetOtherCategories(string userId);
+        List<Category> GetSavedCategories(string userId);
         Category GetUsersCategoryForActiveGame(Guid gameId, string userId);
         List<GameCategory> GetGameCategoriesForGame(Guid gameId);
         Category GetCategoryFromAnswerQuestion(Guid answerQuestionId);
@@ -23,5 +25,7 @@ namespace Oljeopardy.DataAccess
         bool ParticipantHasAnswerQuestionsToSelect(Guid gameId, Participant participant);
         bool WinnerHasAnswerQuestionsToSelect(Guid gameId, Participant winnerParticipant, Guid chosenAnswerQuestionId);
         bool ParticipantsGamecategoryHasAnswerQuestionsToSelect(Guid gameId, Guid participantId);
+        bool UnsaveCategory(Guid categoryId, string userId);
+        bool ShareCategory(Guid categoryId, string userId);
     }
 }

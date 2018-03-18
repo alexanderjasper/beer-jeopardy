@@ -81,6 +81,67 @@ namespace Oljeopardy.DataAccess
             }
         }
 
+        public bool SaveCategory(Guid categoryId, string userId)
+        {
+            try
+            {
+                var allUserCategories = GetUserCategoriesByUser(userId);
+                if (allUserCategories.Any(x => x.CategoryId == categoryId))
+                {
+                    throw new Exception("Category is already saved");
+                }
+                else
+                {
+                    var userCategory = new UserCategory()
+                    {
+                        CategoryId = categoryId,
+                        UserId = userId
+                    };
+                    _context.UserCategories.Add(userCategory);
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not save category", e);
+            }
+        }
+
+        public bool UnsaveCategory(Guid categoryId, string userId)
+        {
+            try
+            {
+                var userCategory = GetUserCategoriesByUser(userId).FirstOrDefault(x => x.CategoryId == categoryId && x.UserId == userId);
+                if (userCategory == null)
+                {
+                    throw new Exception("Category is not saved");
+                }
+                else
+                {
+                    _context.UserCategories.Remove(userCategory);
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not unsave category", e);
+            }
+        }
+
+        private List<UserCategory> GetUserCategoriesByUser(string userId)
+        {
+            try
+            {
+                return _context.UserCategories.Where(x => x.UserId == userId).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not find UserCategories", e);
+            }
+        }
+
         public List<Category> GetCategoriesByUserId(string userId)
         {
             return _context.Categories
@@ -91,9 +152,21 @@ namespace Oljeopardy.DataAccess
 
         public List<Category> GetOtherCategories(string userId)
         {
+            var userCategories = GetUserCategoriesByUser(userId).Select(x => x.CategoryId);
             return _context.Categories
-                .Where(c => c.UserId != userId && c.Deleted == null)
+                .Where(c => c.UserId != userId && c.Deleted == null && !userCategories.Contains(c.Id))
                 .ToList();
+        }
+
+        public List<Category> GetSavedCategories(string userId)
+        {
+            var userCategories = GetUserCategoriesByUser(userId).Select(x => x.CategoryId);
+            var returnList = new List<Category>();
+            foreach (var userCategory in userCategories)
+            {
+                returnList.Add(_context.Categories.FirstOrDefault(x => x.Id == userCategory));
+            }
+            return returnList;
         }
 
         public Category GetUsersCategoryForActiveGame(Guid gameId, string userId)
@@ -306,6 +379,29 @@ namespace Oljeopardy.DataAccess
                 throw new Exception("Could not determine if participant has AnswerQuestions to select");
             }
             return false;
+        }
+
+        public bool ShareCategory(Guid categoryId, string userId)
+        {
+            try
+            {
+                var category = _context.Categories.FirstOrDefault(x => x.Id == categoryId && x.UserId == userId);
+                if (category == null)
+                {
+                    throw new Exception("Could not find category to share.");
+                }
+                else
+                {
+                    category.Shared = true;
+                    _context.Categories.Update(category);
+                    _context.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Could not share category.");
+            }
         }
     }
 }

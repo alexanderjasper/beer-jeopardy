@@ -155,7 +155,45 @@ var deleteCategory = function (categoryId) {
     }
 };
 var saveCategory = function (categoryId) {
-    alert(categoryId);
+    $.ajax({
+        url: '/Category/Save',
+        type: 'post',
+        data: { categoryId: categoryId },
+        async: false
+    }).done(function (data) {
+        if (data) {
+            $('#sharedCategories').DataTable().ajax.reload();
+            $('#savedCategories').DataTable().ajax.reload();
+        }
+    });
+};
+var unsaveCategory = function (categoryId) {
+    $.ajax({
+        url: '/Category/Unsave',
+        type: 'post',
+        data: { categoryId: categoryId },
+        async: false
+    }).done(function (data) {
+        if (data) {
+            $('#sharedCategories').DataTable().ajax.reload();
+            $('#savedCategories').DataTable().ajax.reload();
+        }
+    });
+};
+var shareCategory = function (categoryId) {
+    var r = confirm('Klik OK for at dele kategorien. Andre spillere vil kunne bruge den. Dette kan ikke fortrydes.');
+    if (r === true) {
+        $.ajax({
+            url: '/Category/Share',
+            type: 'post',
+            data: { categoryId: categoryId },
+            async: false
+        }).done(function (data) {
+            if (data) {
+                loadCategories();
+            }
+        });
+    }
 };
 var completeAddGame = function () {
     var form = $('#addGameForm');
