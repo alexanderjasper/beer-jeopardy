@@ -154,6 +154,9 @@ var deleteCategory = function (categoryId) {
         });
     }
 };
+var saveCategory = function (categoryId) {
+    alert(categoryId);
+};
 var completeAddGame = function () {
     var form = $('#addGameForm');
     var selectedIndex = form[0][0].selectedIndex;

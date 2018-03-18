@@ -45,7 +45,6 @@
     <h2>Gemte kategorier</h2>
 
     <h2>Delte kategorier</h2>
-
     <table id="sharedCategories"></table>
     <script>
         $(document).ready(function () {
@@ -54,14 +53,27 @@
                 ajax: "/category/SharedCategories",
                 columns: [
                     {
+                        data: 'gem',
+                        render: function (data, type, full, meta) {
+                            var id = full.category.id;
+                            return '<a class="a-button" onclick="saveCategory(&quot;' + full.category.id + '&quot);"><i class="far fa-save fa-lg"></i></a>';
+                        },
+                        sortable: false,
+                        searchable: false
+                    },
+                    {
                         name: 'kategori',
                         data: 'category.name',
                         title: 'Kategori',
+                        sortable: true,
+                        searchable: true
                     },
                     {
                         name: 'navn',
                         data: 'ownerUserName',
                         title: 'Navn',
+                        sortable: true,
+                        searchable: true
                     }
                 ]
             });
