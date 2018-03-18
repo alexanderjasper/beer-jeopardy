@@ -109,6 +109,10 @@ namespace Oljeopardy.Controllers
                         break;
                 }
             }
+            else
+            {
+                filteredData = filteredData.OrderBy(x => x.Category.Name);
+            }
 
             // Paging filtered data.
             // Paging is rather manual due to in-memmory (IEnumerable) data.
