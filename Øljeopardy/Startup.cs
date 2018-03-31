@@ -93,7 +93,7 @@ namespace Oljeopardy
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<GameUpdateHub>("gameUpdate");
+                routes.MapHub<GameUpdateHub>("/gameUpdate");
             });
         }
     }

@@ -466,7 +466,7 @@ namespace Oljeopardy.DataAccess
                     game.Version += 1;
                     _context.Update(game);
                     _context.SaveChanges();
-                    _hubContext.Clients.Group(gameId.ToString()).InvokeAsync("GameUpdated", gameId.ToString());
+                    _hubContext.Clients.Group(gameId.ToString()).SendAsync("GameUpdated", gameId.ToString());
                     return game;
                 }
                 throw new Exception("Could not find game to increment");
