@@ -52,6 +52,7 @@
             $('#savedCategories').dataTable({
                 serverSide: true,
                 ajax: "/category/SavedCategories",
+                lengthChange: false,
                 columns: [
                     {
                         data: 'gem',
@@ -94,6 +95,7 @@
             $('#sharedCategories').dataTable({
                 serverSide: true,
                 ajax: "/category/SharedCategories",
+                lengthChange: false,
                 columns: [
                     {
                         data: 'gem',

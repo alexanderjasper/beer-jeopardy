@@ -12,9 +12,10 @@ namespace Oljeopardy.Models.JeopardyViewModels
         [Display(Name = "Spillets navn")]
         public string GameName { get; set; }
 
-        public List<Category> CategoryList { get; set; }
+        public List<Category> OwnCategories { get; set; }
+        public List<Category> SavedCategories { get; set; }
 
-        [Required]
-        public Guid ChosenCategoryGuid { get; set; }
+        public Guid ChosenOwnCategoryGuid { get; set; }
+        public Guid ChosenSavedCategoryGuid { get; set; }
     }
 }

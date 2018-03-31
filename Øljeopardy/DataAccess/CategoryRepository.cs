@@ -154,7 +154,7 @@ namespace Oljeopardy.DataAccess
         {
             var userCategories = GetUserCategoriesByUser(userId).Select(x => x.CategoryId);
             return _context.Categories
-                .Where(c => c.UserId != userId && c.Deleted == null && !userCategories.Contains(c.Id))
+                .Where(c => c.UserId != userId && c.Deleted == null && c.Shared && !userCategories.Contains(c.Id))
                 .ToList();
         }
 

@@ -34,7 +34,8 @@ namespace Oljeopardy.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
             var model = new AddGameViewModel()
             {
-                CategoryList = _categoryRepository.GetCategoriesByUserId(userId)
+                OwnCategories = _categoryRepository.GetCategoriesByUserId(userId),
+                SavedCategories = _categoryRepository.GetSavedCategories(userId)
             };
 
             return PartialView(model);
@@ -44,9 +45,17 @@ namespace Oljeopardy.Controllers
         {
 
             var userId = _userManager.GetUserId(HttpContext.User);
-            if (model != null && model.ChosenCategoryGuid != Guid.Empty)
+            if (model.ChosenOwnCategoryGuid != Guid.Empty && model.ChosenSavedCategoryGuid != Guid.Empty)
             {
-                _gameRepository.AddGame(model.GameName, model.ChosenCategoryGuid, userId);
+                throw new Exception("Cannot choose both your own category and a saved one.");
+            }
+            if (model != null && model.ChosenOwnCategoryGuid != Guid.Empty)
+            {
+                _gameRepository.AddGame(model.GameName, model.ChosenOwnCategoryGuid, userId);
+            }
+            else if (model != null && model.ChosenSavedCategoryGuid != Guid.Empty)
+            {
+                _gameRepository.AddGame(model.GameName, model.ChosenSavedCategoryGuid, userId);
             }
 
             return RedirectToAction("Game", "Home");
