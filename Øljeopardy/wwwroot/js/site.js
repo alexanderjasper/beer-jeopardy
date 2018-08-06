@@ -43,9 +43,9 @@ function removeSpinner(button) {
 }
 
 function checkIfGameChanged() {
-    let connection = new signalR.HubConnection('/gameUpdate');
+    var connection = new signalR.HubConnection('/gameUpdate');
     
-    connection.on('gameUpdated', data => {
+    connection.on('gameUpdated', function(data) {
         connection.stop();
         gameBottomMargin = $('#gameBottomMargin');
         if (gameBottomMargin.length && gameBottomMargin.length > 0) {
@@ -54,7 +54,7 @@ function checkIfGameChanged() {
     });
 
     connection.start()
-        .then(() => connection.invoke('joinGroup',gameId));
+        .then(function () { connection.invoke('joinGroup', gameId) });
 
     //$.ajax({
     //    url: "/checkIfGameChanged",
