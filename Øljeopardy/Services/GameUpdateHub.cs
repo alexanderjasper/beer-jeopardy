@@ -11,12 +11,12 @@ namespace Oljeopardy.Services
     {
         public Task JoinGroup(string groupName)
         {
-            return Groups.AddAsync(Context.ConnectionId, groupName);
+            return Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
 
         public Task LeaveGroup(string groupName)
         {
-            return Groups.RemoveAsync(Context.ConnectionId, groupName);
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
     }
 }
