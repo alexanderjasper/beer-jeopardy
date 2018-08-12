@@ -2,6 +2,7 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 Object.defineProperty(exports, "__esModule", { value: true });
+// Not exported from index
 var TextMessageFormat = /** @class */ (function () {
     function TextMessageFormat() {
     }
@@ -9,14 +10,15 @@ var TextMessageFormat = /** @class */ (function () {
         return "" + output + TextMessageFormat.RecordSeparator;
     };
     TextMessageFormat.parse = function (input) {
-        if (input[input.length - 1] != TextMessageFormat.RecordSeparator) {
+        if (input[input.length - 1] !== TextMessageFormat.RecordSeparator) {
             throw new Error("Message is incomplete.");
         }
         var messages = input.split(TextMessageFormat.RecordSeparator);
         messages.pop();
         return messages;
     };
-    TextMessageFormat.RecordSeparator = String.fromCharCode(0x1e);
+    TextMessageFormat.RecordSeparatorCode = 0x1e;
+    TextMessageFormat.RecordSeparator = String.fromCharCode(TextMessageFormat.RecordSeparatorCode);
     return TextMessageFormat;
 }());
 exports.TextMessageFormat = TextMessageFormat;

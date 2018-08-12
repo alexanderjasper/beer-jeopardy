@@ -43,7 +43,6 @@ function removeSpinner(button) {
 }
 
 function checkIfGameChanged() {
-    var connection = new signalR.HubConnection('/gameUpdate');
     
     connection.on('gameUpdated', function(data) {
         connection.stop();

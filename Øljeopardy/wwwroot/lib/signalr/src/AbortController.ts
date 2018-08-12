@@ -5,11 +5,12 @@
 // We don't actually ever use the API being polyfilled, we always use the polyfill because
 // it's a very new API right now.
 
+// Not exported from index.
 export class AbortController implements AbortSignal {
     private isAborted: boolean = false;
     public onabort: () => void;
 
-    abort() {
+    public abort() {
         if (!this.isAborted) {
             this.isAborted = true;
             if (this.onabort) {
@@ -27,7 +28,10 @@ export class AbortController implements AbortSignal {
     }
 }
 
+/** Represents a signal that can be monitored to determine if a request has been aborted. */
 export interface AbortSignal {
+    /** Indicates if the request has been aborted. */
     aborted: boolean;
+    /** Set this to a handler that will be invoked when the request is aborted. */
     onabort: () => void;
 }

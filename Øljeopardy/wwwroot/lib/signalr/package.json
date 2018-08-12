@@ -1,33 +1,32 @@
 {
-  "_from": "@aspnet/signalr@^1.0.0-preview1-update1",
-  "_id": "@aspnet/signalr@1.0.0-preview1-update1",
+  "_from": "@aspnet/signalr@1.0.2",
+  "_id": "@aspnet/signalr@1.0.2",
   "_inBundle": false,
-  "_integrity": "sha512-TGFCoLa2svN37Ew5ue0kGFxbkmQzq2I9N5TMLFBWRrpTYF4txlE3yPX0EaPt/NToKBaK1A+VK8Q+1MGSYtnqUw==",
+  "_integrity": "sha512-sXleqUCCbodCOqUA8MjLSvtAgDTvDhEq6j3JyAq/w4RMJhpZ+dXK9+6xEMbzag2hisq5e/8vDC82JYutkcOISQ==",
   "_location": "/@aspnet/signalr",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "@aspnet/signalr@^1.0.0-preview1-update1",
+    "raw": "@aspnet/signalr@1.0.2",
     "name": "@aspnet/signalr",
     "escapedName": "@aspnet%2fsignalr",
     "scope": "@aspnet",
-    "rawSpec": "^1.0.0-preview1-update1",
+    "rawSpec": "1.0.2",
     "saveSpec": null,
-    "fetchSpec": "^1.0.0-preview1-update1"
+    "fetchSpec": "1.0.2"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/@aspnet/signalr/-/signalr-1.0.0-preview1-update1.tgz",
-  "_shasum": "f8f4b15674f668bc4bacc9f35eebe70f15912c6b",
-  "_spec": "@aspnet/signalr@^1.0.0-preview1-update1",
+  "_resolved": "https://registry.npmjs.org/@aspnet/signalr/-/signalr-1.0.2.tgz",
+  "_shasum": "c9b328db7d01b6d07e7532f130b4a32d9159506a",
+  "_spec": "@aspnet/signalr@1.0.2",
   "_where": "C:\\Users\\alexa\\source\\repos\\Øljeopardy",
   "author": {
     "name": "Microsoft"
   },
-  "browser": "./dist/browser/signalr.js",
   "bugs": {
     "url": "https://github.com/aspnet/SignalR/issues"
   },
@@ -54,16 +53,18 @@
     "url": "git+https://github.com/aspnet/SignalR.git"
   },
   "scripts": {
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:browser && npm run build:uglify",
+    "build": "npm run clean && npm run build:lint && npm run build:esm && npm run build:cjs && npm run build:browser && npm run build:uglify",
     "build:browser": "node ../node_modules/rollup/bin/rollup -c",
-    "build:cjs": "node ../node_modules/typescript/bin/tsc --project ./tsconfig.json --module commonjs --outDir ./dist/cjs --target ES5",
-    "build:esm": "node ../node_modules/typescript/bin/tsc --project ./tsconfig.json --module es2015 --outDir ./dist/esm --target ES2015 -d && node ./build/process-dts.js",
+    "build:cjs": "node ../node_modules/typescript/bin/tsc --project ./tsconfig.json --module commonjs --outDir ./dist/cjs",
+    "build:esm": "node ../node_modules/typescript/bin/tsc --project ./tsconfig.json --module es2015 --outDir ./dist/esm -d && node ./build/process-dts.js",
+    "build:lint": "node ../node_modules/tslint/bin/tslint -c ../tslint.json -p ./tsconfig.json",
     "build:uglify": "node ../node_modules/uglify-js/bin/uglifyjs --source-map \"url='signalr.min.js.map',content='./dist/browser/signalr.js.map'\" --comments -o ./dist/browser/signalr.min.js ./dist/browser/signalr.js",
-    "clean": "node ../node_modules/rimraf/bin.js ./dist ./.rpt2_cache",
-    "pretest": "node ../node_modules/rimraf/bin.js ./spec/obj && tsc --project ./spec/tsconfig.json",
-    "test": "node ../node_modules/jasmine/bin/jasmine.js ./spec/obj/spec/**/*.spec.js"
+    "clean": "node ../node_modules/rimraf/bin.js ./dist",
+    "prepack": "node ../build/embed-version.js",
+    "test": "echo \"Run 'npm test' in the 'clients\\ts' folder to test this package\" && exit 1"
   },
   "typings": "./dist/esm/index.d.ts",
+  "umd": "./dist/browser/signalr.js",
   "umd_name": "signalR",
-  "version": "1.0.0-preview1-update1"
+  "version": "1.0.2"
 }

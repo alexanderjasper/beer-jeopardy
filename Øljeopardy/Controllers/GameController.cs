@@ -202,6 +202,23 @@ namespace Oljeopardy.Controllers
             return Ok(false);            
         }
 
+        [HttpGet]
+        [Route("getGameId")]
+        public IActionResult GetGameId()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var game = _gameRepository.GetActiveGameForUser(userId);
+
+            if (game != null)
+            {
+                return Ok(game.Id.ToString());
+            }
+            else
+            {
+                throw new Exception("Tried to load Game, but user is not participating in a Game.");
+            }
+        }
+
 
     }
 }
