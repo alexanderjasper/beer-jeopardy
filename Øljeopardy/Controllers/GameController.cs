@@ -125,7 +125,7 @@ namespace Oljeopardy.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("Could not submit Eat Your Note",e);
+                throw new Exception("Could not submit Eat Your Note", e);
             }
         }
 
@@ -136,37 +136,33 @@ namespace Oljeopardy.Controllers
                 var userId = _userManager.GetUserId(HttpContext.User);
                 var game = _gameRepository.GetActiveGameForUser(userId);
                 var participant = _gameRepository.GetUserParticipant(game.Id, userId);
-                if (participant.TurnType == Enums.TurnType.Guess)
+                var participants = _gameRepository.GetParticipantsForGame(game.Id);
+                if (participants.Count() <= 1)
                 {
-                    _gameRepository.DeleteParticipant(participant.Id);
-                    var participants = _gameRepository.GetParticipantsForGame(game.Id);
-                    if (participants.Count() <= 1)
+                    game.GameStatus = Enums.GameStatus.Finished;
+                }
+                else if (participant.TurnType == Enums.TurnType.Guess)
+                {
+                    var firstParticipant = participants.FirstOrDefault(x => x.Id != participant.Id);
+                    if (firstParticipant.TurnType == Enums.TurnType.Guess)
                     {
-                        game.GameStatus = Enums.GameStatus.Finished;
-                    }
-                    else
-                    {
-                        var firstParticipant = participants.FirstOrDefault(x => x.Id != participant.Id);
-                        if (firstParticipant.TurnType == Enums.TurnType.Guess)
+                        if (_categoryRepository.ParticipantHasAnswerQuestionsToSelect(game.Id, firstParticipant))
                         {
-                            if (_categoryRepository.ParticipantHasAnswerQuestionsToSelect(game.Id, firstParticipant))
-                            {
-                                firstParticipant.TurnType = Enums.TurnType.Choose;
-                            }
-                            else if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(game.Id, firstParticipant.Id))
-                            {
-                                firstParticipant.TurnType = Enums.TurnType.ChooseOwn;
-                            }
-                            else
-                            {
-                                game.GameStatus = Enums.GameStatus.Finished;
-                            }
-                            _gameRepository.UpdateParticipant(firstParticipant);
-                            game.LatestCategoryChooserId = firstParticipant.UserId;
-                            game.SelectedAnswerQuestionId = null;
-                            game.SelectedGameCategory = null;
-                            game.UserId = firstParticipant.UserId;
+                            firstParticipant.TurnType = Enums.TurnType.Choose;
                         }
+                        else if (_categoryRepository.ParticipantsGamecategoryHasAnswerQuestionsToSelect(game.Id, firstParticipant.Id))
+                        {
+                            firstParticipant.TurnType = Enums.TurnType.ChooseOwn;
+                        }
+                        else
+                        {
+                            game.GameStatus = Enums.GameStatus.Finished;
+                        }
+                        _gameRepository.UpdateParticipant(firstParticipant);
+                        game.LatestCategoryChooserId = firstParticipant.UserId;
+                        game.SelectedAnswerQuestionId = null;
+                        game.SelectedGameCategory = null;
+                        game.UserId = firstParticipant.UserId;
                     }
                     _gameRepository.UpdateGame(game);
                     _gameRepository.IncrementGameVersion(game.Id);
@@ -175,6 +171,9 @@ namespace Oljeopardy.Controllers
                 {
                     throw new Exception("Can only leave game when user's TurnType is Guess.");
                 }
+                _gameRepository.DeleteParticipant(participant.Id);
+                _gameRepository.UpdateGame(game);
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception e)
@@ -199,7 +198,7 @@ namespace Oljeopardy.Controllers
                     return Ok(true);
                 }
             }
-            return Ok(false);            
+            return Ok(false);
         }
 
         [HttpGet]
