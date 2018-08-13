@@ -70,23 +70,6 @@ function checkIfGameChanged() {
         connection.start()
             .then(function () { connection.invoke('joinGroup', gameId) });
     }
-
-    //$.ajax({
-    //    url: "/checkIfGameChanged",
-    //    async: false,
-    //    dataType: 'json',
-    //    success: function (data) {
-    //        if (data) {
-    //            loadGame();
-    //        }
-    //        else {
-    //            gameBottomMargin = $('#gameBottomMargin');
-    //            if (gameBottomMargin.length && gameBottomMargin.length > 0) {
-    //                setTimeout(checkIfGameChanged, 2000);
-    //            }
-    //        }
-    //    }
-    //});
 }
 
 function selectAnswerQuestion(elem) {
