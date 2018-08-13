@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Rough polyfill of https://developer.mozilla.org/en-US/docs/Web/API/AbortController
 // We don't actually ever use the API being polyfilled, we always use the polyfill because
 // it's a very new API right now.
+// Not exported from index.
 var AbortController = /** @class */ (function () {
     function AbortController() {
         this.isAborted = false;

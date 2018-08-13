@@ -43,9 +43,22 @@ function removeSpinner(button) {
 }
 
 function checkIfGameChanged() {
-    let connection = new signalR.HubConnection('/gameUpdate');
+    var gameId = '';
+    $.ajax({
+        url: "/getGameId",
+        async: false,
+        dataType: 'text',
+        success: function (data) {
+            gameId = data;
+        }
+    });
+
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl('/gameUpdate')
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
     
-    connection.on('gameUpdated', data => {
+    connection.on('gameUpdated', function(data) {
         connection.stop();
         gameBottomMargin = $('#gameBottomMargin');
         if (gameBottomMargin.length && gameBottomMargin.length > 0) {
@@ -53,8 +66,10 @@ function checkIfGameChanged() {
         }
     });
 
-    connection.start()
-        .then(() => connection.invoke('joinGroup',gameId));
+    if (gameId) {
+        connection.start()
+            .then(function () { connection.invoke('joinGroup', gameId) });
+    }
 
     //$.ajax({
     //    url: "/checkIfGameChanged",
