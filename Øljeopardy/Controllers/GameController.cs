@@ -214,10 +214,8 @@ namespace Oljeopardy.Controllers
             }
             else
             {
-                throw new Exception("Tried to load Game, but user is not participating in a Game.");
+                return Ok("");
             }
         }
-
-
     }
 }

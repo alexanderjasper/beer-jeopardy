@@ -53,23 +53,23 @@ function checkIfGameChanged() {
         }
     });
 
-    var connection = new signalR.HubConnectionBuilder()
-        .withUrl('/gameUpdate')
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
-    
-    connection.on('gameUpdated', function(data) {
-        connection.stop();
-        gameBottomMargin = $('#gameBottomMargin');
-        if (gameBottomMargin.length && gameBottomMargin.length > 0) {
-            loadGame();
-        }
-    });
+    if (gameId !== '') {
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl('/gameUpdate')
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
-    if (gameId) {
+        connection.on('gameUpdated', function (data) {
+            connection.stop();
+            gameBottomMargin = $('#gameBottomMargin');
+            if (gameBottomMargin.length && gameBottomMargin.length > 0) {
+                loadGame();
+            }
+        });
         connection.start()
             .then(function () { connection.invoke('joinGroup', gameId) });
     }
+    return gameId;
 }
 
 function selectAnswerQuestion(elem) {
@@ -96,8 +96,13 @@ var loadCategoriesDeleted = function () {
     $("#master-container").load('/Home/Categories?pageAction=DeletedCategory');
 };
 var loadGame = function () {
-    $("#master-container").load('/Home/Game');
-    checkIfGameChanged();
+    var gameId = checkIfGameChanged();
+    if (gameId === '') {
+        $("#master-container").load('/Home/Main');
+    }
+    else {
+        $("#master-container").load('/Home/Game');
+    }
 };
 var loadMain = function () {
     $("#master-container").load('/Home/Main');
