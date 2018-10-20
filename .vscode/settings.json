@@ -1,0 +1,4 @@
+{
+    "appService.deploySubpath": "Oljeopardy",
+    "appService.defaultWebAppToDeploy": "/subscriptions/4299097d-f810-48c1-8b1c-17f052986f6c/resourceGroups/OljeopardyResourceGroup/providers/Microsoft.Web/sites/Oljeopardy"
+}
