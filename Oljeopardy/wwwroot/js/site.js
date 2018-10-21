@@ -67,7 +67,7 @@ function checkIfGameChanged() {
             }
         });
 
-        $.connection.hub.disconnected( function () {
+        connection.onclose( function () {
             loadGame();
         });
 
