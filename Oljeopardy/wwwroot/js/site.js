@@ -66,6 +66,11 @@ function checkIfGameChanged() {
                 loadGame();
             }
         });
+
+        connection.hub.disconnected( function () {
+            loadGame();
+        });
+
         connection.start()
             .then(function () { connection.invoke('joinGroup', gameId) });
     }
