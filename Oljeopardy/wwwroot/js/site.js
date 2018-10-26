@@ -4,6 +4,9 @@ $(document).on('click', '.navbar-collapse.in', function (e) {
     }
 });
 
+var connection = null;
+var signalRIsConnected = false;
+
 $(document).ready(function () {
     $(document).click(function (event) {
         var clickover = $(event.target);
@@ -53,8 +56,12 @@ function checkIfGameChanged() {
         }
     });
 
-    if (gameId !== '') {
-        var connection = new signalR.HubConnectionBuilder()
+    if (gameId !== '' && !signalRIsConnected) {
+        if (connection != null){
+            connection.stop();
+        }
+
+        connection = new signalR.HubConnectionBuilder()
             .withUrl('/gameUpdate')
             .configureLogging(signalR.LogLevel.Information)
             .build();
@@ -68,11 +75,15 @@ function checkIfGameChanged() {
         });
 
         connection.onclose( function () {
+            signalRIsConnected = false;
             loadGame();
         });
 
         connection.start()
-            .then(function () { connection.invoke('joinGroup', gameId) });
+            .then(function () { 
+                connection.invoke('joinGroup', gameId);
+                signalRIsConnected = true;
+            });
     }
     return gameId;
 }
