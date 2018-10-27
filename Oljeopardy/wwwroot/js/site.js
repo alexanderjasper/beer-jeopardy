@@ -175,7 +175,7 @@ var deleteCategory = function (categoryId) {
 };
 var completeAddGame = function () {
     var form = $('#addGameForm');
-    var selectedIndex = form[0][0].selectedIndex;
+    var selectedIndex = form[0][1].selectedIndex;
     if (selectedIndex === 0) {
         alert("Vælg en kategori, du vil bruge i spillet");
         return false;
