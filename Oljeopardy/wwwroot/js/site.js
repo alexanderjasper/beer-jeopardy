@@ -57,35 +57,39 @@ function checkIfGameChanged() {
     });
 
     if (gameId !== '' && !signalRIsConnected) {
-        if (connection != null){
-            connection.stop();
-        }
-
-        connection = new signalR.HubConnectionBuilder()
-            .withUrl('/gameUpdate')
-            .configureLogging(signalR.LogLevel.Information)
-            .build();
-
-        connection.on('gameUpdated', function (data) {
-            connection.stop();
-            gameBottomMargin = $('#gameBottomMargin');
-            if (gameBottomMargin.length && gameBottomMargin.length > 0) {
-                loadGame();
-            }
-        });
-
-        connection.onclose( function () {
-            signalRIsConnected = false;
-            loadGame();
-        });
-
-        connection.start()
-            .then(function () { 
-                connection.invoke('joinGroup', gameId);
-                signalRIsConnected = true;
-            });
+        reconnectWebsocket(gameId);
     }
     return gameId;
+}
+
+function reconnectWebsocket(gameId) {
+    if (connection != null){
+        connection.stop();
+    }
+
+    connection = new signalR.HubConnectionBuilder()
+        .withUrl('/gameUpdate')
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    connection.on('gameUpdated', function (data) {
+        connection.stop();
+        gameBottomMargin = $('#gameBottomMargin');
+        if (gameBottomMargin.length && gameBottomMargin.length > 0) {
+            loadGame();
+        }
+    });
+
+    connection.onclose( function () {
+        signalRIsConnected = false;
+        loadGame();
+    });
+
+    connection.start()
+        .then(function () { 
+            connection.invoke('joinGroup', gameId);
+            signalRIsConnected = true;
+    });
 }
 
 function selectAnswerQuestion(elem) {
