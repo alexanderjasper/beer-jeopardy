@@ -6,6 +6,7 @@ $(document).on('click', '.navbar-collapse.in', function (e) {
 
 var connection = null;
 var signalRIsConnected = false;
+var categoryToDeleteId = null;
 
 $(document).ready(function () {
     $(document).click(function (event) {
@@ -142,7 +143,7 @@ var submitCategory = function () {
     var form = $('#categoryForm');
     var id = $('#Id')[0].value;
     if (name === null || $.trim(name) == '') {
-        alert("Du skal navngive din kategori");
+        showElement('mustNameCategoryWarning');
         return false;
     }
     $.ajax({
@@ -163,54 +164,96 @@ var editCategory = function (categoryId) {
     });
 };
 var deleteCategory = function (categoryId) {
-    var r = confirm('Kategorien slettes og kan ikke gendannes!');
-    if (r === true) {
-        $.ajax({
-            url: '/Category/Delete',
-            type: 'post',
-            data: { chosenCategoryGuid: categoryId },
-            async: false
-        }).done(function (data) {
-            if (data) {
-                loadCategoriesDeleted();
-            }
-        });
-    }
+    categoryToDeleteId = categoryId;
+    showElement('deleteCategoryModal');
 };
+var deleteCategoryConfirm = function (button) {
+    addSpinner(button);
+    $.ajax({
+        url: '/Category/Delete',
+        type: 'post',
+        data: { chosenCategoryGuid: categoryToDeleteId },
+        async: false
+    }).done(function (data) {
+        if (data) {
+            hideElement('deleteCategoryModal');
+            loadCategoriesDeleted();
+        }
+    });
+    removeSpinner(button);
+}
+
 var completeAddGame = function () {
     var form = $('#addGameForm');
+    if (validateCompleteAddGame(form)){
+        $.ajax({
+            url: '/Game/Completeadd',
+            data: form.serialize(),
+            async: false
+        });
+        loadGame();
+    }
+};
+
+var validateCompleteAddGame = function (form) {
+    var gameName = form[0][0].value;
     var selectedIndex = form[0][1].selectedIndex;
-    if (selectedIndex === 0) {
-        alert("Vælg en kategori, du vil bruge i spillet");
+    var categoryMissing = selectedIndex === 0;
+    chooseCategoryWarning(categoryMissing);
+    var gameNameMissing = gameName === null || gameName === '';
+    enterGameNameWarning(gameNameMissing);
+
+    if (categoryMissing || gameNameMissing){
         return false;
     }
-    $.ajax({
-        url: '/Game/Completeadd',
-        data: form.serialize(),
-        async: false
-    });
-    loadGame();
-};
+    return true;
+}
+
+var chooseCategoryWarning = function (shouldShow) {
+    var warning = document.getElementById('chooseCategoryWarning');
+    if (shouldShow){
+        warning.style.display = "block";
+    }
+    else {
+        warning.style.display = "none";
+    }
+}
+
+var enterGameNameWarning = function (shouldShow) {
+    var warning = document.getElementById('enterGameNameWarning');
+    if (shouldShow){
+        warning.style.display = "block";
+    }
+    else {
+        warning.style.display = "none";
+    }
+}
+
 var completeParticipation = function () {
     var form = $('#completeParticipationForm');
-    var selectedIndex = form[0][0].selectedIndex;
-    var selectedGameIndex = form[0][0].selectedIndex;
-    if (selectedGameIndex === 0) {
-        alert("Vælg et spil, du vil deltage i");
-        return false;
+    if (validateCompleteParticipation(form)){
+        $.ajax({
+            url: '/Game/CompleteParticipation',
+            data: form.serialize(),
+            async: false
+        });
+        loadGame();
     }
-    var selectedCategoryIndex = form[0][1].selectedIndex;
-    if (selectedCategoryIndex === 0) {
-        alert("Vælg en kategori, du vil bruge i spillet");
-        return false;
-    }
-    $.ajax({
-        url: '/Game/CompleteParticipation',
-        data: form.serialize(),
-        async: false
-    });
-    loadGame();
 };
+var validateCompleteParticipation = function (form) {
+    var gameIndex = form[0][0].selectedIndex;
+    var categoryIndex = form[0][1].selectedIndex;
+    var gameMissing = gameIndex === 0;
+    showHideElement('gameMissingWarning', gameMissing);
+    var categoryMissing = categoryIndex === 0;
+    showHideElement('categoryMissingWarning', categoryMissing);
+    
+    if (gameMissing || categoryMissing) {
+        return false;
+    }
+    return true;
+}
+
 var selectWinner = function (winnerId, gameId, button) {
     addSpinner(button);
     $.ajax({
@@ -235,30 +278,24 @@ var selectAnswer = function (button, chosenAnswerQuestionId, gameId) {
     });
     loadGame();
 };
-var eatYourNote = function (button) {
-    promptAnswer = confirm("Bekræft, at ingen kunne gætte spørgsmålet.");
-    if (!promptAnswer) {
-        return false;
-    }
 
+var eatYourNoteConfirm = function (button) {
     if (button != null) {
         addSpinner(button);
     }
+
     $.ajax({
         url: '/Game/EatYourNote',
         type: 'post',
         success: function () {
+            hideElement('eatYourNoteModal');
             loadGame();
+            removeSpinner(button);
         }
     });
-};
+}
 
-var leaveGame = function (button) {
-    promptAnswer = confirm("Bekræft, at du vil forlade det aktuelle spil.");
-    if (!promptAnswer) {
-        return false;
-    }
-
+var leaveGameConfirm = function (button) {
     if (button != null) {
         addSpinner(button);
     }
@@ -267,10 +304,30 @@ var leaveGame = function (button) {
         type: 'post',
         success: function () {
             loadMain();
+            hideElement('leaveGameModal');
+            removeSpinner(button);
         },
         error: function () {
             removeSpinner(button);
-            alert('Du kan ikke forlade spillet, når det er din tur til at gøre noget.');
+            hideElement('leaveGameModal');
+            showElement('leaveGameError');
         }
     });
 };
+
+var showElement = function(elementId) {
+    element = document.getElementById(elementId);
+    element.style.display = 'block';
+}
+var hideElement = function(elementId) {
+    element = document.getElementById(elementId);
+    element.style.display = 'none';
+}
+var showHideElement = function(elementId, shouldShow) {
+    if (shouldShow) {
+        showElement(elementId);
+    }
+    else {
+        hideElement(elementId);
+    }
+}

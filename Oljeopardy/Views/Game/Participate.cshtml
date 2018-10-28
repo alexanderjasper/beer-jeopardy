@@ -12,11 +12,17 @@
                         <option selected disabled>Vælg et spil</option>
                     </select>
                 </div>
+                <div id="gameMissingWarning" class="field-validation-text col-xs-12" style="display: none">
+                    <strong>Vælg et spil, du vil deltage i.</strong>
+                </div>
                 <div class="col-xs-12">
                     <select class="form-control" asp-for="ChosenCategoryGuid"
                             asp-items="@(new SelectList(Model.CategoryList, "Id", "Name"))" class="dropdown">
                         <option selected disabled>Vælg en kategori</option>
                     </select>
+                </div>
+                <div id="categoryMissingWarning" class="field-validation-text col-xs-12" style="display: none">
+                    <strong>Vælg en kategori, du vil bruge i spillet.</strong>
                 </div>
             </div>
             <input type="button" class="menubutton" value="Deltag i spil" onClick="completeParticipation()" />

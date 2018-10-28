@@ -1,0 +1,42 @@
+<div id="eatYourNoteModal" class="modal">
+    <div class="modal-content">
+        <p>Bekræft, at ingen kunne gætte spørgsmålet.</p>
+        <div style="text-align: right">
+            <button class="secondary-smallbutton" onclick="hideElement('eatYourNoteModal')">
+                Annuller
+            </button>
+            <button class="smallbutton has-spinner" style="margin-left: 10px; min-width: 107px" onclick="eatYourNoteConfirm(this)">
+                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
+                <span class="btn-text">Æd den selv</span>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="leaveGameModal" class="modal">
+    <div class="modal-content">
+        <p>Bekræft, at du vil forlade det aktuelle spil.</p>
+        <div style="text-align: right">
+            <button class="secondary-smallbutton" onclick="hideElement('leaveGameModal')">
+                Annuller
+            </button>
+            <button class="smallbutton has-spinner" style="margin-left: 10px; min-width: 129px" onclick="leaveGameConfirm(this)">
+                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
+                <span class="btn-text">Forlad spillet</span>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="deleteCategoryModal" class="modal">
+    <div class="modal-content">
+        <p>Kategorien slettes og kan ikke gendannes.</p>
+        <div style="text-align: right">
+            <button class="secondary-smallbutton" onclick="hideElement('deleteCategoryModal')">
+                Annuller
+            </button>
+            <button class="smallbutton has-spinner" style="margin-left: 10px; min-width: 65px" onclick="deleteCategoryConfirm(this)">
+                <span class="spinner"><i class="fas fa-spinner fa-spin fa-lg"></i></span>
+                <span class="btn-text">Slet</span>
+            </button>
+        </div>
+    </div>
+</div>

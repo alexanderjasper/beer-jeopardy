@@ -82,7 +82,7 @@ hr {
   border: none;
   font-family: inherit;
   cursor: pointer;
-  width: 65px;
+  min-width: 65px;
   height: 30px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -100,6 +100,28 @@ hr {
   margin-left: auto;
   margin-right: -5px;
   margin-bottom: 4px; }
+
+.secondary-smallbutton {
+  border: #368015;
+  font-family: inherit;
+  cursor: pointer;
+  height: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  outline: none;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  font-size: 12px;
+  background: white;
+  color: black;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  margin-left: auto;
+  margin-right: -5px;
+  margin-bottom: 4px;
+}
 
 .textbutton {
   text-align: center;
@@ -225,3 +247,44 @@ hr {
 
 .has-spinner.active .btn-text {
   display: none; }
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.field-validation-text {
+  color: #a94442;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: rgba(255,255,255,0.9);
+  margin: 35% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
